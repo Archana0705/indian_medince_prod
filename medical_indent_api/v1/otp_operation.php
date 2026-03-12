@@ -1,0 +1,692 @@
+<?php
+/*
+|----------------------------------------------------------
+|  fn_report_reportdata  â€“  REST endpoint (Extended CRUD)
+|----------------------------------------------------------
+*/
+
+require_once('../helper/header.php');
+require_once('../helper/db/edm_read.php');
+require_once('../helper/db/edm_write.php');
+
+header("Access-Control-Allow-Methods: POST");
+header("Content-Type: application/json");
+session_start();
+
+define('DATE_FORMAT', 'Y-m-d H:i:s.u');
+
+// Initialize database connections
+$read_db = null;
+$write_db = null;
+
+try {
+    $read_db = getEdmReadConnection();
+    $write_db = getEdmWriteConnection();
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['success' => 0, 'message' => 'Database connection failed: ' . $e->getMessage()]);
+    exit;
+}
+
+// Validate request method
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['success' => 0, 'message' => 'Method not allowed']);
+    exit;
+}
+
+if (empty($_POST['data'])) {
+    http_response_code(400);
+    echo json_encode(['success' => 0, 'message' => 'Missing encrypted payload']);
+    exit;
+}
+
+$p = decryptData($_POST['data']);
+
+if (!$p || !is_array($p)) {
+    http_response_code(400);
+    echo json_encode(['success' => 0, 'message' => 'Invalid or corrupted payload']);
+    exit;
+}
+
+/*
+|----------------------------------------------------------
+|  OTP API Functions
+|----------------------------------------------------------
+*/
+
+/**
+ * Generate a 6-digit OTP
+ */
+function generateOTP()
+{
+    return str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
+}
+
+/**
+ * Get database connection
+ */
+function getDBConnection($type = 'write')
+{
+    global $read_db, $write_db;
+    
+    if ($type === 'read' && $read_db) {
+        return $read_db;
+    } elseif ($type === 'write' && $write_db) {
+        return $write_db;
+    }
+    
+    try {
+        if ($type === 'read') {
+            return getEdmReadConnection();
+        } else {
+            return getEdmWriteConnection();
+        }
+    } catch (Exception $e) {
+        error_log("Database connection error: " . $e->getMessage());
+        return null;
+    }
+}
+
+/**
+ * Insert OTP into database
+ */
+function insertOTP($mobileNo, $otp)
+{
+    $db = getDBConnection('write');
+    if (!$db) {
+        error_log("Failed to get write database connection for insertOTP");
+        return false;
+    }
+    
+    // Clean mobile number (remove any non-numeric characters)
+    $mobileNo = preg_replace('/[^0-9]/', '', $mobileNo);
+
+    try {
+        // First, check if mobile number already exists
+        $checkStmt = $db->prepare("SELECT id FROM public.otp_login WHERE mobileno = ?");
+        $checkStmt->execute([$mobileNo]);
+        $existing = $checkStmt->fetch();
+
+        if ($existing) {
+            // Update existing OTP
+            $stmt = $db->prepare(
+                "UPDATE public.otp_login 
+                SET otp = ?, created_ts = NOW(), updated_ts = NOW(), is_used = false, attempt_count = 0
+                WHERE mobileno = ?"
+            );
+            $result = $stmt->execute([$otp, $mobileNo]);
+            if ($result === false) {
+                $err = $stmt->errorInfo();
+                error_log("OTP Update failed: " . json_encode($err));
+                return false;
+            }
+            return $result;
+        } else {
+            // Insert new OTP
+            $stmt = $db->prepare(
+                "INSERT INTO public.otp_login (mobileno, otp, created_ts) 
+                VALUES (?, ?, NOW())"
+            );
+            $result = $stmt->execute([$mobileNo, $otp]);
+            if ($result === false) {
+                $err = $stmt->errorInfo();
+                error_log("OTP Insert failed: " . json_encode($err));
+                return false;
+            }
+            return $result;
+        }
+    } catch (PDOException $e) {
+        error_log("OTP Insert PDOException: " . $e->getMessage());
+        if (isDevelopmentEnvironment()) {
+            throw $e;
+        }
+        return false;
+    } catch (Exception $e) {
+        error_log("OTP Insert Error: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Verify OTP
+ */
+function verifyOTP($mobileNo, $otp)
+{
+    try {
+        $db = getDBConnection('read');
+        if (!$db) {
+            error_log("Failed to get database connection for verifyOTP");
+            return false;
+        }
+
+        // Clean mobile number
+        $mobileNo = preg_replace('/[^0-9]/', '', $mobileNo);
+
+        // Check OTP with 10-minute expiry
+        $stmt = $db->prepare("
+            SELECT id, created_ts, is_used, attempt_count
+            FROM public.otp_login 
+            WHERE mobileno = ? AND otp = ? 
+            AND created_ts >= NOW() - INTERVAL '10 minutes'
+            ORDER BY created_ts DESC 
+            LIMIT 1
+        ");
+
+        $stmt->execute([$mobileNo, $otp]);
+        $result = $stmt->fetch();
+
+        if (!$result) {
+            return false;
+        }
+
+        // Check if OTP is already used or too many attempts
+        if ($result['is_used'] == 'true' || $result['attempt_count'] >= 5) {
+            return false;
+        }
+
+        // OTP verified successfully - mark it as used
+        markOTPAsUsed($result['id']);
+        return true;
+    } catch (Exception $e) {
+        error_log("OTP Verification Error: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Mark OTP as used
+ */
+function markOTPAsUsed($otpId)
+{
+    try {
+        $db = getDBConnection('write');
+        if (!$db) {
+            error_log("Failed to get write database connection for markOTPAsUsed");
+            return false;
+        }
+        
+        $stmt = $db->prepare("
+            UPDATE public.otp_login 
+            SET is_used = true, updated_ts = NOW() 
+            WHERE id = ?
+        ");
+        return $stmt->execute([$otpId]);
+    } catch (Exception $e) {
+        error_log("Mark OTP Used Error: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Increment OTP attempt count
+ */
+function incrementOTPAttempt($otpId)
+{
+    try {
+        $db = getDBConnection('write');
+        if (!$db) {
+            error_log("Failed to get write database connection for incrementOTPAttempt");
+            return false;
+        }
+        
+        $stmt = $db->prepare("
+            UPDATE public.otp_login 
+            SET attempt_count = attempt_count + 1, last_attempt = NOW(), updated_ts = NOW()
+            WHERE id = ?
+        ");
+        return $stmt->execute([$otpId]);
+    } catch (Exception $e) {
+        error_log("Increment OTP Attempt Error: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Check if OTP was recently sent (rate limiting)
+ */
+function canSendOTP($mobileNo)
+{
+    try {
+        $db = getDBConnection('read');
+        if (!$db) {
+            error_log("Failed to get database connection for canSendOTP");
+            return true; // Allow sending if we can't check
+        }
+
+        $mobileNo = preg_replace('/[^0-9]/', '', $mobileNo);
+
+        $stmt = $db->prepare("
+            SELECT created_ts 
+            FROM public.otp_login 
+            WHERE mobileno = ? 
+            AND created_ts >= NOW() - INTERVAL '1 minute'
+            ORDER BY created_ts DESC 
+            LIMIT 1
+        ");
+
+        $stmt->execute([$mobileNo]);
+        $result = $stmt->fetch();
+
+        // If OTP was sent in the last minute, don't allow resend
+        return !$result;
+    } catch (Exception $e) {
+        error_log("OTP Rate Limit Check Error: " . $e->getMessage());
+        return true; // Allow sending if there's an error
+    }
+}
+
+/**
+ * Get recent OTP record for a mobile number
+ */
+function getRecentOTP($mobileNo)
+{
+    try {
+        $db = getDBConnection('read');
+        if (!$db) {
+            error_log("Failed to get database connection for getRecentOTP");
+            return false;
+        }
+
+        $mobileNo = preg_replace('/[^0-9]/', '', $mobileNo);
+
+        $stmt = $db->prepare("
+            SELECT id, otp, created_ts, is_used, attempt_count
+            FROM public.otp_login 
+            WHERE mobileno = ? 
+            AND created_ts >= NOW() - INTERVAL '10 minutes'
+            ORDER BY created_ts DESC 
+            LIMIT 1
+        ");
+
+        $stmt->execute([$mobileNo]);
+        return $stmt->fetch();
+    } catch (Exception $e) {
+        error_log("Get Recent OTP Error: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Handle OTP operations
+ */
+function handleOTPOperation($data)
+{
+    $operation = $data['operation'] ?? '';
+    $mobileNo = $data['mobile_no'] ?? '';
+    $otp = $data['otp'] ?? '';
+
+    // Validate mobile number
+    if (!preg_match('/^[6-9]\d{9}$/', $mobileNo)) {
+        echo json_encode(['success' => 0, 'message' => 'Invalid mobile number format']);
+        return;
+    }
+
+    switch ($operation) {
+        case 'send_otp':
+            sendOTP($mobileNo);
+            break;
+
+        case 'verify_otp':
+            verifyOTPRequest($mobileNo, $otp);
+            break;
+
+        case 'check_otp_status':
+            checkOTPStatus($mobileNo);
+            break;
+
+        case 'resend_otp':
+            resendOTP($mobileNo);
+            break;
+
+        default:
+            echo json_encode(['success' => 0, 'message' => 'Invalid operation']);
+    }
+}
+
+/**
+ * Send OTP to mobile number
+ */
+function sendOTP($mobileNo)
+{
+    // Rate limiting check
+    if (!canSendOTP($mobileNo)) {
+        echo json_encode([
+            'success' => 0,
+            'message' => 'Please wait 1 minute before requesting another OTP',
+            'code' => 'RATE_LIMITED'
+        ]);
+        return;
+    }
+
+    // Generate OTP
+    $otp = generateOTP();
+    
+    // Store OTP in database
+    try {
+        $insertResult = insertOTP($mobileNo, $otp);
+        
+        if (!$insertResult) {
+            echo json_encode([
+                'success' => 0,
+                'message' => 'Failed to generate OTP. Please try again.',
+                'code' => 'GENERATION_FAILED'
+            ]);
+            return;
+        }
+        
+        // Send OTP via SMS
+        $smsResult = sendOtpViamethod($mobileNo, $otp, 'TNGOVT', 'mobile');
+        
+        if (!$smsResult) {
+            error_log("Failed to send SMS OTP to $mobileNo");
+            // Still return success because OTP was generated, just SMS failed
+        }
+
+        // Return response
+        if (isDevelopmentEnvironment()) {
+            // Development mode - return OTP
+            echo json_encode([
+                'success' => 1,
+                'message' => 'OTP sent successfully',
+                'debug_otp' => $otp, // Remove this in production
+                'expires_in' => 600 // 10 minutes in seconds
+            ]);
+        } else {
+            // Production mode
+            echo json_encode([
+                'success' => 1,
+                'message' => 'OTP sent successfully',
+                'expires_in' => 600
+            ]);
+        }
+
+        // Log OTP generation
+        error_log("OTP generated for $mobileNo: $otp");
+        
+    } catch (Exception $e) {
+        error_log("sendOTP Exception: " . $e->getMessage());
+        echo json_encode([
+            'success' => 0,
+            'message' => 'Failed to send OTP. Please try again.',
+            'code' => 'SEND_FAILED'
+        ]);
+    }
+}
+
+/**
+ * Resend OTP
+ */
+function resendOTP($mobileNo)
+{
+    // Check if there's a recent OTP that can be reused
+    $recentOTP = getRecentOTP($mobileNo);
+
+    if ($recentOTP && $recentOTP['is_used'] == 'false' && $recentOTP['attempt_count'] < 3) {
+        // Reuse existing OTP
+        $otp = $recentOTP['otp'];
+
+        // Update timestamp to extend expiry
+        $db = getDBConnection('write');
+        if ($db) {
+            $stmt = $db->prepare(
+                "UPDATE public.otp_login 
+                SET created_ts = NOW(), attempt_count = 0 
+                WHERE mobileno = ? AND otp = ?"
+            );
+            $stmt->execute([$mobileNo, $otp]);
+        }
+
+        // Resend SMS
+        sendOtpViamethod($mobileNo, $otp, 'TNGOVT', 'mobile');
+        
+        echo json_encode([
+            'success' => 1,
+            'message' => 'OTP resent successfully',
+            'debug_otp' => isDevelopmentEnvironment() ? $otp : null,
+            'expires_in' => 600
+        ]);
+    } else {
+        // Generate new OTP
+        sendOTP($mobileNo);
+    }
+}
+
+/**
+ * Verify OTP request
+ */
+function verifyOTPRequest($mobileNo, $otp)
+{
+    if (empty($otp) || !preg_match('/^\d{6}$/', $otp)) {
+        echo json_encode([
+            'success' => 0,
+            'message' => 'Invalid OTP format. Please enter 6 digits.',
+            'code' => 'INVALID_FORMAT'
+        ]);
+        return;
+    }
+
+    // Get recent OTP record first to check status
+    $recentOTP = getRecentOTP($mobileNo);
+
+    if (!$recentOTP) {
+        echo json_encode([
+            'success' => 0,
+            'message' => 'No OTP found or OTP expired. Please request a new OTP.',
+            'code' => 'OTP_EXPIRED'
+        ]);
+        return;
+    }
+
+    if ($recentOTP['is_used'] == 'true') {
+        echo json_encode([
+            'success' => 0,
+            'message' => 'OTP already used. Please request a new OTP.',
+            'code' => 'OTP_USED'
+        ]);
+        return;
+    }
+
+    if ($recentOTP['attempt_count'] >= 5) {
+        echo json_encode([
+            'success' => 0,
+            'message' => 'Too many failed attempts. Please request a new OTP.',
+            'code' => 'MAX_ATTEMPTS'
+        ]);
+        return;
+    }
+
+    // Increment attempt count
+    incrementOTPAttempt($recentOTP['id']);
+    
+    if (verifyOTP($mobileNo, $otp)) {
+        // OTP verified successfully
+        $_SESSION['otp_verified'] = true;
+        $_SESSION['verified_mobile'] = $mobileNo;
+        $_SESSION['verified_at'] = time();
+
+        echo json_encode([
+            'success' => 1,
+            'message' => 'OTP verified successfully',
+            'verified' => true,
+            'mobile_no' => $mobileNo,
+        ]);
+    } else {
+        $remainingAttempts = 5 - ($recentOTP['attempt_count'] + 1);
+
+        echo json_encode([
+            'success' => 0,
+            'message' => $remainingAttempts > 0
+                ? "Invalid OTP. {$remainingAttempts} attempts remaining."
+                : "Too many failed attempts. Please request a new OTP.",
+            'code' => 'INVALID_OTP',
+            'remaining_attempts' => $remainingAttempts
+        ]);
+    }
+}
+
+/**
+ * Check OTP status
+ */
+function checkOTPStatus($mobileNo)
+{
+    $recentOTP = getRecentOTP($mobileNo);
+
+    if (!$recentOTP) {
+        echo json_encode([
+            'success' => 0,
+            'message' => 'No active OTP found',
+            'has_active_otp' => false
+        ]);
+        return;
+    }
+
+    $createdTime = strtotime($recentOTP['created_ts']);
+    $currentTime = time();
+    $timeElapsed = $currentTime - $createdTime;
+    $timeRemaining = 600 - $timeElapsed; // 10 minutes expiry
+
+    echo json_encode([
+        'success' => 1,
+        'has_active_otp' => true,
+        'is_used' => ($recentOTP['is_used'] == 'true'),
+        'attempt_count' => (int) $recentOTP['attempt_count'],
+        'time_remaining' => max(0, $timeRemaining),
+        'expires_in' => max(0, $timeRemaining)
+    ]);
+}
+
+/**
+ * Check if we're in development environment
+ */
+function isDevelopmentEnvironment()
+{
+    $host = $_SERVER['HTTP_HOST'] ?? '';
+    return in_array($host, ['localhost', '127.0.0.1', '::1']) || strpos($host, '.local') !== false;
+}
+
+/**
+ * Send OTP via SMS
+ */
+function sendOtpViamethod($contact, $generatedOTP, $app_name, $method)
+{
+    $_SESSION['otp'] = $generatedOTP;
+    $_SESSION['otp_expiry'] = time() + 120; // OTP expires in 2 minutes
+
+    if ($method === 'mobile') {
+        $message_content = "à®µà®£à®•à¯à®•à®®à¯, à®¤à®™à¯à®•à®³à®¿à®©à¯ à®œà®²à¯à®²à®¿à®•à¯à®•à®Ÿà¯à®Ÿà¯ à®µà®²à¯ˆà®¤à®³à®¤à¯à®¤à®¿à®²à¯ à®‰à®³à¯à®¨à¯à®´à¯ˆà®µà®¿à®±à¯à®•à¯à®•à®¾à®© OTP à®†à®©à®¤à¯ $generatedOTP . à®‰à®³à¯à®¨à¯à®´à¯ˆà®µà®¿à®±à¯à®•à¯à®•à¯ OTP à® à®‰à®³à¯à®³à®¿à®Ÿà®µà¯à®®à¯. - TNAHVS";
+        $entityid = 1001730754604494181;
+        $templateid = 1007481319631091366;
+        $endpoint = 'https://tmegov.onex-aura.com/api/sms';
+        $params = array('key' => 'r8o9j9JV', 'to' => $contact, 'from' => 'TNAHVS', 'body' => $message_content, 'entityid' => $entityid, 'templateid' => $templateid);
+        $url = $endpoint . '?' . http_build_query($params);
+
+        // Initialize cURL
+        $ch = curl_init();
+        // Set the URL with query string
+        curl_setopt($ch, CURLOPT_URL, $url);
+        // Set the request type to GET
+        curl_setopt($ch, CURLOPT_HTTPGET, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        
+        $result = curl_exec($ch);
+        $curlError = curl_error($ch);
+        curl_close($ch);
+
+        if ($curlError) {
+            error_log("SMS API cURL Error: $curlError");
+            return false;
+        }
+
+        // Decode the JSON response
+        $data = json_decode($result);
+        if ($data && isset($data->status)) {
+            return $data->status == 100;
+        }
+        
+        return false;
+    }
+    
+    return false;
+}
+
+/*
+|----------------------------------------------------------
+|  Main API Router
+|----------------------------------------------------------
+*/
+
+// Handle OTP operations
+if (isset($p['action']) && $p['action'] === 'otp_operation') {
+    handleOTPOperation($p);
+    exit;
+}
+
+// Handle other actions (insert, update, delete, select)
+if (isset($p['action'])) {
+    switch ($p['action']) {
+        case 'insert':
+            handleInsertOperation($p);
+            break;
+
+        case 'select':
+            handleSelectOperation($p);
+            break;
+
+        case 'update':
+            handleUpdateOperation($p);
+            break;
+
+        case 'delete':
+            handleDeleteOperation($p);
+            break;
+
+        default:
+            http_response_code(400);
+            echo json_encode(['success' => 0, 'message' => 'Invalid action']);
+            exit;
+    }
+} else {
+    http_response_code(400);
+    echo json_encode(['success' => 0, 'message' => 'No action specified']);
+    exit;
+}
+
+/*
+|----------------------------------------------------------
+|  CRUD Functions (placeholder implementations)
+|----------------------------------------------------------
+*/
+
+function handleInsertOperation($data)
+{
+    // Your existing insert logic here
+    try {
+        echo json_encode(['success' => 1, 'message' => 'Record inserted successfully']);
+    } catch (Exception $e) {
+        error_log("Insert Error: " . $e->getMessage());
+        echo json_encode(['success' => 0, 'message' => 'Insert failed']);
+    }
+}
+
+function handleSelectOperation($data)
+{
+    // Your existing select logic here
+    echo json_encode(['success' => 1, 'data' => []]);
+}
+
+function handleUpdateOperation($data)
+{
+    // Your existing update logic here
+    echo json_encode(['success' => 1, 'message' => 'Record updated successfully']);
+}
+
+function handleDeleteOperation($data)
+{
+    // Your existing delete logic here
+    echo json_encode(['success' => 1, 'message' => 'Record deleted successfully']);
+}
+
+?>

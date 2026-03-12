@@ -1,0 +1,1356 @@
+<html class="page-57 app-IMIM" lang="en" style="--js-sticky-top: 96px">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=edge" />
+  <meta charset="utf-8" />
+  <title>Scheme report</title>
+  <!-- Prevent browser from caching protected pages -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <link rel="apple-touch-icon" href="../assets/img/app-icon-192.png">
+  <link rel="icon" href="../assets/img/app-icon-32.png">
+
+  <link rel="stylesheet" href="../assets/css/Core.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/Theme-Standard.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/font-apex.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/Core_theme.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/custom.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/aos.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/theme.css" type="text/css">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/datatable/css/dataTables.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/vendor/datatable/dataTables.bootstrap5.min.css">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- session toast  -->
+  <!-- session toast  -->
+  <link rel="stylesheet" href="../assets/css/sessionToast.css" type="text/css">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="-1">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    .modal-backdrop {
+      background-color: #00000040 !important;
+    }
+  </style>
+  <style type="text/css">
+    ul.headermenu {
+      padding: 10px 30px;
+      width: auto !important;
+      margin: 0;
+      white-space: nowrap;
+      left: -32px;
+      position: relative;
+    }
+  </style>
+  <style type="text/css">
+    .modal-body {
+      overflow-x: hidden !important;
+    }
+
+    input#screenReaderSwitch {
+      display: none;
+    }
+  </style>
+
+  <!-- <script type="text/javascript" charset="utf-8" async="" data-requirecontext="_" data-requiremodule="ojtranslations/nls/en/localeElements" src="/i/libraries/./oraclejet/14.0.0/js/libs/oj/14.0.0/resources/nls/en/localeElements.js"></script>
+    <base href="/ords/">
+    <link rel="stylesheet" href="/i/libraries/oraclejet/14.0.0/css/libs/oj/14.0.0/redwood/oj-redwood-notag-min.css?v=23.1.0" type="text/css">
+    <link rel="stylesheet" href="/i/app_ui/css/Core.min.css?v=23.1.0" type="text/css">
+    <link rel="stylesheet" href="/i/app_ui/css/Theme-Standard.min.css?v=23.1.0" type="text/css">
+    <link rel="stylesheet" href="/i/libraries/font-apex/2.2.1/css/font-apex.min.css?v=23.1.0" type="text/css">
+    <link rel="stylesheet" href="/i/themes/theme_42/23.1/css/Core.min.css?v=23.1.0" type="text/css">
+    <link rel="stylesheet" href="r/dimdev/117/files/theme/42/v66/77989896499605096373.css" type="text/css">
+    <link rel="apple-touch-icon" href="r/dimdev/117/files/static/v194/icons/app-icon-192.png">
+    <link rel="icon" href="r/dimdev/117/files/static/v194/icons/app-icon-32.png"> -->
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="-1" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- <style type="text/css">.t-fht-cell { height: 1px; overflow: hidden; } .t-fht-wrapper { width: 100%; overflow: hidden; position: relative; } .t-fht-thead { overflow: hidden; position: relative; } .t-fht-tbody { overflow: auto; } </style> -->
+  <link rel="stylesheet" href="../assets/css/responsive.css" type="text/css">
+</head>
+
+<body
+  class="t-PageBody t-PageBody--hideLeft t-PageBody--hideActions t-PageTemplate--standard apex-top-nav apex-icons-fontapex apex-theme-vita-standard js-HeaderExpanded t-PageBody--topNav"
+  id="t_PageBody">
+  <a href="#main" id="t_Body_skipToContent">Skip to Main Content</a>
+  <form>
+    <header class="t-Header" id="t_Header" role="banner">
+      <div class="t-Header-branding">
+        <div class="t-Header-controls">
+          <button class="t-Button t-Button--icon t-Button--header t-Button--headerTree" aria-label="Main Navigation"
+            title="Main Navigation" id="t_Button_navControl" type="button">
+            <span class="t-Header-controlsIcon" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="t-Header-logo">
+          <!-- <a href="&#x2F;ords&#x2F;r&#x2F;dimdev&#x2F;imim&#x2F;home?session=9577400874335" class="t-Header-logo-link"><img src="r&#x2F;dimdev&#x2F;117&#x2F;files&#x2F;static&#x2F;v194&#x2F;app-251298-logo.jpeg" alt="" class="apex-logo-img" /><span class="apex-logo-text">DIRECTORATE OF INDIAN MEDICINE  - INDENT MANAGEMENT</span></a> -->
+          <div class="gigw">
+            <li>
+              <a data-aos="fade-up" data-aos-delay="200" class="linkedin btn-decrease aos-init aos-animate"><span
+                  class="d-inline-block" tabindex="0" data-toggle="tooltip" title="font size Decrease"><i></i> A
+                  -</span></a>
+            </li>
+            <li>
+              <a data-aos="fade-up" data-aos-delay="300" class="linkedin btn-orig aos-init aos-animate"><span
+                  class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Reset font"><i></i> A
+                  <sup></sup></span></a>
+            </li>
+            <li>
+              <a data-aos="fade-up" data-aos-delay="400" class="instagram btn-increase aos-init aos-animate"><span
+                  class="d-inline-block" tabindex="0" data-toggle="tooltip" title="font size Increase"><i></i> A
+                  +</span></a>
+            </li>
+            <li>
+              <a data-aos="fade-up" data-aos-delay="500" class="aos-init aos-animate"><span class="d-inline-block"
+                  tabindex="0" data-toggle="tooltip" title="Dark Mode"><i class="t-Icon fa fa-moon-o"
+                    id="darkmode"></i></span></a>
+            </li>
+            <li>
+              <a data-aos="fade-up" data-aos-delay="600" class="form-check form-switch aos-init aos-animate"><label
+                  class="form-check-label" for="screenReaderSwitch">
+                  <span class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Screen Reader">
+                    <i id="sound" class="t-Icon fa fa-volume-up"></i></span></label><input class="form-check-input"
+                  type="checkbox" role="switch" id="screenReaderSwitch"
+                  onclick="readText(document.getElementsByTagName('body')[0])" /></a>
+            </li>
+          </div>
+        </div>
+        <div class="t-Header-navBar">
+          <div class="t-Header-navBar--start"></div>
+          <div id="globalHeader"></div>
+          <div class="t-Header-navBar--end"></div>
+        </div>
+      </div>
+      <div class="top">
+        <img id="leftlogo" data-aos="fade-right" data-aos-duration="800" src="../assets/img/head-tnlogo.png"
+          class="aos-init aos-animate" />
+        <h1 data-aos="zoom-in" data-aos-duration="800" class="dept-name text-middle aos-init aos-animate">
+          Medicine Indent
+        </h1>
+        <h3 data-aos="zoom-in" data-aos-duration="800" class="dept-name2 text-middle aos-init aos-animate">
+          Department of Indian Medicine and Homoeopathy
+        </h3>
+        <img id="rightlogo" data-aos="fade-left" data-aos-duration="800" src="../assets/img/head-dept-logo.png"
+          class="aos-init aos-animate" />
+      </div>
+      <div class="t-Header-nav">
+        <div class="t-Header-nav-list js-tabLike js-tabLike a-MenuBar a-MenuBar--overflow a-MenuBar--tabs"
+          id="t_MenuNav" role="menubar">
+          <ul id="nav-links">
+            <div id="navbar-container"></div>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <div class="t-Body">
+      <div class="t-Body-main">
+        <div class="t-Body-title" id="t_Body_title"></div>
+        <div class="t-Body-content" id="t_Body_content">
+          <div id="t_Body_content_offset"></div>
+          <main id="main" class="t-Body-mainContent">
+            <span id="APEX_SUCCESS_MESSAGE" data-template-id="428236780824079931276_S"
+              class="apex-page-success u-hidden"></span><span id="APEX_ERROR_MESSAGE"
+              data-template-id="428236780824079931276_E" class="apex-page-error u-hidden"></span>
+            <div class="t-Body-fullContent"></div>
+            <div class="t-Body-contentInner">
+              <div class="container">
+                <div class="row">
+                  <div class="col col-12 apex-col-auto col-start col-end">
+                    <div id="R81452622107629074944" role="region" aria-label="Scheme report"
+                      class="t-IRR-region js-apex-region">
+                      <div class="t-Region-orderBy"></div>
+                      <div id="R81452622107629074944_ir" class="a-IRR-container">
+                        <div id="R81452622107629074944_worksheet_region" class="a-IRR" aria-live="polite">
+                          <div id="R81452622107629074944_single_row_view" class="a-IRR-singleRowView"></div>
+                          <div id="R81452622107629074944_full_view" class="a-IRR-fullView">
+                            <div id="R81452622107629074944_toolbar" class="a-IRR-toolbar">
+                              <div role="search" aria-label="Search bar of Scheme report"
+                                id="R81452622107629074944_toolbar_controls" class="a-IRR-controls">
+                                <div class="a-IRR-controlGroup a-IRR-controlGroup--search a-IRR-controlGroup--hidden">
+                                  <div class="a-IRR-search">
+                                    <input type="hidden"
+                                      id="R81452622107629074944_column_search_current_column" /><input type="hidden"
+                                      id="R81452622107629074944_search_field" value="" />
+                                  </div>
+                                </div>
+                                <div class="a-IRR-controlGroup a-IRR-controlGroup--views"></div>
+                                <div class="a-IRR-controlGroup a-IRR-controlGroup--options">
+                                  <input type="hidden" id="R81452622107629074944_row_select" value="50" />
+                                  <div class="a-IRR-actions">
+                                    <button id="R81452622107629074944_actions_button"
+                                      class="a-Button a-IRR-button a-IRR-button--actions" type="button"
+                                      data-menu="R81452622107629074944_actions_menu" aria-haspopup="menu">
+                                      Actions<span aria-hidden="true" class="a-Icon icon-menu-drop-down"></span>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                              <div role="region" aria-label="Buttons next to search bar of Scheme report"
+                                class="a-IRR-buttons">
+                                <button class="t-Button t-Button--hot js-ignoreChange" type="button"
+                                  data-bs-toggle="modal" data-bs-target=".create_Modal">
+                                  <span class="t-Button-label" onclick="loaddisscheme()">Create</span>
+                                </button>
+                              </div>
+                            </div>
+                            <div id="R81452622107629074944_content" class="a-IRR-content">
+                              <div id="R81452622107629074944_dialog_js" class="a-IRR-dialogBody" style="display: none">
+                              </div>
+                              <input type="hidden" id="R81452622107629074944_worksheet_id"
+                                value="81452622201478074944" />
+                              <input type="hidden" id="R81452622107629074944_app_user" value="9994793279" />
+                              <input type="hidden" id="R81452622107629074944_report_id" value="2299649666615680640" />
+                              <input type="hidden" id="R81452622107629074944_view_mode" value="REPORT" />
+                              <style id="R81452622107629074944_worksheet_css" type="text/css"></style>
+                              <div role="region" aria-label="Chart view of Scheme report"
+                                id="R81452622107629074944_chart" class="a-IRR-chartView"></div>
+                              <div role="region" aria-label="Group by view of Scheme report"
+                                id="R81452622107629074944_group_by" class="a-IRR-groupByView"></div>
+                              <div role="region" aria-label="Pivot view of Scheme report"
+                                id="R81452622107629074944_pivot" class="a-IRR-pivotView"></div>
+                              <div role="region" aria-label="Data view of Scheme report"
+                                id="R81452622107629074944_data_panel" class="a-IRR-reportView">
+                                <div class="a-IRR-tableContainer">
+                                  <div class="t-fht-wrapper">
+                                    <!-- <div class="t-fht-thead js-stickyTableHeader js-stickyWidget-toggle" id="stickyTableHeader_1" style="z-index: 300; width: 1485.6px; position: absolute; top: auto;"> -->
+                                    <!-- <table aria-label="Scheme report, Report = Primary Default, View = Report" class="a-IRR-table" id="81452622201478074944" aria-hidden="true">
+                                          <tr>
+                                            <th class="a-IRR-header a-IRR-header--linkCol" id="R81452622107629074944_LINK">
+                                              <span class="u-vh">Link</span>
+                                              <div class="t-fht-cell" style="width: 73.2625px;"></div>
+                                            </th>
+                                            <th class="a-IRR-header u-tR" id="C81452623016771074945">
+                                              <a class="a-IRR-headerLink" data-column="81452623016771074945" data-fht-column-idx="0">S No</a>
+                                              <div class="t-fht-cell" style="width: 78.8125px;"></div>
+                                            </th>
+                                            <th class="a-IRR-header u-tL" id="C81452623411396074945">
+                                              <a class="a-IRR-headerLink" data-column="81452623411396074945" data-fht-column-idx="1">District</a>
+                                              <div class="t-fht-cell" style="width: 186.188px;"></div>
+                                            </th>
+                                            <th class="a-IRR-header u-tL" id="C81452623876299074946">
+                                              <a class="a-IRR-headerLink" data-column="81452623876299074946" data-fht-column-idx="2">Name of The Institution</a>
+                                              <div class="t-fht-cell" style="width: 761.6px;"></div>
+                                            </th>
+                                            <th class="a-IRR-header u-tL" id="C81452624233837074946">
+                                              <a class="a-IRR-headerLink" data-column="81452624233837074946" data-fht-column-idx="3">Institution Type</a>
+                                              <div class="t-fht-cell" style="width: 198.963px;"></div>
+                                            </th>
+                                            <th class="a-IRR-header u-tL" id="C81452624619579074946">
+                                              <a class="a-IRR-headerLink" data-column="81452624619579074946" data-fht-column-idx="4">System</a>
+                                              <div class="t-fht-cell" style="width: 182.775px;"></div>
+                                            </th>
+                                          </tr>
+                                        </table> -->
+                                    <!-- </div> -->
+                                    <div class="js-stickyWidget-placeholder" style="width: 1485.6px; height: 40px">
+                                    </div>
+                                    <div class="t-fht-tbody" style="width: auto">
+                                      <table aria-label="Scheme report, Report = Primary Default, View = Report"
+                                        class="a-IRR-table" id="viewbudgetSchemedataTable" style="margin-top: -56.4px">
+                                        <thead>
+                                          <tr>
+                                            <th class="a-IRR-header a-IRR-header--linkCol"
+                                              id="R161192321633005013086_LINK">
+                                              <span class="u-vh">Link</span>
+                                              <div class="t-fht-cell"></div>
+                                            </th>
+                                            <th class="a-IRR-header u-tL" id="C161192322501341013088">
+                                              <a aria-haspopup="dialog" class="a-IRR-headerLink"
+                                                data-column="161192322501341013088" href="#" data-fht-column-idx="0">S
+                                                No</a>
+                                              <div class="t-fht-cell"></div>
+                                            </th>
+                                            <th class="a-IRR-header u-tL" id="C161192323366697013088">
+                                              <a aria-haspopup="dialog" class="a-IRR-headerLink"
+                                                data-column="161192323366697013088" href="#"
+                                                data-fht-column-idx="1">District</a>
+                                              <div class="t-fht-cell"></div>
+                                            </th>
+                                            <th class="a-IRR-header u-tL" id="C161192324565104013089">
+                                              <a aria-haspopup="dialog" class="a-IRR-headerLink"
+                                                data-column="161192324565104013089" href="#"
+                                                data-fht-column-idx="2">Name of The Institution</a>
+                                              <div class="t-fht-cell"></div>
+                                            </th>
+                                            <th class="a-IRR-header u-tL" id="C161192322954346013088">
+                                              <a aria-haspopup="dialog" class="a-IRR-headerLink"
+                                                data-column="161192322954346013088" href="#"
+                                                data-fht-column-idx="3">Institution Type</a>
+                                              <div class="t-fht-cell"></div>
+                                            </th>
+                                            <th class="a-IRR-header u-tL" id="C161192323764526013089">
+                                              <a aria-haspopup="dialog" class="a-IRR-headerLink"
+                                                data-column="161192323764526013089" href="#"
+                                                data-fht-column-idx="4">System</a>
+                                              <div class="t-fht-cell"></div>
+                                            </th>
+                                          </tr>
+                                        </thead>
+
+                                        <tbody></tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div role="region" aria-label="Pagination of Scheme report"
+                                  class="a-IRR-paginationWrap a-IRR-paginationWrap--bottom">
+                                  <ul class="a-IRR-pagination">
+                                    <li aria-hidden="true" class="a-IRR-pagination-item is-disabled"></li>
+                                    <li class="a-IRR-pagination-item">
+                                      <span class="a-IRR-pagination-label">
+                                        1 - 50</span>
+                                    </li>
+                                    <li class="a-IRR-pagination-item">
+                                      <button type="button" class="a-Button a-IRR-button a-IRR-button--pagination"
+                                        aria-controls="R81452622107629074944" title="Next" aria-label="Next"
+                                        data-pagination="pgR_min_row=51max_rows=50rows_fetched=50">
+                                        <span class="a-Icon icon-right-chevron" aria-hidden="true"></span>
+                                      </button>
+                                    </li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+          <footer class="t-Footer" id="t_Footer" role="contentinfo">
+            <div class="t-Footer-body">
+              <div class="t-Footer-content"></div>
+              <div class="t-Footer-apex">
+                <div class="t-Footer-version"></div>
+                <div class="t-Footer-customize"></div>
+              </div>
+            </div>
+            <div class="t-Footer-top">
+              <a href="#top" class="t-Footer-topButton" id="t_Footer_topButton" title="Start of page"
+                aria-label="Start of page"><span class="a-Icon icon-up-chevron" aria-hidden="true"></span></a>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <div class="t-Body-inlineDialogs" id="t_Body_inlineDialogs"></div>
+    <input type="hidden" id="pPageFormRegionChecksums" value="[]" />
+    <input type="hidden" id="pPageItemsRowVersion" value="" /><input type="hidden" id="pPageItemsProtected"
+      value="/AzM2KqOBWZr9OsRo37KdNo2z7rnIc89MWmh8-RYEejEgejWOMQ9BXO4nMqaM4YaQa4WQJlEemZ-zj1TNQQfjuQ" />
+  </form>
+
+
+  <!-- create -->
+  <div class="modal fade create_Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header py-2">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Scheme Form</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-2">
+          <div class="container6">
+            <div class="row">
+              <div class="col col-6 apex-col-auto col-start">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--text-field"
+                  id="P58_DISTRICT_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_DISTRICT" id="P58_DISTRICT_LABEL" class="t-Form-label">District</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <select id="P58_DISTRICT" name="P58_DISTRICT" class="selectlist apex-item-select"
+                        data-native-menu="false" size="1">
+                        <option value="" selected="selected">
+                          Select District
+                        </option>
+                      </select>
+                    </div>
+                    <span id="P58_DISTRICT_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-6 apex-col-auto col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--text-field"
+                  id="P58_NAME_OF_THE_INSTITUTION_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_NAME_OF_THE_INSTITUTION" id="P58_NAME_OF_THE_INSTITUTION_LABEL"
+                      class="t-Form-label">Name Of The Institution</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_NAME_OF_THE_INSTITUTION" name="P58_NAME_OF_THE_INSTITUTION"
+                        class="text_field apex-item-text" value="" size="32" maxlength="255" data-trim-spaces="NONE" />
+                    </div>
+                    <span id="P58_NAME_OF_THE_INSTITUTION_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-6 apex-col-auto col-start">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--text-field"
+                  id="P58_INSTITUTION_TYPE_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_INSTITUTION_TYPE" id="P58_INSTITUTION_TYPE_LABEL" class="t-Form-label">Institution
+                      Type</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_INSTITUTION_TYPE" name="P58_INSTITUTION_TYPE"
+                        class="text_field apex-item-text" value="" size="32" maxlength="50" data-trim-spaces="NONE" />
+                    </div>
+                    <span id="P58_INSTITUTION_TYPE_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-6 apex-col-auto col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--text-field"
+                  id="P58_SYSTEM_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_SYSTEM" id="P58_SYSTEM_LABEL" class="t-Form-label">System</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_SYSTEM" name="P58_SYSTEM" class="text_field apex-item-text" value=""
+                        size="32" maxlength="50" data-trim-spaces="NONE" />
+                    </div>
+                    <span id="P58_SYSTEM_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--textarea"
+                  id="P58_SCHEME_NAME_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_SCHEME_NAME" id="P58_SCHEME_NAME_LABEL" class="t-Form-label">Scheme Name</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <div class="apex-item-group apex-item-group--textarea">
+                        <textarea name="P58_SCHEME_NAME" rows="5" cols="30" maxlength="1000" id="P58_SCHEME_NAME"
+                          class="textarea apex-item-textarea" data-resizable="true" style="resize: both"></textarea>
+                      </div>
+                    </div>
+                    <span id="P58_SCHEME_NAME_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--number-field"
+                  id="P58_SCHEME_VALUES_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_SCHEME_VALUES" id="P58_SCHEME_VALUES_LABEL" class="t-Form-label">Scheme
+                      Values</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_SCHEME_VALUES" name="P58_SCHEME_VALUES"
+                        class="number_field apex-item-text apex-item-number" value="" size="30" inputmode="decimal"
+                        style="text-align: start" />
+                    </div>
+                    <span id="P58_SCHEME_VALUES_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--textarea"
+                  id="P58_STATUS_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_STATUS" id="P58_STATUS_LABEL" class="t-Form-label">Status</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <div class="apex-item-group apex-item-group--textarea">
+                        <textarea name="P58_STATUS" rows="5" cols="30" maxlength="1000" id="P58_STATUS"
+                          class="textarea apex-item-textarea" data-resizable="true" style="resize: both"></textarea>
+                      </div>
+                    </div>
+                    <span id="P58_STATUS_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--textarea is-required"
+                  id="P58_CREATED_BY_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_CREATED_BY" id="P58_CREATED_BY_LABEL" class="t-Form-label">Created By</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <div class="apex-item-group apex-item-group--textarea">
+                        <textarea name="P58_CREATED_BY" rows="5" cols="30" maxlength="1000" id="P58_CREATED_BY"
+                          required="" class="textarea apex-item-textarea" data-resizable="true"
+                          style="resize: both"></textarea>
+                      </div>
+                    </div>
+                    <span id="P58_CREATED_BY_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <!-- Created Date -->
+                <div class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper is-required"
+                  id="P58_CREATED_DATE_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_CREATED_DATE" id="P58_CREATED_DATE_LABEL" class="t-Form-label">Created Date</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_CREATED_DATE" name="P58_CREATED_DATE" class="form-control datepicker"
+                        placeholder="Select Date" required />
+                    </div>
+                    <span id="P58_CREATED_DATE_error_placeholder" class="a-Form-error"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--text-field is-required"
+                  id="P58_UPDATED_BY_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_UPDATED_BY" id="P58_UPDATED_BY_LABEL" class="t-Form-label">Updated By</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_UPDATED_BY" name="P58_UPDATED_BY" required=""
+                        class="text_field apex-item-text" value="" size="30" maxlength="100" />
+                    </div>
+                    <span id="P58_UPDATED_BY_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper is-required"
+                  id="P58_UPDATED_DATE_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_UPDATED_DATE" id="P58_UPDATED_DATE_LABEL" class="t-Form-label">Updated Date</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_UPDATED_DATE" name="P58_UPDATED_DATE" class="form-control datepicker"
+                        placeholder="Select Date" required />
+                    </div>
+                    <span id="P58_UPDATED_DATE_error_placeholder" class="a-Form-error"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer py-2">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-primary" id="btnCreateSchemeBudget">
+            Create
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- create -->
+
+  <!-- update -->
+
+  <div class="modal fade update_Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header py-2">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">
+            Update Scheme form
+          </h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body py-2">
+          <div class="container6">
+            <div class="row">
+              <div class="col col-6 apex-col-auto col-start">
+                <input type="hidden" id="P58_ID_Edit" name="P58_ID" />
+                <input type="hidden" id="P58_STATUS_Edit" name="P58_STATUS" />
+
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--has-initial-value apex-item-wrapper--text-field js-show-label"
+                  id="P58_DISTRICT_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_DISTRICT" id="P58_DISTRICT_LABEL_Edit" class="t-Form-label">District</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+
+                      <select id="P58_DISTRICT_Edit" name="P58_DISTRICT" class="selectlist apex-item-select"
+                        data-native-menu="false" size="1">
+                        <option value="" selected="selected">
+                          Select District
+                        </option>
+                      </select>
+                    </div>
+                    <span id="P58_DISTRICT_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-6 apex-col-auto col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--has-initial-value apex-item-wrapper--text-field js-show-label"
+                  id="P58_NAME_OF_THE_INSTITUTION_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_NAME_OF_THE_INSTITUTION" id="P58_NAME_OF_THE_INSTITUTION_LABEL_Edit"
+                      class="t-Form-label">Name Of The Institution</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_NAME_OF_THE_INSTITUTION_Edit" name="P58_NAME_OF_THE_INSTITUTION"
+                        class="text_field apex-item-text" value="Govt. Siddha Medical College, Chennai" size="32"
+                        maxlength="255" data-trim-spaces="NONE" />
+                    </div>
+                    <span id="P58_NAME_OF_THE_INSTITUTION_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-6 apex-col-auto col-start">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--has-initial-value apex-item-wrapper--text-field js-show-label"
+                  id="P58_INSTITUTION_TYPE_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_INSTITUTION_TYPE" id="P58_INSTITUTION_TYPE_LABEL_Edit"
+                      class="t-Form-label">Institution Type</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_INSTITUTION_TYPE_Edit" name="P58_INSTITUTION_TYPE"
+                        class="text_field apex-item-text" value="Medical College" size="32" maxlength="50"
+                        data-trim-spaces="NONE" />
+                    </div>
+                    <span id="P58_INSTITUTION_TYPE_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="col col-6 apex-col-auto col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--has-initial-value apex-item-wrapper--text-field js-show-label"
+                  id="P58_SYSTEM_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_SYSTEM" id="P58_SYSTEM_LABEL" class="t-Form-label">System</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_SYSTEM_Edit" name="P58_SYSTEM" class="text_field apex-item-text"
+                        value="Siddha" size="32" maxlength="50" data-trim-spaces="NONE" />
+                    </div>
+                    <span id="P58_SYSTEM_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--has-initial-value apex-item-wrapper--textarea js-show-label"
+                  id="P58_SCHEME_NAME_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_SCHEME_NAME" id="P58_SCHEME_NAME_LABEL" class="t-Form-label">Scheme Name</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <div class="apex-item-group apex-item-group--textarea">
+                        <textarea name="P58_SCHEME_NAME" rows="5" cols="30" maxlength="1000" id="P58_SCHEME_NAME_Edit"
+                          class="textarea apex-item-textarea" data-resizable="true" style="resize: both">
+Ayush Health &amp; Wellness Center</textarea>
+                      </div>
+                    </div>
+                    <span id="P58_SCHEME_NAME_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--has-initial-value apex-item-wrapper--number-field js-show-label"
+                  id="P58_SCHEME_VALUES_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_SCHEME_VALUES" id="P58_SCHEME_VALUES_LABEL" class="t-Form-label">Scheme
+                      Values</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_SCHEME_VALUES_Edit" name="P58_SCHEME_VALUES"
+                        class="number_field apex-item-text apex-item-number" value="300000" size="30"
+                        inputmode="decimal" style="text-align: start" />
+                    </div>
+                    <span id="P58_SCHEME_VALUES_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col col-12 apex-col-auto col-start col-end">
+                  <div
+                    class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--textarea"
+                    id="P58_STATUS_CONTAINER"
+                  >
+                    <div class="t-Form-labelContainer">
+                      <label
+                        for="P58_STATUS"
+                        id="P58_STATUS_LABEL"
+                        class="t-Form-label"
+                        >Status</label
+                      >
+                    </div>
+                    <div class="t-Form-inputContainer">
+                      <div class="t-Form-itemWrapper">
+                        <div class="apex-item-group apex-item-group--textarea">
+                          <textarea
+                            name="P58_STATUS"
+                            rows="5"
+                            cols="30"
+                            maxlength="1000"
+                            id="P58_STATUS_Edit"
+                            class="textarea apex-item-textarea"
+                            data-resizable="true"
+                            style="resize: both"
+                          ></textarea>
+                        </div>
+                      </div>
+                      <span
+                        id="P58_STATUS_error_placeholder"
+                        class="a-Form-error"
+                        data-template-id="428237131010283931341_ET"
+                      ></span>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--has-initial-value apex-item-wrapper--textarea js-show-label is-required"
+                  id="P58_CREATED_BY_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_CREATED_BY" id="P58_CREATED_BY_LABEL" class="t-Form-label">Created By</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <div class="apex-item-group apex-item-group--textarea">
+                        <textarea name="P58_CREATED_BY" rows="5" cols="30" maxlength="1000" id="P58_CREATED_BY_Edit"
+                          required="" class="textarea apex-item-textarea" data-resizable="true" style="resize: both">
+DIMDEVUSER</textarea>
+                      </div>
+                    </div>
+                    <span id="P58_CREATED_BY_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div
+                  class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel apex-item-wrapper apex-item-wrapper--has-initial-value apex-item-wrapper--text-field js-show-label is-required"
+                  id="P58_UPDATED_BY_CONTAINER">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_UPDATED_BY" id="P58_UPDATED_BY_LABEL" class="t-Form-label">Updated By</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <div class="t-Form-itemWrapper">
+                      <input type="text" id="P58_UPDATED_BY_Edit" name="P58_UPDATED_BY" required=""
+                        class="text_field apex-item-text" value="DIMDEVUSER" size="30" maxlength="100" />
+                    </div>
+                    <span id="P58_UPDATED_BY_error_placeholder" class="a-Form-error"
+                      data-template-id="428237131010283931341_ET"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel is-required">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_CREATED_DATE_input_Edit" class="t-Form-label">Created Date</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <input type="text" id="P58_CREATED_DATE_input_Edit" class="form-control datepicker"
+                      placeholder="DD/MM/YYYY" required />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div class="t-Form-fieldContainer t-Form-fieldContainer--floatingLabel is-required">
+                  <div class="t-Form-labelContainer">
+                    <label for="P58_UPDATED_DATE_input_Edit" class="t-Form-label">Updated Date</label>
+                  </div>
+                  <div class="t-Form-inputContainer">
+                    <input type="text" id="P58_UPDATED_DATE_input_Edit" class="form-control datepicker"
+                      placeholder="DD/MM/YYYY" required />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer py-2">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-primary" onclick="updateScheme()">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- update -->
+
+  <!-- session -->
+  <script src="../assets/js/session-guard.js"></script>
+  <script src="../assets/js/session.js"></script>
+
+  <script src="../assets/js/jquery.latest.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/flatpickr.js"></script>
+
+  <!-- DataTables -->
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="../assets/js/widget.treeView.min.js"></script>
+  <script src="../assets/common.js"></script>
+  <script src="../assets/js/widget.interactiveReport.min.js"></script>
+  <script src="../assets/js/widget.iconList.min.js"></script>
+  <script src="../assets/js/widget.stickyTableHeader.min.js"></script>
+  <script src="../assets/js/widget.stickyWidget.min.js"></script>
+  <script src="../assets/js/item.Colorpicker.min.js"></script>
+  <script src="../assets/js/jetCommonBundle.min.js"></script>
+  <script src="../assets/js/chartBundle.min.js"></script>
+
+  <script src="../assets/js/toastUtil.js"></script>
+  <script src="../assets/js/dataTableUtil.js"></script>
+  <script src="../assets/js/crypto-js.min.js"></script>
+  <script src="../assets/js/theme42.min.js"></script>
+  <script src="../assets/js/global.js"></script>
+  <script src="../assets/js/encrypt_decrypt.js"></script>
+  <script src="../assets/js/singleFileUpload.js"></script>
+  <script src="../assets/js/globalHeader.js"></script>
+  <script src="../assets/js/apiConfig.js"></script>
+  <script src="../assets/js/validation.js"></script>
+  <script src="../assets/js/role-guard.js"></script>
+
+  <!-- <script src="/i/themes/theme_42/23.1/js/theme42.min.js?v=23.1.0"></script>
+      <script src="r/dimdev/117/files/static/v194/aos.min.js"></script>
+      <script src="r/dimdev/117/files/static/v194/add.min.js"></script>
+      <script src="/i/libraries/apex/minified/widget.interactiveReport.min.js?v=23.1.0"></script>
+      <script src="/i/libraries/apex/minified/widget.iconList.min.js?v=23.1.0"></script>
+      <script src="/i/libraries/apex/minified/widget.stickyTableHeader.min.js?v=23.1.0"></script>
+      <script src="/i/libraries/apex/minified/widget.stickyWidget.min.js?v=23.1.0"></script>
+      <script src="/i/libraries/apex/minified/item.Colorpicker.min.js?v=23.1.0"></script>
+      <script src="/i/libraries/oraclejet/14.0.0/js/libs/require/require.js?v=23.1.0"></script>
+      <script src="/i/libraries/apex/minified/requirejs.jetConfig.min.js?v=23.1.0"></script>
+      <script src="/i/libraries/apex/minified/jetCommonBundle.min.js?v=23.1.0"></script>
+      <script src="/i/libraries/apex/minified/chartBundle.min.js?v=23.1.0"></script> -->
+
+  <script>
+    $(document).ready(function () {
+      const session = window.getDecryptedUserSession();
+      if (!session) {
+        sessionStorage.clear();
+        window.location.replace("../index.html");
+        return;
+      }
+
+      console.log("Decrypted User Session:", session);
+
+      const {
+        name: userName = "",
+        district: userDistrict = "",
+        designation: userDesignation = "",
+        system: userSystem = "",
+        institutionName: userInstitutionName = "",
+        mobnumber: mobnumber = ""
+      } = session;
+      $("#username .t-Button-label").text(userName);
+      $("#P1_NAME_OF_THE_INDENTING_OFFICER_DISPLAY").text(userName);
+      $("#P1_NAME_OF_THE_INDENTING_OFFICER").val(userName);
+      $("#P1_DESIGNATION_OF_OFFICER").val(userDesignation);
+      $("#P1_DESIGNATION_OF_OFFICER_DISPLAY").text(userDesignation);
+      $("#P1_DISTRICT").val(userDistrict);
+      $("#P1_DISTRICT_DISPLAY").text(userDistrict);
+    });
+    const apiUrl =
+      `${BASE_API_URL}/commonfunction`;
+
+    function getPayload() {
+      return {
+        action: "function_call",
+        function_name: "im_get_allotted_budget_scheme_fn",
+        params: {},
+      };
+    }
+    function initColumnFilter(tableId) {
+      if ($.fn.DataTable.isDataTable(`#${tableId}`)) {
+        $(`#${tableId}`).DataTable().destroy();
+      }
+
+      const table = $(`#${tableId}`).DataTable({
+        initComplete: function () {
+          this.api().columns().every(function () {
+            const column = this;
+            $('input', this.header()).on('keyup change clear', function () {
+              // Normalize input: trim, lowercase, single space
+              let inputVal = this.value.trim().toLowerCase().replace(/\s+/g, ' ');
+              if (column.search() !== inputVal) {
+                column.search(inputVal).draw();
+              }
+            });
+          });
+        },
+        orderCellsTop: true,
+        fixedHeader: true,
+        pageLength: 10
+      });
+    }
+    function fetchTableData() {
+      const payload = getPayload();
+      loadDataToTable({
+        tableId: "viewbudgetSchemedataTable",
+        apiUrl,
+        httpMethod: "POST",
+        payload: encryptData(payload),
+        rowBuilder: (item, i) => {
+          if (!item || Object.keys(item).length === 0) {
+            $("#viewbudgetSchemedataTable tbody").html(`
+                          <tr><td colspan="14" class="u-tC">No Data Found</td></tr>
+                        `);
+            return;
+          }
+
+          return `
+                  <tr>
+                      <td class="a-IRR-linkCol u-tC" data-bs-toggle="modal" data-bs-target=".update_Modal" id="update_bud_scheme">
+                        <a 
+                          href="#"
+                          class="edit-btn"
+                          data-id="${item.id}" 
+                          data-district="${item.district}"
+                          data-institution="${item.name_of_the_institution}"
+                          data-institution-type="${item.institution_type}"
+                          data-system="${item.system}"
+                          data-scheme-name="${item.scheme_name}"
+                          data-scheme-values="${item.scheme_values}"
+                          data-status="${item.status}"
+                            onclick='openUpdateSchemeModal(${JSON.stringify(
+            item
+          )})'
+                        >
+                          <span class="fa fa-edit" title="Edit"></span>
+                        </a>
+                      </td>
+
+                      <td class=" u-tL" >${i + 1}</td>
+                      <td class=" u-tL">${item.district}</td> 
+                      <td class=" u-tL">${item.name_of_the_institution}</td>
+                      <td class=" u-tL">${item.institution_type}</td> 
+                      <td class=" u-tL">${item.system}</td>
+
+                    </tr>
+                  `;
+        },
+        onTableInit: function (dtRef) {
+          dataTableRef = dtRef;
+          initColumnFilter("viewbudgetSchemedataTable"); // call filter setup here
+        },
+      });
+    }
+    fetchTableData();
+
+    function getPayloadBudgetSchemeInsert() {
+      const session = window.getDecryptedUserSession();
+      const {
+        name: userName = "",
+        district: userDistrict = "",
+        designation: userDesignation = "",
+        system: userSystem = "",
+        institutionName: userInstitutionName = "",
+        mobnumber: mobnumber = ""
+      } = session;
+      return {
+        action: "function_call",
+        function_name: "im_ins_allotted_budget_scheme_fn",
+        params: {
+          p_district: $("#P58_DISTRICT").val() || null,
+          p_name_of_the_institution:
+            $("#P58_NAME_OF_THE_INSTITUTION").val() || null,
+          p_institution_type: $("#P58_INSTITUTION_TYPE").val() || null,
+          p_system: $("#P58_SYSTEM").val() || null,
+          p_scheme_name: $("#P58_SCHEME_NAME").val() || null,
+          p_scheme_values: parseFloat($("#P58_SCHEME_VALUES").val()) || 0,
+          p_status: $("#P58_STATUS").val() || null,
+          p_created_by: mobnumber || null,
+          p_created_date: new Date().toISOString(),
+        },
+      };
+    }
+    function validateSchemeForm() {
+      let isValid = true;
+
+      // Clear existing error messages
+      $(".a-Form-error").text("");
+
+      const fields = [
+        { id: "#P58_DISTRICT", label: "District" },
+        { id: "#P58_NAME_OF_THE_INSTITUTION", label: "Institution Name" },
+        { id: "#P58_INSTITUTION_TYPE", label: "Institution Type" },
+        { id: "#P58_SYSTEM", label: "System" },
+        { id: "#P58_SCHEME_NAME", label: "Scheme Name" },
+        { id: "#P58_SCHEME_VALUES", label: "Scheme Values", isNumber: true },
+        { id: "#P58_STATUS", label: "Status" },
+        { id: "#P58_CREATED_DATE", label: "Created Date" },
+        { id: "#P58_UPDATED_BY", label: "Updated By" },
+        { id: "#P58_UPDATED_DATE", label: "Updated Date" },
+      ];
+
+      for (const field of fields) {
+        const value = $(field.id).val().trim();
+
+        if (!value || (field.isNumber && isNaN(parseFloat(value)))) {
+          isValid = false;
+          const errorId = field.id + "_error_placeholder";
+          $(errorId).text(`${field.label} is required`);
+        }
+      }
+
+      return isValid;
+    }
+
+    $("#btnCreateSchemeBudget").on("click", function () {
+      if (!validateSchemeForm()) {
+        return; // Stop if form is invalid
+      }
+      const payload = getPayloadBudgetSchemeInsert();
+      $.ajax({
+        url: apiUrl,
+        method: "POST",
+        data: {
+          data: encryptData(payload),
+        },
+        dataType: "json",
+        success: function (response) {
+          showSuccessToast("Successfully submitted.");
+          $(".create_Modal").modal("hide");
+        },
+        error: function (xhr, status, error) {
+          console.error("API call failed:", {
+            status: xhr.status,
+            statusText: xhr.statusText,
+            responseText: xhr.responseText,
+            error: error,
+          });
+        },
+      });
+    });
+    function openUpdateSchemeModal(data) {
+      // Fill text inputs
+      document.getElementById("P58_ID_Edit").value = data.id || "";
+      document.getElementById("P58_DISTRICT_Edit").value = data.district || "";
+      document.getElementById("P58_NAME_OF_THE_INSTITUTION_Edit").value = data.name_of_the_institution || "";
+      document.getElementById("P58_INSTITUTION_TYPE_Edit").value = data.institution_type || "";
+      document.getElementById("P58_SYSTEM_Edit").value = data.system || "";
+      document.getElementById("P58_SCHEME_NAME_Edit").value = data.scheme_name || "";
+      document.getElementById("P58_SCHEME_VALUES_Edit").value = data.scheme_values || "";
+      document.getElementById("P58_STATUS_Edit").value = data.status || "";
+      document.getElementById("P58_CREATED_BY_Edit").value = data.created_by || "";
+      document.getElementById("P58_UPDATED_BY_Edit").value = data.updated_by || "DIMDEVUSER";
+      loadDistrictOptions({
+        payload: {
+          action: "function_call",
+          function_name: "im_own_district_fn",
+          params: { null: null },
+        },
+        dropdownId: "P58_DISTRICT_Edit",
+        placeholder: "--Select District--",
+        preselectedValue: data.district,
+      });
+      // Show modal
+      $(".update_Modal").modal("show");
+      setTimeout(() => {
+        const createdPicker = flatpickr("#P58_CREATED_DATE_input_Edit");
+        const updatedPicker = flatpickr("#P58_UPDATED_DATE_input_Edit");
+
+        if (data.created_date) {
+          createdPicker.setDate(data.created_date, true, "Y-m-d"); // true = trigger change, "Y-m-d" = input format
+        }
+
+        if (data.updated_date) {
+          updatedPicker.setDate(data.updated_date, true, "Y-m-d");
+        }
+      }, 200);
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return "";
+      const d = new Date(dateString);
+      const day = String(d.getDate()).padStart(2, "0");
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const year = d.getFullYear();
+      return `${day}/${month}/${year}`;
+    }
+    function convertDateToISOUsingDate(dateStr) {
+      const [month, day, year] = dateStr.split("/");
+      const dateObj = new Date(year, month - 1, day); // month is zero-based
+      return dateObj.toISOString().split("T")[0]; // YYYY-MM-DD
+    }
+
+    function updateScheme() {
+      const payload = {
+        action: "function_call",
+        function_name: "im_upd_allotted_budget_scheme_fn",
+        params: {
+          p_id: document.getElementById("P58_ID_Edit")?.value || null,
+          p_district: document.getElementById("P58_DISTRICT_Edit").value,
+          p_name_of_the_institution: document.getElementById(
+            "P58_NAME_OF_THE_INSTITUTION_Edit"
+          ).value,
+          p_institution_type: document.getElementById(
+            "P58_INSTITUTION_TYPE_Edit"
+          ).value,
+          p_system: document.getElementById("P58_SYSTEM_Edit").value,
+          p_scheme_name: document.getElementById("P58_SCHEME_NAME_Edit")
+            .value,
+          p_scheme_values:
+            parseFloat(
+              document.getElementById("P58_SCHEME_VALUES_Edit").value
+            ) || 0,
+          p_status: document.getElementById("P58_STATUS_Edit").value,
+          p_updated_by: document.getElementById("P58_UPDATED_BY_Edit").value,
+          p_updated_date: convertDateToISOUsingDate(
+            document.getElementById("P58_UPDATED_DATE_input_Edit").value
+          ),
+        },
+      };
+      $.ajax({
+        url: apiUrl,
+        method: "POST",
+        data: {
+          data: encryptData(payload),
+        },
+        dataType: "json",
+        success: function (response) {
+          showSuccessToast("Scheme updated successfully");
+          $(".update_Modal").modal("hide");
+          document.getElementById("P54_DISTRICT_Edit").value =
+            payload.params.p_district || "";
+          document.getElementById("P54_NAME_OF_THE_INSTITUTION_Edit").value =
+            payload.params.p_name_of_the_institution || "";
+          document.getElementById("P54_INSTITUTION_TYPE_Edit").value =
+            payload.params.p_institution_type || "";
+          document.getElementById("P54_SYSTEM_Edit").value =
+            payload.params.p_system || "";
+          document.getElementById("P54_REGULAR_Edit").value =
+            payload.params.p_regular || "";
+        },
+        error: function (xhr, status, error) {
+          console.error("API call failed:", {
+            status: xhr.status,
+            statusText: xhr.statusText,
+            responseText: xhr.responseText,
+            error: error,
+          });
+        },
+      });
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      flatpickr(".datepicker", {
+        dateFormat: "d/m/Y",   // Input value format
+        altInput: true,
+        altFormat: "F j, Y",   // UI-visible format
+        maxDate: "today",
+        allowInput: true,
+        defaultDate: null,
+        disableMobile: true,
+        wrap: false,
+        clickOpens: true,
+        changeMonth: true,
+        changeYear: true
+      });
+    });
+
+    function loaddisscheme() {
+      loadDistrictOptions({
+        payload: {
+          action: "function_call",
+          function_name: "im_own_district_fn",
+          params: { null: null },
+        },
+        dropdownId: "P58_DISTRICT",
+        placeholder: "--Select District--",
+      });
+    }
+
+    function loadDistrictOptions({
+      payload,
+      dropdownId,
+      placeholder,
+      preselectedValue = "",
+    }) {
+      $.ajax({
+        url: apiUrl,
+        method: "POST",
+        headers: {
+          "X-APP-Key": "edm",
+          "X-APP-Name": "edm",
+        },
+        data: {
+          data: encryptData(payload),
+        },
+        dataType: "json",
+        success(response) {
+          const decrypted = decryptData(response.data);
+          const $dropdown = $(`#${dropdownId}`);
+          $dropdown
+            .empty()
+            .append(`<option value="">${placeholder}</option>`);
+
+          decrypted.forEach((item) => {
+            const value =
+              item.district ||
+              item.year ||
+              item.system ||
+              item.scheme ||
+              item.type ||
+              item.quarter;
+
+            $dropdown.append(`<option value="${value}">${value}</option>`);
+          });
+
+          // ✅ Set selected value after loading options
+          if (preselectedValue) {
+            $dropdown.val(preselectedValue);
+          }
+        },
+        error(xhr, status, error) {
+          console.error(`${payload.function_name} API Error:`, error);
+        },
+      });
+    }
+  </script>
+  <div id="pushModal" style="width: 100%; display: none; height: 100%" class="u-DisplayNone u-Overlay--glass"></div>
+  <div id="R81452622107629074944_actions_menu" role="menu" class="a-Menu" style="display: none"></div>
+  <div role="dialog" aria-label="Column Actions" aria-modal="true" class="a-IRR-sortWidget"
+    id="R81452622107629074944_sort_widget" style="display: none">
+    <h1 class="u-vh" aria-roledescription="Visually hidden dialog title">
+      Column Actions
+    </h1>
+    <ul role="toolbar" class="a-IRR-sortWidget-actions" id="R81452622107629074944_sort_widget_actions">
+      <li role="none" class="a-IRR-sortWidget-actions-item" id="R81452622107629074944_sort_widget_action_up">
+        <button class="a-Button a-IRR-button a-IRR-sortWidget-button" type="button" title="Sort Ascending"
+          aria-label="Sort Ascending" data-option="up">
+          <span aria-hidden="true" class="a-Icon icon-irr-sort-asc"></span>
+        </button>
+      </li>
+      <li role="none" class="a-IRR-sortWidget-actions-item" id="R81452622107629074944_sort_widget_action_down">
+        <button class="a-Button a-IRR-button a-IRR-sortWidget-button" type="button" title="Sort Descending"
+          aria-label="Sort Descending" data-option="down">
+          <span aria-hidden="true" class="a-Icon icon-irr-sort-desc"></span>
+        </button>
+      </li>
+      <li role="none" class="a-IRR-sortWidget-actions-item" id="R81452622107629074944_sort_widget_action_hide">
+        <button class="a-Button a-IRR-button a-IRR-sortWidget-button" type="button" title="Hide Column"
+          aria-label="Hide Column" data-option="hide">
+          <span aria-hidden="true" class="a-Icon icon-irr-remove-col"></span>
+        </button>
+      </li>
+      <li role="none" class="a-IRR-sortWidget-actions-item" id="R81452622107629074944_sort_widget_action_break">
+        <button class="a-Button a-IRR-button a-IRR-sortWidget-button" type="button" title="Control Break"
+          aria-label="Control Break" data-option="break">
+          <span aria-hidden="true" class="a-Icon icon-irr-control-break"></span>
+        </button>
+      </li>
+      <li role="none" class="a-IRR-sortWidget-actions-item" id="R81452622107629074944_sort_widget_action_help">
+        <button class="a-Button a-IRR-button a-IRR-sortWidget-button" type="button" title="Help" aria-label="Help"
+          data-option="help" aria-pressed="false">
+          <span aria-hidden="true" class="a-Icon icon-irr-help"></span>
+        </button>
+      </li>
+      <li role="none" class="a-IRR-sortWidget-actions-item" id="R81452622107629074944_sort_widget_action_computation">
+        <button class="a-Button a-IRR-button a-IRR-sortWidget-button" type="button" title="Compute" aria-label="Compute"
+          data-option="computation">
+          <span aria-hidden="true" class="a-Icon icon-irr-calculator"></span>
+        </button>
+      </li>
+    </ul>
+    <div role="region" aria-label="Help" class="a-IRR-sortWidget-help" id="R81452622107629074944_sort_widget_help">
+    </div>
+    <div role="search" class="a-IRR-sortWidget-search" id="R81452622107629074944_sort_widget_search">
+      <label for="R81452622107629074944_sort_widget_search_field" class="a-IRR-sortWidget-searchLabel"><span
+          class="u-vh">Search</span></label><input id="R81452622107629074944_sort_widget_search_field"
+        class="a-IRR-sortWidget-searchField" type="text" placeholder="Filter..." />
+      <div role="group" aria-label="Filter suggestions" class="a-IRR-sortWidget-rows"
+        id="R81452622107629074944_sort_widget_rows"></div>
+    </div>
+  </div>
+  <div class="t-NavigationBar-menu a-Menu" style="display: none" id="menu_L428237300758551931558" role="menu">
+    <ul>
+      <li class="" data-current="false" data-icon="fa fa-sign-out">
+        <a href="apex_authentication.logout?p_app_id=117&amp;p_session_id=9577400874335" title="" target="">Sign Out</a>
+      </li>
+    </ul>
+  </div>
+  <iframe frameborder="0" scrolling="no" style="background-color: transparent; border: 0px; display: none"></iframe>
+  <div id="GOOGLE_INPUT_CHEXT_FLAG" style="display: none" input=""
+    input_stat='{"tlang":true,"tsbc":true,"pun":true,"mk":true,"ss":true}'></div>
+</body>
+
+</html>

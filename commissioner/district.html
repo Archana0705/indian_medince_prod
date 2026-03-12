@@ -1,0 +1,401 @@
+<html class="page-65 app-IMIM oj-agent-os-windows oj-agent-browser-chrome" lang="en" style="--js-sticky-top: 204.4px">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=edge" />
+  <meta charset="utf-8" />
+  <title>Overall Dashboard Report for Commissioner</title>
+  <!-- Prevent browser from caching protected pages -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <link rel="apple-touch-icon" href="../assets/img/app-icon-192.png" />
+  <link rel="icon" href="../assets/img/app-icon-32.png" />
+
+  <link rel="stylesheet" href="../assets/css/Core.min.css" type="text/css" />
+  <link rel="stylesheet" href="../assets/css/Theme-Standard.min.css" type="text/css" />
+  <link rel="stylesheet" href="../assets/css/font-apex.min.css" type="text/css" />
+  <link rel="stylesheet" href="../assets/css/Core_theme.min.css" type="text/css" />
+  <link rel="stylesheet" href="../assets/css/custom.min.css" type="text/css" />
+  <link rel="stylesheet" href="../assets/css/aos.min.css" type="text/css" />
+  <link rel="stylesheet" href="../assets/css/theme.css" type="text/css" />
+
+  <!-- session toast  -->
+  <link rel="stylesheet" href="../assets/css/sessionToast.css" type="text/css">
+  <style type="text/css">
+    ul.headermenu {
+      padding: 10px 30px;
+      width: auto !important;
+      margin: 0;
+      white-space: nowrap;
+      left: -32px;
+      position: relative;
+    }
+  </style>
+
+  <style type="text/css">
+    .a-Menu--top.submenu {
+      position: absolute;
+      /* Make submenu appear outside of parent li */
+      top: 100%;
+      /* Place submenu right below parent */
+      left: 0;
+      /* Align submenu with parent */
+      min-width: 200px;
+      /* Adjust width if needed */
+      background: white;
+      /* Ensure it has a background */
+      border: 1px solid #ccc;
+      /* Add a border for visibility */
+      z-index: 1000;
+      /* Ensure it appears above other elements */
+      display: none;
+      /* Initially hidden */
+    }
+
+    .cusdrop {
+      top: 13.5rem;
+      left: initial !important;
+    }
+
+    .navpage {
+      height: 100%;
+      text-decoration: none;
+      color: #fff;
+      padding: 12px;
+      line-height: 3.2;
+    }
+
+    .a-MenuBar-item a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
+    }
+  </style>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="-1" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" type="text/css">
+</head>
+
+<body
+  class="t-PageBody t-PageBody--hideLeft t-PageBody--hideActions t-PageTemplate--standard apex-top-nav apex-icons-fontapex apex-theme-vita-standard t-PageBody--topNav js-HeaderExpanded"
+  id="t_PageBody" data-aos-easing="ease" data-aos-duration="400" data-aos-delay="0">
+  <a href="#main" id="t_Body_skipToContent">Skip to Main Content</a>
+  <form action="wwv_flow.accept?p_context=imim/overall-dashboard-report-for-commissioner/5821089868360" method="post"
+    name="wwv_flow" id="wwvFlowForm" data-oj-binding-provider="none" novalidate="" autocomplete="off">
+    <input type="hidden" name="p_flow_id" value="117" id="pFlowId" /><input type="hidden" name="p_flow_step_id"
+      value="65" id="pFlowStepId" /><input type="hidden" name="p_instance" value="5821089868360" id="pInstance" /><input
+      type="hidden" name="p_page_submission_id" value="169350648297662151913390324694704029015"
+      id="pPageSubmissionId" /><input type="hidden" name="p_request" value="" id="pRequest" /><input type="hidden"
+      name="p_reload_on_submit" value="S" id="pReloadOnSubmit" /><input type="hidden"
+      value="imim/overall-dashboard-report-for-commissioner/5821089868360" id="pContext" /><input type="hidden"
+      value="169350648297662151913390324694704029015" id="pSalt" />
+
+    <div class="t-Body">
+      <div class="t-Body-main">
+        <div class="t-Body-title" id="t_Body_title"></div>
+        <div class="t-Body-content" id="t_Body_content">
+          <div id="t_Body_content_offset"></div>
+          <main id="main" class="t-Body-mainContent">
+            <div class="row">
+              <div class="col col-12 apex-col-auto col-start col-end">
+                <div class="container">
+                  <div class="row">
+                    <div class="col col-12">
+                      <canvas id="districtbarChart" width="300" height="100"></canvas>
+                    </div>
+
+                    <div class="col col-5 height: 500px">
+                      <canvas id="districtpieChart" width="300" height="200"></canvas>
+                    </div>
+
+                    <div class="col col-5">
+                      <canvas id="districtdonutChart" width="400" height="200"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+    <div class="t-Body-inlineDialogs" id="t_Body_inlineDialogs"></div>
+    <input type="hidden" id="pPageFormRegionChecksums" value="[]" />
+    <input type="hidden" id="pPageItemsRowVersion" value="" /><input type="hidden" id="pPageItemsProtected"
+      value="/zQZ4ic-mouFLwaqzDyXz-IyDcIzXrsm5u8N0mXaI_f8Oz2iF5eDCe93eAeER6kCBCHLC1_SdQxanzl88Z3lX6g" />
+  </form>
+
+  <!-- session -->
+  <script src="../assets/js/session-guard.js"></script>
+  <script src="../assets/js/session.js"></script>
+
+  <!-- jQuery -->
+  <script src="../assets/js/jquery.latest.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- DataTables -->
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="../assets/js/widget.treeView.min.js"></script>
+  <script src="../assets/common.js"></script>
+  <script src="../assets/js/widget.interactiveReport.min.js"></script>
+  <script src="../assets/js/widget.iconList.min.js"></script>
+  <script src="../assets/js/widget.stickyTableHeader.min.js"></script>
+  <script src="../assets/js/widget.stickyWidget.min.js"></script>
+  <script src="../assets/js/item.Colorpicker.min.js"></script>
+  <script src="../assets/js/jetCommonBundle.min.js"></script>
+  <script src="../assets/js/chartBundle.min.js"></script>
+
+  <!-- <script src="../assets/js/toastUtil.js"></script> -->
+  <script type="module" src="../assets/js/dataTableUtil.js"></script>
+  <script src="../assets/js/crypto-js.min.js"></script>
+  <script src="../assets/js/theme42.min.js"></script>
+  <script src="../assets/js/global.js"></script>
+  <script src="../assets/js/encrypt_decrypt.js"></script>
+  <script src="../assets/js/singleFileUpload.js"></script>
+  <script src="../assets/js/globalHeader.js"></script>
+  <script src="../assets/js/apiConfig.js"></script>
+  <script src="../assets/js/dataTableUtil.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    let financialYear = sessionStorage.getItem("financialyear");
+    const apiUrl =
+      `${BASE_API_URL}/commonfunction`;
+    function fetchAndPopulateDropdown({ payload, dropdownId, placeholder }) {
+      $.ajax({
+        url: apiUrl,
+        method: "POST",
+        headers: {
+          "X-APP-Key": "edm",
+          "X-APP-Name": "edm",
+        },
+        data: {
+          data: encryptData(payload),
+        },
+        dataType: "json",
+        success(response) {
+          const decrypted = decryptData(response.data);
+          console.log(
+            `Decrypted Data for ${payload.function_name}:`,
+            decrypted
+          );
+
+          const $dropdown = $(`#${dropdownId}`);
+          $dropdown
+            .empty()
+            .append(`<option value="">${placeholder}</option>`);
+
+          decrypted.forEach((item) => {
+            const value = item.year;
+            $dropdown.append(`<option value="${value}">${value}</option>`);
+          });
+        },
+        error(xhr, status, error) {
+          console.error(`${payload.function_name} API Error:`, error);
+        },
+      });
+    }
+    fetchAndPopulateDropdown({
+      payload: {
+        action: "function_call",
+        function_name: "im_year_fn",
+        params: {},
+      },
+      dropdownId: "P65_YEAR",
+      placeholder: "--Select Financial Year--",
+    });
+    function getPayload() {
+      return {
+        action: "function_call",
+        function_name: "im_indent_count_by_district_fn",
+        params: { p_year: financialYear || null },
+      };
+    }
+    let districtdonutChart = null;
+    let districtpieChart = null;
+    let districtbarChart = null;
+    let year = null;
+
+    // $("#P65_YEAR").on("change", function () {
+    //   fetchQuarterDataAndRenderAllCharts();
+    // });
+    fetchQuarterDataAndRenderAllCharts();
+
+    function fetchQuarterDataAndRenderAllCharts() {
+      const payload = {
+        action: "function_call",
+        function_name: "im_indent_count_by_district_fn",
+        params: { p_year: $("#P65_YEAR").val() || null },
+      };
+
+      $.ajax({
+        url: apiUrl,
+        method: "POST",
+        headers: {
+          "X-APP-Key": "edm",
+          "X-APP-Name": "edm",
+        },
+        data: {
+          data: encryptData(payload),
+        },
+        dataType: "json",
+        success(response) {
+          const decrypted = decryptData(response.data);
+          console.log("Decrypted Data:", decrypted);
+
+          const labels = decrypted.map((item) => item.name_of_the_district);
+          const values = decrypted.map((item) => item.total_count);
+
+          const colors = [
+            "#FBCD4A", // 1st Quarter
+            "#E95B54", // 2nd Quarter
+            "#309FDB", // 3rd Quarter
+            "#3CAF85", // 4th Quarter
+            "#113946", // Annual Indent
+          ];
+
+          renderDonutChart(labels, values, colors);
+          renderPieChart(labels, values, colors);
+          renderBarChart(labels, values, colors);
+        },
+        error(xhr, status, error) {
+          console.error("API Error:", error);
+        },
+      });
+    }
+
+    function renderDonutChart(labels, values, colors) {
+      const ctx = document
+        .getElementById("districtdonutChart")
+        .getContext("2d");
+      if (districtdonutChart) districtdonutChart.destroy();
+
+      districtdonutChart = new Chart(ctx, {
+        type: "doughnut",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              data: values,
+              backgroundColor: colors,
+              borderColor: "#fff",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          cutout: "60%",
+          plugins: {
+            legend: { position: "bottom" },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const total = values.reduce((a, b) => a + b, 0);
+                  const percentage = ((context.raw / total) * 100).toFixed(1);
+                  return `${context.label}: ${context.raw} (${percentage}%)`;
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    function renderPieChart(labels, values, colors) {
+      const ctx = document
+        .getElementById("districtpieChart")
+        .getContext("2d");
+      if (districtpieChart) districtpieChart.destroy();
+
+      districtpieChart = new Chart(ctx, {
+        type: "pie",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              data: values,
+              backgroundColor: colors,
+              borderColor: "#fff",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { position: "bottom" },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  const total = values.reduce((a, b) => a + b, 0);
+                  const percentage = ((context.raw / total) * 100).toFixed(1);
+                  return `${context.label}: ${context.raw} (${percentage}%)`;
+                },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    function renderBarChart(labels, values, colors) {
+      const ctx = document
+        .getElementById("districtbarChart")
+        .getContext("2d");
+      if (districtbarChart) districtbarChart.destroy();
+
+      districtbarChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Indent Count",
+              data: values,
+              backgroundColor: colors,
+              borderRadius: 6,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function (context) {
+                  return `${context.label}: ${context.raw}`;
+                },
+              },
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
+  </script>
+  <div id="pushModal" style="width: 100%; display: none; height: 100%" class="u-DisplayNone u-Overlay--glass"></div>
+  <div class="t-NavigationBar-menu a-Menu" style="display: none" id="menu_L428237300758551931558" role="menu">
+    <ul>
+      <li class="" data-current="false" data-icon="fa fa-sign-out">
+        <a href="apex_authentication.logout?p_app_id=117&amp;p_session_id=5821089868360" title="" target="">Sign Out</a>
+      </li>
+    </ul>
+  </div>
+  <iframe frameborder="0" scrolling="no" style="background-color: transparent; border: 0px; display: none"></iframe>
+  <div id="GOOGLE_INPUT_CHEXT_FLAG" style="display: none" input=""
+    input_stat='{"tlang":true,"tsbc":true,"pun":true,"mk":true,"ss":true}'></div>
+</body>
+
+</html>

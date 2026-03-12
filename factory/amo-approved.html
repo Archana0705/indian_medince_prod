@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html class="page-25 app-IMIM" lang="en">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=edge">
+  <meta charset="utf-8">
+  <title>Download despatched medicine</title>
+  <!-- Prevent browser from caching protected pages -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <link rel="apple-touch-icon" href="../assets/img/app-icon-192.png">
+  <link rel="icon" href="../assets/img/app-icon-32.png">
+
+  <link rel="stylesheet" href="../assets/css/Core.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/Theme-Standard.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/font-apex.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/Core_theme.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/custom.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/aos.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/theme.css" type="text/css">
+
+  <!-- DataTables CSS for better styling -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- session toast  -->
+  <link rel="stylesheet" href="../assets/css/sessionToast.css" type="text/css">
+
+  <!-- SheetJS for handling large Excel exports -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="-1">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style type="text/css">
+    /* Custom styles for enhanced datatable */
+    .t-fht-cell {
+      height: 1px;
+      overflow: hidden;
+    }
+
+    .t-fht-wrapper {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .t-fht-thead {
+      overflow: hidden;
+      position: relative;
+    }
+
+    .t-fht-tbody {
+      overflow: auto;
+    }
+
+    ul.headermenu {
+      padding: 10px 30px;
+      width: auto !important;
+      margin: 0;
+      white-space: nowrap;
+      left: -32px;
+      position: relative;
+    }
+
+    /* Modern datatable styling */
+    .dataTables_wrapper {
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      margin-top: 20px;
+    }
+
+    .dataTables_length {
+      margin-bottom: 20px;
+      padding: 0 10px;
+    }
+
+    .dataTables_length label {
+      font-weight: 500;
+      color: #495057;
+      font-size: 14px;
+    }
+
+    .dataTables_length select {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 6px 12px;
+      margin: 0 8px;
+      background-color: #f8f9fa;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dataTables_length select:hover {
+      border-color: #007bff;
+      background-color: #ffffff;
+    }
+
+    .dataTables_filter {
+      margin-bottom: 20px;
+      padding: 0 10px;
+    }
+
+    .dataTables_filter label {
+      font-weight: 500;
+      color: #495057;
+      font-size: 14px;
+    }
+
+    .dataTables_filter input {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 8px 16px;
+      margin-left: 10px;
+      width: 300px;
+      background-color: #f8f9fa;
+      transition: all 0.2s;
+    }
+
+    .dataTables_filter input:focus {
+      outline: none;
+      border-color: #007bff;
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+    /* Download buttons styling */
+    .dt-buttons {
+      margin-bottom: 20px;
+      padding: 0 10px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .dt-button {
+      background: #f8f9fc !important;
+      border: 1px solid #e0e0e0 !important;
+      border-radius: 8px !important;
+      padding: 8px 16px !important;
+      color: #2c3e50 !important;
+      font-weight: 500 !important;
+      font-size: 14px !important;
+      cursor: pointer !important;
+      transition: all 0.2s !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+    }
+
+    .dt-button:hover {
+      background: #e2e8f0 !important;
+      border-color: #cbd5e0 !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .dt-button i {
+      font-size: 16px;
+    }
+
+    table.dataTable {
+      border-collapse: separate;
+      border-spacing: 0;
+      width: 100% !important;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 10px !important;
+      margin-bottom: 10px !important;
+      border: 1px solid #e0e0e0;
+    }
+
+    table.dataTable thead th {
+      background: #f8f9fc;
+      color: #2c3e50;
+      font-weight: 600;
+      font-size: 14px;
+      padding: 16px 12px;
+      border-bottom: 2px solid #e0e0e0;
+      white-space: nowrap;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    table.dataTable thead th:first-child {
+      border-top-left-radius: 12px;
+    }
+
+    table.dataTable thead th:last-child {
+      border-top-right-radius: 12px;
+    }
+
+    table.dataTable tbody td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #f0f0f0;
+      color: #495057;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    table.dataTable tbody tr {
+      transition: all 0.2s;
+    }
+
+    table.dataTable tbody tr:hover {
+      background-color: #f8f9ff !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    table.dataTable tbody tr:nth-child(even) {
+      background-color: #fafbfc;
+    }
+
+    table.dataTable tbody tr:nth-child(odd) {
+      background-color: #ffffff;
+    }
+
+    /* Custom scrollbar for better UX */
+    .dataTables_scrollBody::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    .dataTables_scrollBody::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .dataTables_scrollBody::-webkit-scrollbar-thumb {
+      background: #cbd5e0;
+      border-radius: 10px;
+    }
+
+    .dataTables_scrollBody::-webkit-scrollbar-thumb:hover {
+      background: #a0aec0;
+    }
+
+    /* Pagination styling */
+    .dataTables_paginate {
+      display: flex;
+      justify-content: center;
+      margin-top: 25px;
+      gap: 8px;
+    }
+
+    .paginate_button {
+      background: white !important;
+      border: 1px solid #e0e0e0 !important;
+      border-radius: 8px !important;
+      padding: 8px 16px !important;
+      margin: 0 2px !important;
+      color: #495057 !important;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .paginate_button:hover:not(.disabled),
+    .paginate_button:focus {
+      background: #e2e8f0 !important;
+      border-color: #cbd5e0 !important;
+      color: #2c3e50 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .paginate_button.current {
+      background: #e2e8f0 !important;
+      border-color: #cbd5e0 !important;
+      color: #2c3e50 !important;
+      font-weight: bold;
+    }
+
+    .paginate_button.disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      background: #f8f9fa !important;
+    }
+
+    /* Info text styling */
+    .dataTables_info {
+      padding: 15px 10px;
+      color: #6c757d;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    /* Header title styling */
+    .page-title {
+      background: #ffffff;
+      padding: 20px 30px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      border: 1px solid #e0e0e0;
+    }
+
+    .page-title h3 {
+      margin: 0;
+      font-weight: 600;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #2c3e50;
+    }
+
+    .page-title h3 i {
+      font-size: 28px;
+      color: #2c3e50;
+    }
+
+    .page-title-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .stats-badge {
+      background: #f8f9fc;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #2c3e50;
+      border: 1px solid #e0e0e0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .download-btn {
+      background: #f8f9fc;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 8px 16px;
+      color: #2c3e50;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .download-btn:hover {
+      background: #e2e8f0;
+      border-color: #cbd5e0;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .download-dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .download-dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: #ffffff;
+      min-width: 180px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      z-index: 1000;
+    }
+
+    .download-dropdown:hover .download-dropdown-content {
+      display: block;
+    }
+
+    .download-dropdown-content a {
+      color: #2c3e50;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .download-dropdown-content a:hover {
+      background-color: #f8f9fc;
+    }
+
+    .download-dropdown-content a:first-child {
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+
+    .download-dropdown-content a:last-child {
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    /* Container padding */
+    .container-fluid {
+      max-width: 100%;
+      padding: 20px;
+    }
+
+    /* Table container */
+    .table-container {
+      background: white;
+      border-radius: 16px;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    /* Loading indicator */
+    .dataTables_processing {
+      background: #f8f9fc !important;
+      color: #2c3e50 !important;
+      border: 1px solid #e0e0e0 !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Fix for table header visibility */
+    #medicineIndentTable thead {
+      display: table-header-group;
+    }
+
+    #medicineIndentTable th {
+      position: relative;
+      background: #f8f9fc;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    /* Text alignment utilities */
+    .text-center {
+      text-align: center;
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .text-left {
+      text-align: left;
+    }
+
+    /* Error message styling */
+    .error-container {
+      text-align: center;
+      padding: 50px;
+      background: #fff3f3;
+      border: 1px solid #ffcdd2;
+      border-radius: 8px;
+      margin: 20px;
+    }
+
+    .error-container h2 {
+      color: #d32f2f;
+      margin-bottom: 10px;
+    }
+
+    .error-container p {
+      color: #666;
+    }
+
+    /* Progress indicator for large downloads */
+    .download-progress {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      z-index: 9999;
+      text-align: center;
+      min-width: 300px;
+      border: 1px solid #e0e0e0;
+      display: none;
+    }
+
+    .download-progress.show {
+      display: block;
+    }
+
+    .progress-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #2c3e50;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .progress-text {
+      font-size: 16px;
+      color: #2c3e50;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: #f0f0f0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 15px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #2c3e50;
+      width: 0%;
+      transition: width 0.3s;
+    }
+  </style>
+  <link rel="stylesheet" href="../assets/css/responsive.css" type="text/css">
+</head>
+
+<body
+  class="t-PageBody t-PageBody--hideLeft t-PageBody--hideActions t-PageTemplate--standard apex-top-nav apex-icons-fontapex apex-theme-vita-standard t-PageBody--topNav js-HeaderExpanded"
+  id="t_PageBody">
+  <a href="#main" id="t_Body_skipToContent">Skip to Main Content</a>
+
+  <header class="t-Header" id="t_Header" role="banner">
+    <div class="t-Header-branding">
+      <div class="t-Header-controls">
+        <button class="t-Button t-Button--icon t-Button--header t-Button--headerTree" aria-label="Main Navigation"
+          title="Main Navigation" id="t_Button_navControl" type="button"><span class="t-Header-controlsIcon"
+            aria-hidden="true"></span></button>
+      </div>
+      <div class="t-Header-logo">
+        <div class="gigw">
+          <li><a data-aos="fade-up" data-aos-delay="200" class="linkedin btn-decrease aos-init aos-animate"><span
+                class="d-inline-block" tabindex="0" data-toggle="tooltip" title="font size Decrease"><i></i> A
+                -</span></a></li>
+          <li><a data-aos="fade-up" data-aos-delay="300" class="linkedin btn-orig aos-init aos-animate"><span
+                class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Reset font"><i></i> A
+                <sup></sup></span></a></li>
+          <li><a data-aos="fade-up" data-aos-delay="400" class="instagram btn-increase aos-init aos-animate"><span
+                class="d-inline-block" tabindex="0" data-toggle="tooltip" title="font size Increase"><i></i> A
+                +</span></a></li>
+          <li><a data-aos="fade-up" data-aos-delay="500" class="aos-init aos-animate"><span class="d-inline-block"
+                tabindex="0" data-toggle="tooltip" title="Dark Mode"><i class="t-Icon fa fa-moon-o"
+                  id="darkmode"></i></span></a></li>
+        </div>
+      </div>
+      <div class="t-Header-navBar">
+        <div class="t-Header-navBar--start"></div>
+        <div id="globalHeader"></div>
+        <div class="t-Header-navBar--end"></div>
+      </div>
+    </div>
+    <div class="top">
+      <img id="leftlogo" data-aos="fade-right" data-aos-duration="800" src="../assets/img/head-tnlogo.png"
+        class="aos-init aos-animate">
+      <h1 data-aos="zoom-in" data-aos-duration="800" class="dept-name text-middle aos-init aos-animate">Medicine
+        Indent</h1>
+      <h3 data-aos="zoom-in" data-aos-duration="800" class="dept-name2 text-middle aos-init aos-animate">Department of
+        Indian Medicine and Homoeopathy</h3>
+      <img id="rightlogo" data-aos="fade-left" data-aos-duration="800" src="../assets/img/head-dept-logo.png"
+        class="aos-init aos-animate">
+    </div>
+    <div class="t-Header-nav">
+      <div class="t-Header-nav-list js-tabLike js-tabLike a-MenuBar a-MenuBar--overflow a-MenuBar--tabs" id="t_MenuNav"
+        role="menubar">
+        <ul id="nav-links">
+          <div id="navbar-container"></div>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <!-- Download Progress Modal -->
+  <div class="download-progress" id="downloadProgress">
+    <div class="progress-spinner"></div>
+    <div class="progress-text" id="progressText">Preparing download...</div>
+    <div class="progress-bar-container">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+  </div>
+
+  <div id="mainContainer">
+
+    <div class="t-Body">
+      <div class="t-Body-main">
+        <div class="t-Body-title" id="t_Body_title"></div>
+        <div class="t-Body-content" id="t_Body_content">
+          <div id="t_Body_content_offset"></div>
+          <main id="main" class="t-Body-mainContent">
+            <div class="t-Body-fullContent"></div>
+            <div class="t-Body-contentInner">
+              <div class="container-fluid">
+                <!-- Enhanced page title section with download options -->
+                <div class="page-title">
+                  <h3>
+                    AMO Approved Medicine
+                  </h3>
+                  <div class="page-title-actions">
+                    <span class="stats-badge">
+                      <i class="fas fa-calendar-alt"></i>
+                      <span id="currentDate"></span>
+                    </span>
+
+                    <!-- Custom Download Dropdown -->
+                    <div class="download-dropdown">
+                      <button class="download-btn">
+                        <i class="fas fa-download"></i> Download Report <i class="fas fa-chevron-down"></i>
+                      </button>
+                      <div class="download-dropdown-content">
+                        <a href="#" id="downloadExcel">
+                          <i class="fas fa-file-excel" style="color: #2c3e50;"></i> Excel
+                        </a>
+                        <a href="#" id="downloadPDF">
+                          <i class="fas fa-file-pdf" style="color: #2c3e50;"></i> PDF
+                        </a>
+                        <a href="#" id="downloadCSV">
+                          <i class="fas fa-file-csv" style="color: #2c3e50;"></i> CSV
+                        </a>
+                        <a href="#" id="downloadPrint">
+                          <i class="fas fa-print" style="color: #2c3e50;"></i> Print
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Main content row -->
+                <div class="row">
+                  <div class="col-12">
+                    <div class="table-container">
+                      <div id="R242628023561228056223" role="region" aria-label="Download despatched medicine"
+                        class="t-IRR-region js-apex-region">
+                        <div id="R242628023561228056223_ir" class="a-IRR-container">
+                          <div id="R242628023561228056223_worksheet_region" class="a-IRR" aria-live="polite">
+                            <div id="R242628023561228056223_full_view" class="a-IRR-fullView">
+                              <div id="R242628023561228056223_content" class="a-IRR-content ">
+                                <div id="R242628023561228056223_data_panel" class="a-IRR-reportView">
+                                  <div class="a-IRR-tableContainer">
+                                    <table id="medicineIndentTable" class="display" style="width:100%">
+                                      <thead>
+                                        <tr>
+                                          <th class="text-center">S.No</th>
+                                          <th class="text-left">Medicine Name</th>
+                                          <th class="text-center">Packing Size</th>
+                                          <th class="text-right">Amount</th>
+                                          <th class="text-right">Indented Qty</th>
+                                          <th class="text-right">Godown Stock</th>
+                                          <th class="text-right">Supply Qty</th>
+                                          <th class="text-right">Supply Price</th>
+                                          <th class="text-right">Despatch %</th>
+                                          <th class="text-right">Balance Qty</th>
+                                          <th class="text-left">Created By</th>
+                                          <th class="text-left">Forward To</th>
+                                          <th class="text-left">Name</th>
+                                          <th class="text-center">Expiry Date</th>
+                                          <th class="text-center">Mobile</th>
+                                          <th class="text-right">Stock Available</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr>
+                                          <td colspan="16" class="text-center">Loading data...</td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+          <footer class="t-Footer" id="t_Footer" role="contentinfo">
+            <div class="t-Footer-body">
+              <div class="t-Footer-content"></div>
+              <div class="t-Footer-apex">
+                <div class="row">
+                  <div class="col-6">
+                    <p class="text-middle"><img class="footer-logo" src="../assets/img/head-dept-logo.png"><br>Content
+                      owned by Department of Indian Medicine and Homoeopathy ©</p>
+                  </div>
+                  <div class="col-6">
+                    <p class="text-middle"><img class="footer-logo" src="../assets/img/tnegalogo.png"><br>Designed and
+                      Developed by Tamil Nadu e-Governance Agency</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="t-Footer-top">
+              <a href="#top" class="t-Footer-topButton" id="t_Footer_topButton" title="Start of page"
+                aria-label="Start of page"><span class="a-Icon icon-up-chevron" aria-hidden="true"></span></a>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- session -->
+  <script src="../assets/js/session-guard.js"></script>
+  <script src="../assets/js/session.js"></script>
+
+  <!-- jQuery -->
+  <script src="../assets/js/jquery.latest.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- DataTables with additional plugins -->
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+  <!-- SheetJS for large Excel exports -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+  <script src="../assets/js/widget.treeView.min.js"></script>
+  <script src="../assets/common.js"></script>
+  <script src="../assets/js/widget.interactiveReport.min.js"></script>
+  <script src="../assets/js/widget.iconList.min.js"></script>
+  <script src="../assets/js/widget.stickyTableHeader.min.js"></script>
+  <script src="../assets/js/widget.stickyWidget.min.js"></script>
+  <script src="../assets/js/item.Colorpicker.min.js"></script>
+  <script src="../assets/js/jetCommonBundle.min.js"></script>
+  <script src="../assets/js/chartBundle.min.js"></script>
+
+  <script src="../assets/js/toastUtil.js"></script>
+  <script src="../assets/js/dataTableUtil.js"></script>
+  <script src="../assets/js/crypto-js.min.js"></script>
+  <script src="../assets/js/theme42.min.js"></script>
+  <script src="../assets/js/global.js"></script>
+  <script src="../assets/js/encrypt_decrypt.js"></script>
+  <script src="../assets/js/singleFileUpload.js"></script>
+  <script src="../assets/js/globalHeader.js"></script>
+  <script src="../assets/js/apiConfig.js"></script>
+  <script src="../assets/js/validation.js"></script>
+  <script src="../assets/js/role-guard.js"></script>
+
+  <script>
+    let dataTableRef = null;
+    let allData = null; // Store all data for large exports
+
+    $(document).ready(function () {
+      var userName = sessionStorage.getItem("userName") || "Guest";
+      $('#username .t-Button-label').text(userName);
+
+      // Set current date
+      const today = new Date();
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      $('#currentDate').text(today.toLocaleDateString('en-US', options));
+
+      // Check if API base URL is configured
+      if (typeof BASE_API_URL === 'undefined') {
+        showError('API configuration not found. Please check apiConfig.js');
+        return;
+      }
+
+      // Call the API function on page load
+      fetchFactoryDispatchData();
+
+      // Download event handlers
+      $('#downloadExcel').on('click', function (e) {
+        e.preventDefault();
+        downloadLargeExcel();
+      });
+
+      $('#downloadPDF').on('click', function (e) {
+        e.preventDefault();
+        downloadReport('pdf');
+      });
+
+      $('#downloadCSV').on('click', function (e) {
+        e.preventDefault();
+        downloadLargeCSV();
+      });
+
+      $('#downloadPrint').on('click', function (e) {
+        e.preventDefault();
+        downloadReport('print');
+      });
+    });
+
+    function showError(message) {
+      $('#medicineIndentTable tbody').html(`
+        <tr>
+          <td colspan="16" class="text-center">
+            <div class="error-container">
+              <h2><i class="fas fa-exclamation-triangle"></i> Error</h2>
+              <p>${message}</p>
+              <p>Please ensure the backend server is running and API configuration is correct.</p>
+            </div>
+          </td>
+        </tr>
+      `);
+    }
+
+    const apiUrl = typeof BASE_API_URL !== 'undefined' ? `${BASE_API_URL}/commonfunction` : null;
+
+    function fetchFactoryDispatchData() {
+      if (!apiUrl) {
+        showError('API URL not configured');
+        return;
+      }
+
+      const payload = {
+        action: "function_call",
+        function_name: "get_factory_dispatch_medicine_fn",
+        params: {}  // Empty params as requested
+      };
+
+      // Show loading state
+      $('#medicineIndentTable tbody').html('<tr><td colspan="16" class="text-center">Loading data...</td></tr>');
+
+      // Check if encryptData function exists
+      if (typeof encryptData !== 'function') {
+        showError('Encryption function not found');
+        return;
+      }
+
+      loadDataToTable({
+        tableId: 'medicineIndentTable',
+        apiUrl: apiUrl,
+        httpMethod: 'POST',
+        payload: encryptData(payload),
+        enableScroll: true,
+        rowBuilder: (item, index) => {
+          console.log('Row data item:', item);
+          const serialNo = index + 1;
+
+          // Format numbers with 2 decimal places if they exist
+          const formatNumber = (value) => {
+            if (!value || value === 'N/A') return 'N/A';
+            const num = parseFloat(value);
+            return isNaN(num) ? value : num.toFixed(2);
+          };
+
+          return `
+            <tr>
+              <td class="text-center">${serialNo}</td>
+              <td class="text-left">${item.medicine_name || item.MedicineName || 'N/A'}</td>
+              <td class="text-center">${item.packing_size || item.PackingSize || 'N/A'}</td>
+              <td class="text-right">${formatNumber(item.amount || item.Amount)}</td>
+              <td class="text-right">${item.indented_quantity || item.IndentedQty || 'N/A'}</td>
+              <td class="text-right">${item.godown_stock_availablity || item.GodownStock || 'N/A'}</td>
+              <td class="text-right">${item.supply_quantity || item.SupplyQty || 'N/A'}</td>
+              <td class="text-right">${formatNumber(item.supply_price || item.SupplyPrice)}</td>
+              <td class="text-right">${item.percentage_of_despatch_quantity || item.DespatchPercent ? (item.percentage_of_despatch_quantity || item.DespatchPercent) + '%' : 'N/A'}</td>
+              <td class="text-right">${item.balance_quantity_to_be_supplied || item.BalanceQty || 'N/A'}</td>
+              <td class="text-left">${item.created_by || item.CreatedBy || 'N/A'}</td>
+              <td class="text-left">${item.forward_to || item.ForwardTo || 'N/A'}</td>
+              <td class="text-left">${item.name || item.Name || 'N/A'}</td>
+              <td class="text-center">${item.expiry_date || item.ExpiryDate || 'N/A'}</td>
+              <td class="text-center">${item.mobile || item.Mobile || 'N/A'}</td>
+              <td class="text-right">${item.stock_availble || item.StockAvailable || 'N/A'}</td>
+            </tr>
+          `;
+        },
+        onTableInit: function (dtRef, data) {
+          dataTableRef = dtRef;
+
+          // Debug: Log the full data structure
+          console.log('Full data response:', data);
+
+          // Try to extract data from different possible structures
+          if (data) {
+            if (Array.isArray(data)) {
+              allData = data;
+              console.log('Data is array with', allData.length, 'records');
+            } else if (data.data && Array.isArray(data.data)) {
+              allData = data.data;
+              console.log('Data.data is array with', allData.length, 'records');
+            } else if (data.records && Array.isArray(data.records)) {
+              allData = data.records;
+              console.log('Data.records is array with', allData.length, 'records');
+            } else if (data.result && Array.isArray(data.result)) {
+              allData = data.result;
+              console.log('Data.result is array with', allData.length, 'records');
+            } else {
+              // If we can't find an array, try to get the data from DataTables after it's initialized
+              setTimeout(() => {
+                if (dataTableRef) {
+                  const tableData = dataTableRef.rows().data().toArray();
+                  if (tableData && tableData.length > 0) {
+                    allData = tableData;
+                    console.log('Extracted data from DataTables:', allData.length, 'records');
+                    console.log('First record sample:', allData[0]);
+                  }
+                }
+              }, 1000);
+            }
+          }
+
+          $('.dataTables_wrapper').addClass('enhanced-datatable');
+        },
+        onError: function (error) {
+          console.error('Error loading data:', error);
+          showError('Failed to load data from server. Please try again.');
+        }
+      });
+    }
+
+    // Function to download large Excel file (handles 2 lakh+ records)
+    function downloadLargeExcel() {
+      // First, try to get data from DataTables directly
+      if (dataTableRef) {
+        const tableData = dataTableRef.rows().data().toArray();
+        if (tableData && tableData.length > 0) {
+          allData = tableData;
+          console.log('Using DataTables data for export:', allData.length, 'records');
+          console.log('First record for export:', allData[0]);
+        }
+      }
+
+      if (!allData || allData.length === 0) {
+        alert('No data available to download. Please wait for data to load or check console for errors.');
+        return;
+      }
+
+      // Show progress indicator
+      $('#downloadProgress').addClass('show');
+      $('#progressText').text('Preparing Excel file with ' + allData.length + ' records...');
+      $('#progressBar').css('width', '10%');
+
+      // Use setTimeout to allow UI to update
+      setTimeout(() => {
+        try {
+          // Prepare headers
+          const headers = [
+            'S.No',
+            'Medicine Name',
+            'Packing Size',
+            'Amount',
+            'Indented Qty',
+            'Godown Stock',
+            'Supply Qty',
+            'Supply Price',
+            'Despatch %',
+            'Balance Qty',
+            'Created By',
+            'Forward To',
+            'Name',
+            'Expiry Date',
+            'Mobile',
+            'Stock Available'
+          ];
+
+          $('#progressText').text('Processing data...');
+          $('#progressBar').css('width', '30%');
+
+          // Prepare data rows
+          const rows = [];
+
+          // Check if data is array of arrays (from DataTables) or array of objects
+          const isArrayOfArrays = allData.length > 0 && Array.isArray(allData[0]);
+
+          console.log('Data format:', isArrayOfArrays ? 'Array of Arrays' : 'Array of Objects');
+
+          if (isArrayOfArrays) {
+            // Data is coming as array of arrays from DataTables
+            for (let i = 0; i < allData.length; i++) {
+              const item = allData[i];
+
+              // Debug first few items
+              if (i < 3) {
+                console.log(`Export item ${i} (array):`, item);
+              }
+
+              // Clean numeric values
+              const cleanNumber = (value) => {
+                if (!value || value === 'N/A' || value === '') return '';
+                // Remove HTML if present
+                const textValue = String(value).replace(/<[^>]*>/g, '');
+                const num = parseFloat(textValue);
+                return isNaN(num) ? textValue : num.toFixed(2);
+              };
+
+              // Extract values from array based on column order
+              // Based on your table headers, the array indices are:
+              // 0: S.No, 1: Medicine Name, 2: Packing Size, 3: Amount, 4: Indented Qty, 
+              // 5: Godown Stock, 6: Supply Qty, 7: Supply Price, 8: Despatch %, 9: Balance Qty,
+              // 10: Created By, 11: Forward To, 12: Name, 13: Expiry Date, 14: Mobile, 15: Stock Available
+
+              const row = [
+                i + 1, // S.No (use index+1 instead of item[0] to ensure correct numbering)
+                item[1] ? String(item[1]).replace(/<[^>]*>/g, '') : '', // Medicine Name (remove HTML)
+                item[2] ? String(item[2]).replace(/<[^>]*>/g, '') : '', // Packing Size
+                cleanNumber(item[3]), // Amount
+                cleanNumber(item[4]), // Indented Qty
+                cleanNumber(item[5]), // Godown Stock
+                cleanNumber(item[6]), // Supply Qty
+                cleanNumber(item[7]), // Supply Price
+                item[8] ? String(item[8]).replace(/<[^>]*>/g, '') : '', // Despatch %
+                cleanNumber(item[9]), // Balance Qty
+                item[10] ? String(item[10]).replace(/<[^>]*>/g, '') : '', // Created By
+                item[11] ? String(item[11]).replace(/<[^>]*>/g, '') : '', // Forward To
+                item[12] ? String(item[12]).replace(/<[^>]*>/g, '') : '', // Name
+                item[13] ? String(item[13]).replace(/<[^>]*>/g, '') : '', // Expiry Date
+                item[14] ? String(item[14]).replace(/<[^>]*>/g, '') : '', // Mobile
+                cleanNumber(item[15]) // Stock Available
+              ];
+
+              rows.push(row);
+
+              // Update progress for large datasets
+              if ((i + 1) % 10000 === 0) {
+                const progress = 30 + Math.floor(((i + 1) / allData.length) * 30);
+                $('#progressBar').css('width', progress + '%');
+              }
+            }
+          } else {
+            // Data is array of objects (from API)
+            for (let i = 0; i < allData.length; i++) {
+              const item = allData[i];
+
+              const formatNumber = (value) => {
+                if (!value || value === 'N/A' || value === '') return '';
+                const cleanValue = String(value).replace(/[^0-9.-]/g, '');
+                const num = parseFloat(cleanValue);
+                return isNaN(num) ? value : num.toFixed(2);
+              };
+
+              const row = [
+                i + 1,
+                item.medicine_name || item.MedicineName || item.medicineName || item['Medicine Name'] || '',
+                item.packing_size || item.PackingSize || item.packingSize || item['Packing Size'] || '',
+                formatNumber(item.amount || item.Amount),
+                item.indented_quantity || item.IndentedQty || item.indentedQty || item['Indented Qty'] || '',
+                item.godown_stock_availablity || item.GodownStock || item.godownStock || item['Godown Stock'] || '',
+                item.supply_quantity || item.SupplyQty || item.supplyQty || item['Supply Qty'] || '',
+                formatNumber(item.supply_price || item.SupplyPrice || item.supplyPrice || item['Supply Price']),
+                (item.percentage_of_despatch_quantity || item.DespatchPercent || item.despatchPercent || item['Despatch %']) ?
+                  (item.percentage_of_despatch_quantity || item.DespatchPercent || item.despatchPercent || item['Despatch %']) + '%' : '',
+                item.balance_quantity_to_be_supplied || item.BalanceQty || item.balanceQty || item['Balance Qty'] || '',
+                item.created_by || item.CreatedBy || item.createdBy || item['Created By'] || '',
+                item.forward_to || item.ForwardTo || item.forwardTo || item['Forward To'] || '',
+                item.name || item.Name || item['Name'] || '',
+                item.expiry_date || item.ExpiryDate || item.expiryDate || item['Expiry Date'] || '',
+                item.mobile || item.Mobile || '',
+                item.stock_availble || item.StockAvailable || item.stockAvailable || item['Stock Available'] || ''
+              ];
+
+              rows.push(row);
+            }
+          }
+
+          console.log(`Prepared ${rows.length} rows for export`);
+          if (rows.length > 0) {
+            console.log('First export row:', rows[0]);
+          }
+
+          $('#progressText').text('Creating worksheet...');
+          $('#progressBar').css('width', '60%');
+
+          // Create workbook and worksheet
+          const wb = XLSX.utils.book_new();
+          const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+
+          // Set column widths for better readability
+          const colWidths = [
+            { wch: 8 },   // S.No
+            { wch: 40 },  // Medicine Name
+            { wch: 15 },  // Packing Size
+            { wch: 12 },  // Amount
+            { wch: 12 },  // Indented Qty
+            { wch: 12 },  // Godown Stock
+            { wch: 12 },  // Supply Qty
+            { wch: 12 },  // Supply Price
+            { wch: 10 },  // Despatch %
+            { wch: 12 },  // Balance Qty
+            { wch: 20 },  // Created By
+            { wch: 20 },  // Forward To
+            { wch: 20 },  // Name
+            { wch: 15 },  // Expiry Date
+            { wch: 15 },  // Mobile
+            { wch: 15 }   // Stock Available
+          ];
+          ws['!cols'] = colWidths;
+
+          $('#progressText').text('Finalizing Excel file...');
+          $('#progressBar').css('width', '80%');
+
+          // Add the worksheet to the workbook
+          XLSX.utils.book_append_sheet(wb, ws, 'Factory Dispatch Report');
+
+          $('#progressText').text('Downloading...');
+          $('#progressBar').css('width', '90%');
+
+          // Generate filename with current date
+          const date = new Date();
+          const dateStr = date.toISOString().split('T')[0];
+          const filename = `Factory_Dispatch_Report_${dateStr}.xlsx`;
+
+          // Write and download
+          XLSX.writeFile(wb, filename);
+
+          // Hide progress
+          $('#progressBar').css('width', '100%');
+          setTimeout(() => {
+            $('#downloadProgress').removeClass('show');
+            $('#progressBar').css('width', '0%');
+          }, 1000);
+
+        } catch (error) {
+          console.error('Error creating Excel file:', error);
+          alert('Error creating Excel file: ' + error.message);
+          $('#downloadProgress').removeClass('show');
+        }
+      }, 100);
+    }
+
+    // Function to download large CSV file
+    function downloadLargeCSV() {
+      // First, try to get data from DataTables directly
+      if (dataTableRef) {
+        const tableData = dataTableRef.rows().data().toArray();
+        if (tableData && tableData.length > 0) {
+          allData = tableData;
+        }
+      }
+
+      if (!allData || allData.length === 0) {
+        alert('No data available to download. Please wait for data to load.');
+        return;
+      }
+
+      // Show progress indicator
+      $('#downloadProgress').addClass('show');
+      $('#progressText').text('Preparing CSV file with ' + allData.length + ' records...');
+      $('#progressBar').css('width', '10%');
+
+      setTimeout(() => {
+        try {
+          // Prepare headers
+          const headers = [
+            'S.No',
+            'Medicine Name',
+            'Packing Size',
+            'Amount',
+            'Indented Qty',
+            'Godown Stock',
+            'Supply Qty',
+            'Supply Price',
+            'Despatch %',
+            'Balance Qty',
+            'Created By',
+            'Forward To',
+            'Name',
+            'Expiry Date',
+            'Mobile',
+            'Stock Available'
+          ];
+
+          $('#progressText').text('Processing data...');
+          $('#progressBar').css('width', '30%');
+
+          // Prepare CSV content
+          let csvContent = headers.join(',') + '\n';
+
+          // Check if data is array of arrays (from DataTables) or array of objects
+          const isArrayOfArrays = allData.length > 0 && Array.isArray(allData[0]);
+
+          // Process in chunks to avoid UI freeze
+          const chunkSize = 10000;
+
+          for (let i = 0; i < allData.length; i++) {
+            const item = allData[i];
+
+            if (isArrayOfArrays) {
+              // Data is array of arrays from DataTables
+              const cleanNumber = (value) => {
+                if (!value || value === 'N/A' || value === '') return '';
+                const textValue = String(value).replace(/<[^>]*>/g, '');
+                const num = parseFloat(textValue);
+                return isNaN(num) ? textValue : num.toFixed(2);
+              };
+
+              const row = [
+                i + 1,
+                `"${(item[1] ? String(item[1]).replace(/<[^>]*>/g, '').replace(/"/g, '""') : '')}"`,
+                `"${(item[2] ? String(item[2]).replace(/<[^>]*>/g, '').replace(/"/g, '""') : '')}"`,
+                cleanNumber(item[3]),
+                cleanNumber(item[4]),
+                cleanNumber(item[5]),
+                cleanNumber(item[6]),
+                cleanNumber(item[7]),
+                `"${(item[8] ? String(item[8]).replace(/<[^>]*>/g, '').replace(/"/g, '""') : '')}"`,
+                cleanNumber(item[9]),
+                `"${(item[10] ? String(item[10]).replace(/<[^>]*>/g, '').replace(/"/g, '""') : '')}"`,
+                `"${(item[11] ? String(item[11]).replace(/<[^>]*>/g, '').replace(/"/g, '""') : '')}"`,
+                `"${(item[12] ? String(item[12]).replace(/<[^>]*>/g, '').replace(/"/g, '""') : '')}"`,
+                `"${(item[13] ? String(item[13]).replace(/<[^>]*>/g, '').replace(/"/g, '""') : '')}"`,
+                `"${(item[14] ? String(item[14]).replace(/<[^>]*>/g, '').replace(/"/g, '""') : '')}"`,
+                cleanNumber(item[15])
+              ];
+
+              csvContent += row.join(',') + '\n';
+            } else {
+              // Data is array of objects
+              const formatNumber = (value) => {
+                if (!value || value === 'N/A' || value === '') return '';
+                const cleanValue = String(value).replace(/[^0-9.-]/g, '');
+                const num = parseFloat(cleanValue);
+                return isNaN(num) ? value : num.toFixed(2);
+              };
+
+              const row = [
+                i + 1,
+                `"${(item.medicine_name || item.MedicineName || item.medicineName || item['Medicine Name'] || '').replace(/"/g, '""')}"`,
+                `"${(item.packing_size || item.PackingSize || item.packingSize || item['Packing Size'] || '').replace(/"/g, '""')}"`,
+                formatNumber(item.amount || item.Amount),
+                item.indented_quantity || item.IndentedQty || item.indentedQty || item['Indented Qty'] || '',
+                item.godown_stock_availablity || item.GodownStock || item.godownStock || item['Godown Stock'] || '',
+                item.supply_quantity || item.SupplyQty || item.supplyQty || item['Supply Qty'] || '',
+                formatNumber(item.supply_price || item.SupplyPrice || item.supplyPrice || item['Supply Price']),
+                (item.percentage_of_despatch_quantity || item.DespatchPercent || item.despatchPercent || item['Despatch %']) ?
+                  (item.percentage_of_despatch_quantity || item.DespatchPercent || item.despatchPercent || item['Despatch %']) + '%' : '',
+                item.balance_quantity_to_be_supplied || item.BalanceQty || item.balanceQty || item['Balance Qty'] || '',
+                `"${(item.created_by || item.CreatedBy || item.createdBy || item['Created By'] || '').replace(/"/g, '""')}"`,
+                `"${(item.forward_to || item.ForwardTo || item.forwardTo || item['Forward To'] || '').replace(/"/g, '""')}"`,
+                `"${(item.name || item.Name || item['Name'] || '').replace(/"/g, '""')}"`,
+                item.expiry_date || item.ExpiryDate || item.expiryDate || item['Expiry Date'] || '',
+                item.mobile || item.Mobile || '',
+                item.stock_availble || item.StockAvailable || item.stockAvailable || item['Stock Available'] || ''
+              ];
+
+              csvContent += row.join(',') + '\n';
+            }
+
+            // Update progress every chunk
+            if ((i + 1) % chunkSize === 0) {
+              const progress = 30 + Math.floor(((i + 1) / allData.length) * 50);
+              $('#progressBar').css('width', progress + '%');
+            }
+          }
+
+          $('#progressText').text('Finalizing download...');
+          $('#progressBar').css('width', '80%');
+
+          // Create download link
+          const blob = new Blob(["\uFEFF" + csvContent], { type: 'text/csv;charset=utf-8;' }); // Add BOM for UTF-8
+          const link = document.createElement('a');
+          const url = URL.createObjectURL(blob);
+
+          const date = new Date();
+          const dateStr = date.toISOString().split('T')[0];
+          const filename = `Factory_Dispatch_Report_${dateStr}.csv`;
+
+          link.setAttribute('href', url);
+          link.setAttribute('download', filename);
+          link.style.visibility = 'hidden';
+
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+
+          $('#progressBar').css('width', '100%');
+          setTimeout(() => {
+            $('#downloadProgress').removeClass('show');
+            $('#progressBar').css('width', '0%');
+          }, 1000);
+
+        } catch (error) {
+          console.error('Error creating CSV file:', error);
+          alert('Error creating CSV file. Please try again.');
+          $('#downloadProgress').removeClass('show');
+        }
+      }, 100);
+    }
+
+    // Download report function for other formats
+    function downloadReport(format) {
+      if (!dataTableRef) {
+        alert('Table is still loading. Please wait...');
+        return;
+      }
+
+      switch (format) {
+        case 'pdf':
+          dataTableRef.button('.buttons-pdf').trigger();
+          break;
+        case 'print':
+          dataTableRef.button('.buttons-print').trigger();
+          break;
+        default:
+          console.log('Unknown format:', format);
+      }
+    }
+  </script>
+
+  <div id="pushModal" style="width: 100%; display:none; height: 100%;" class="u-DisplayNone u-Overlay--glass"></div>
+  <div class="t-NavigationBar-menu a-Menu" style="display: none" id="menu_L428237300758551931558" role="menu">
+    <ul>
+      <li class="" data-current="false" data-icon="fa fa-sign-out"><a
+          href="apex_authentication.logout?p_app_id=117&amp;p_session_id=2368821413423" title="" target="">Sign Out</a>
+      </li>
+    </ul>
+  </div>
+</body>
+
+</html>

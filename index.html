@@ -1,0 +1,1611 @@
+<html class="page-9999 app-IMIM" lang="en" style="--js-sticky-top: 0px;">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=edge">
+  <meta charset="utf-8">
+  <title>INDIAN MEDICINE - MANAGEMENT - Log In</title>
+
+  <link rel="apple-touch-icon" href="assets/img/app-icon-192.png">
+  <link rel="icon" href="assets/img/app-icon-32.png">
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <link rel="stylesheet" href="assets/css/Core.min.css" type="text/css">
+  <link rel="stylesheet" href="assets/css/Theme-Standard.min.css" type="text/css">
+  <link rel="stylesheet" href="assets/css/font-apex.min.css" type="text/css">
+  <link rel="stylesheet" href="assets/css/Core_theme.min.css" type="text/css">
+  <link rel="stylesheet" href="assets/css/custom.min.css" type="text/css">
+  <link rel="stylesheet" href="assets/css/aos.min.css" type="text/css">
+  <link rel="stylesheet" href="assets/css/theme.css" type="text/css">
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/datatable/css/dataTables.css" rel="stylesheet">
+  <link rel="stylesheet" href="assets/vendor/datatable/dataTables.bootstrap5.min.css">
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/toastr/toastr.min.css" rel="stylesheet">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="-1" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    #otpTimer {
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 8px;
+      text-align: center;
+      padding: 4px 8px;
+      border-radius: 4px;
+      background-color: #f8f9fa;
+      border: 1px solid #dee2e6;
+      transition: all 0.3s ease;
+    }
+
+    #otpTimer.expiring {
+      color: #ff6b6b;
+      background-color: #fff5f5;
+      border-color: #ff6b6b;
+    }
+  </style>
+  <style>
+    #cooldownTimer {
+      background-color: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-radius: 4px;
+      padding: 8px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #856404;
+      text-align: center;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.7;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    /* For the OTP expiry timer */
+    #otpTimer {
+      background-color: #e3f2fd;
+      border: 1px solid #bbdefb;
+      border-radius: 4px;
+      padding: 8px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: #0d47a1;
+      text-align: center;
+    }
+
+    /* Disabled button style */
+    #sendOtp:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    #popup-overlay {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #changePasswordModal {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 300px;
+      text-align: center;
+    }
+
+    #operatorChoiceSection {
+      display: block;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 8px 16px;
+    }
+
+    body {
+      margin: 0% 10%;
+      padding: 0%;
+      overflow-x: hidden;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0);
+    }
+
+    #cm {
+      width: 300px;
+      position: fixed;
+      left: 3%;
+      top: 6%;
+    }
+
+    #cm100 {
+      width: 300px;
+      position: fixed;
+      top: 6%;
+      right: 3%;
+    }
+
+    .bg {
+      width: 100%;
+      height: 100vh;
+      background-image: url(assets/img/bg1.jpeg);
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-repeat: no-repeat;
+      background-size: cover;
+      z-index: -10;
+      filter: blur(2px);
+      animation: zoombam 60s linear infinite;
+    }
+
+    @keyframes zoombam {
+      0% {
+        transform: scale(2);
+        opacity: 0%;
+        rotate: 30deg;
+      }
+
+      2% {
+        opacity: 100%;
+      }
+
+      98% {
+        opacity: 100%;
+      }
+
+      100% {
+        transform: scale(1.1);
+        opacity: 0%;
+        rotate: 0deg;
+      }
+    }
+
+    .t-Region-header {
+      display: none;
+    }
+
+    #R236245515523248623283 {
+      background-color: rgba(255, 255, 255, 0);
+      border: none;
+      border-width: 0px;
+    }
+
+    #log-dept-logo {
+      width: 200px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      background-color: rgba(255, 255, 255, 0.765);
+      border-radius: 20px;
+      user-select: none;
+      pointer-events: none;
+      -webkit-user-drag: none;
+    }
+
+    .dept-title {
+      position: relative;
+    }
+
+    .dept-title h1 {
+      position: fixed;
+      font-size: 7em;
+      margin-top: 0;
+      filter: drop-shadow(2px 2px 8px rgb(0, 0, 0));
+      color: var(--background);
+      z-index: -5;
+    }
+
+    .dept-title h2 {
+      font-size: 2em;
+      margin-bottom: 20px;
+      color: var(--background);
+      filter: drop-shadow(0px 0px 2px rgb(0, 0, 0));
+      font-weight: 700;
+    }
+
+    /* logbox */
+    .t-Login-logo {
+      background-color: rgba(0, 0, 0, 0);
+    }
+
+    .t-Login-region {
+      --ut-field-padding-y: 10px;
+    }
+
+    .t-Login-region {
+      border-radius: 50px 2px 50px 2px;
+      background-color: rgba(223, 187, 146, 0.757);
+      box-shadow: 2px 2px 5px black;
+    }
+
+    .t-Form-label {
+      color: white;
+      font-weight: 600;
+    }
+
+    .container {
+      zoom: 85%;
+    }
+
+    .t-Form-labelContainer label {
+      color: var(--shade1);
+    }
+
+    .t-Login-containerFooter .t-Region {
+      background-color: rgba(255, 255, 255, 0);
+      border-width: 0px;
+    }
+
+    .t-Login-containerFooter .t-Region p {
+      color: var(--background);
+    }
+
+    @media(width<600px) {
+      body {
+        margin: 0% 5%;
+        padding: 0% 1%;
+      }
+
+      .container {
+        zoom: 100%;
+        margin-top: 5em;
+      }
+
+      #cm {
+        width:
+          150px;
+        position: fixed;
+        left: -10%;
+        top: 6%;
+      }
+
+      #cm100 {
+        width: 150px;
+        position: fixed;
+        top: 6%;
+        right: -10%;
+      }
+
+      #log-dept-logo {
+        width: 80px;
+      }
+
+      .dept-title h2 {
+        font-size: 18px;
+      }
+
+      .dept-title h1 {
+        font-size: 48px;
+      }
+    }
+  </style>
+</head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="assets/css/responsive.css" type="text/css">
+</head>
+
+<body class="t-PageBody--login t-PageTemplate--login apex-top-nav apex-icons-fontapex apex-theme-vita-standard"
+  data-aos-easing="ease" data-aos-duration="400" data-aos-delay="0">
+  <!-- <div class="top-cm" data-aos="flip-left" data-aos-duration="2000">
+      <img src="r/dimdev/117/files/static/v194/cm.png" id="cm">
+      <img src="r/dimdev/117/files/static/v194/cm100.png" id="cm100">
+      </div> -->
+  <div class="bg">
+    <div class="circles">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <form>
+    <div class="t-Login-bg">
+      <div class="t-Login-bgImg"></div>
+    </div>
+    <div class="t-Login-container">
+      <header class="t-Login-containerHeader"></header>
+      <main class="t-Login-containerBody" id="main">
+        <span id="APEX_SUCCESS_MESSAGE" data-template-id="238513976789193517219_S"
+          class="apex-page-success u-hidden"></span><span id="APEX_ERROR_MESSAGE"
+          data-template-id="238513976789193517219_E" class="apex-page-error u-hidden"></span>
+        <div class="container">
+          <div class="row" style="padding-top: 150px;">
+            <div class="col col-6 apex-col-auto col-start">
+              <div class="t-Region t-Region--scrollBody" id="R236248342223979339606" role="region" aria-label="New">
+                <div class="t-Region-header">
+                  <div class="t-Region-headerItems t-Region-headerItems--title">
+                    <span class="t-Region-headerIcon"><span class="t-Icon " aria-hidden="true"></span></span>
+                    <h2 class="t-Region-title" id="R236248342223979339606_heading" data-apex-heading="">New</h2>
+                  </div>
+                  <div class="t-Region-headerItems t-Region-headerItems--buttons"><span
+                      class="js-maximizeButtonContainer"></span></div>
+                </div>
+                <div class="t-Region-bodyWrap">
+                  <div class="t-Region-buttons t-Region-buttons--top">
+                    <div class="t-Region-buttons-left"></div>
+                    <div class="t-Region-buttons-right"></div>
+                  </div>
+                  <div class="t-Region-body">
+                    <div class="t-Region-orderBy"></div>
+                    <div class="dept-title">
+                      <img id="log-dept-logo" src="assets/img/dept-logo.png">
+                      <!-- <h2 class="delayed text-middle">Directorate of Animal Husbandry and Veterinary Services</h2>
+                          <h1 class="fade">Jallikattu in Tamil Nadu</h1> -->
+                      <h2 data-aos="zoom-in-down" data-aos-duration="500" class="text-middle aos-init aos-animate">
+                        Department of Indian Medicine</h2>
+                      <h2 data-aos="fade-down" data-aos-duration="800" data-aos-delay="800"
+                        class="text-middle aos-init aos-animate">Medicine Indent</h2>
+                    </div>
+                  </div>
+                  <div class="t-Region-buttons t-Region-buttons--bottom">
+                    <div class="t-Region-buttons-left"></div>
+                    <div class="t-Region-buttons-right"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col col-6 apex-col-auto col-end">
+              <div class="t-Login-region t-Form--stretchInputs t-Form--labelsAbove " id="R428237249449436931406"
+                role="region" aria-labelledby="R428237249449436931406_heading">
+                <div class="t-Login-header">
+                  <img class="t-Login-logo" src="assets/img/head-tnlogo.png" alt="" data-app-icon="">
+                  <span class="t-Login-logo " aria-hidden="true"></span>
+                  <h2 class="t-Login-title" id="R428237249449436931406_heading" data-apex-heading="">MEDICINE MANAGEMENT
+                  </h2>
+                </div>
+                <div class="t-Login-body">
+                  <div
+                    class="t-Form-fieldContainer rel-col  apex-item-wrapper apex-item-wrapper--has-placeholder apex-item-wrapper--number-field apex-item-wrapper--has-icon"
+                    id="P9999_USERNAME_CONTAINER">
+                    <div class="t-Form-labelContainer col col-null">
+                      <label for="P9999_USERNAME" id="P9999_USERNAME_LABEL" class="t-Form-label">Enter Mobile
+                        Number</label>
+                    </div>
+                    <div class="t-Form-inputContainer col col-null">
+                      <div class="t-Form-itemWrapper"><input type="text" id="P9999_USERNAME" name="P9999_USERNAME"
+                          placeholder="Enter Registered Mobile Number"
+                          class="number_field apex-item-text apex-item-number apex-item-has-icon" value="" size="40"
+                          maxlength="10" inputmode="decimal" style="text-align:start"><span
+                          class="apex-item-icon fa fa-user" aria-hidden="true"></span></div>
+                      <span id="P9999_USERNAME_error_placeholder" class="a-Form-error"
+                        data-template-id="428237130780249931341_ET"></span>
+                    </div>
+                  </div>
+                  <input type="hidden" name="P9999_MOBILE_NUMBER" id="P9999_MOBILE_NUMBER" value=""><input type="hidden"
+                    name="P9999_PASSWORD" id="P9999_PASSWORD" value="664282"><input type="hidden"
+                    name="P9999_VALIDATION_FLAG" id="P9999_VALIDATION_FLAG" value="Invalid"><input type="hidden"
+                    name="P9999_OTP_FLAG" id="P9999_OTP_FLAG" value="">
+                  <div
+                    class="t-Form-fieldContainer t-Form-fieldContainer--stacked is-required t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--xlarge apex-item-wrapper apex-item-wrapper--text-field"
+                    id="P9999_OTP_NUMBER_CONTAINER" style="display: none;">
+                    <div class="t-Form-labelContainer">
+                      <label for="P9999_OTP_NUMBER" id="P9999_OTP_NUMBER_LABEL" class="t-Form-label">Enter the OTP
+                      </label>
+                    </div>
+                    <div class="t-Form-inputContainer">
+                      <div class="t-Form-itemWrapper"><input type="text" id="P9999_OTP_NUMBER" name="P9999_OTP_NUMBER"
+                          required="" class="text_field apex-item-text" value="" size="30"></div>
+                      <div class="t-Form-itemAssistance">
+                        <span id="P9999_OTP_NUMBER_error_placeholder" class="a-Form-error"
+                          data-template-id="428237131750063931341_ET"></span>
+                        <div class="t-Form-itemRequired" aria-hidden="true">Required</div>
+                      </div>
+                    </div>
+                  </div>
+                  <input type="hidden" name="P9999_REMEMBER" id="P9999_REMEMBER" value=""><input type="hidden"
+                    data-for="P9999_REMEMBER"
+                    value="3f2H2YMStcmnhPBLmFHIgiXuS99ngMSRpJjK_Saj-VJiZXut5a_LGGbeCYp_VKN1t3u7OS-t2jQkWX-NK3qFyQ">
+                </div>
+                <div class="t-Login-buttons"><button onclick="void(0);"
+                    class="t-Button t-Button--hot u-color-12  t-Button--large" type="button" id="sendOtp"><span
+                      class="t-Button-label">Send OTP</span></button><button
+                    class="t-Button t-Button--hot login-but u-color-12" type="button" id="B9768786719447315"
+                    style="display: none;"><span class="t-Button-label">Login</span></button>
+                </div>
+                <div class="t-Login-links"></div>
+                <div class="t-Login-subRegions"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer class="t-Login-containerFooter">
+        <div class="t-Region t-Region--scrollBody" id="R236248342707579339610" role="region" aria-label="New">
+          <div class="t-Region-header">
+            <div class="t-Region-headerItems t-Region-headerItems--title">
+              <span class="t-Region-headerIcon"><span class="t-Icon " aria-hidden="true"></span></span>
+              <h2 class="t-Region-title" id="R236248342707579339610_heading" data-apex-heading="">New</h2>
+            </div>
+            <div class="t-Region-headerItems t-Region-headerItems--buttons"><span
+                class="js-maximizeButtonContainer"></span></div>
+          </div>
+          <div class="t-Region-bodyWrap">
+            <div class="t-Region-buttons t-Region-buttons--top">
+              <div class="t-Region-buttons-left"></div>
+              <div class="t-Region-buttons-right"></div>
+            </div>
+            <div class="t-Region-body">
+              <div class="t-Region-orderBy"></div>
+              <div class="row">
+                <div class="col-6 foot">
+                  <p class="text-middle"><img class="footer-logo" src="assets/img/dept-logo.png"><br>Content owned by
+                    Department of Indian Medicine and Homoeopathy</p>
+                </div>
+                <div class="col-6 foot">
+                  <p class="text-middle"><img class="footer-logo" src="assets/img/tnegalogo.png"><br>Designed and
+                    Developed by Tamil Nadu e-Governance Agency</p>
+                </div>
+              </div>
+            </div>
+            <div class="t-Region-buttons t-Region-buttons--bottom">
+              <div class="t-Region-buttons-left"></div>
+              <div class="t-Region-buttons-right"></div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+    <input type="hidden" id="pPageFormRegionChecksums" value="[]">
+    <input type="hidden" id="pPageItemsRowVersion" value=""><input type="hidden" id="pPageItemsProtected"
+      value="UDk5OTlfUkVNRU1CRVI/KlR1DqEqcOXwt2_QSHQENqh_xCoIP0mq_iSUb28WOJS2D0AKU0lmKxTvwIDY0T1apvtjQE8Jf92q-K_qrQvWAg">
+  </form>
+  <!-- jQuery -->
+  <script src="assets/js/jquery.latest.min.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- DataTables -->
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="assets/js/widget.treeView.min.js"></script>
+  <script type="module" src="assets/js/commonMenu.js"></script>
+  <script src="assets/js/widget.interactiveReport.min.js"></script>
+  <script src="assets/js/widget.iconList.min.js"></script>
+  <script src="assets/js/widget.stickyTableHeader.min.js"></script>
+  <script src="assets/js/widget.stickyWidget.min.js"></script>
+  <script src="assets/js/item.Colorpicker.min.js"></script>
+  <script src="assets/js/jetCommonBundle.min.js"></script>
+  <script src="assets/js/chartBundle.min.js"></script>
+
+  <script src="assets/js/toastUtil.js"></script>
+  <script type="module" src="assets/js/dataTableUtil.js"></script>
+  <script src="assets/js/crypto-js.min.js"></script>
+  <script src="assets/js/theme42.min.js"></script>
+  <script src="assets/js/global.js"></script>
+  <script src="assets/js/encrypt_decrypt.js"></script>
+  <script src="assets/js/singleFileUpload.js"></script>
+  <script src="assets/js/globalHeader.js"></script>
+  <script src="assets/js/apiConfig.js"></script>
+  <script src="assets/js/session.js"></script>
+
+  <!-- <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const sendOtpButton = document.getElementById('sendOtp');
+      const loginButton = document.querySelector('.login-but');
+      let generatedOtp = '664282'; // Dummy OTP
+
+      // Step 1: Send OTP (mock)
+      sendOtpButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const mobnumber = document.getElementById('P9999_USERNAME')?.value?.trim();
+        if (!mobnumber || mobnumber.length !== 10 || isNaN(mobnumber)) {
+          showErrorToast("Please enter a valid 10-digit mobile number.");
+          return;
+        }
+
+        showSuccessToast(`OTP has been sent to your mobile number.`);
+        $("#P9999_OTP_NUMBER_CONTAINER").show();
+        $(".login-but").show();
+        $("#sendOtp").hide();
+      });
+
+      // Step 2: Validate OTP and Login
+      loginButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const enteredOtp = document.getElementById('P9999_OTP_NUMBER')?.value?.trim();
+        if (!enteredOtp) {
+          showErrorToast("Please enter the OTP.");
+          return;
+        }
+
+        if (enteredOtp !== generatedOtp) {
+          showErrorToast("Invalid OTP. Please try again.");
+          return;
+        }
+
+        const mobnumber = document.getElementById('P9999_USERNAME')?.value?.trim();
+
+        try {
+          // 🔐 Create encrypted session
+          await initializeUserSession(mobnumber);
+
+          // 🔓 Get decrypted session for navigation logic
+          const session = getDecryptedUserSession();
+          if (!session) {
+            throw new Error("User session decryption failed.");
+          }
+
+          console.log("✅ Decrypted session:", session);
+
+          // 🧠 Determine user role and redirect
+          // const role = (session.role || '').toLowerCase();
+          // let folder = '';
+
+          // if (role.includes('amo')) folder = 'amo';
+          // else if (role.includes('dsmo')) folder = 'dsmo';
+          // else if (role.includes('factory')) folder = 'factory';
+          // else if (role.includes('nodal')) folder = 'nodal';
+          // else if (role.includes('admin')) folder = 'admin';
+          // else if (role.includes('commissioner')) folder = 'commissioner';
+          // else throw new Error('Unknown role: ' + role);
+
+          // // 🚀 Redirect to user’s home page
+          // window.location.href = `${folder}/home.html`;
+          const role = (session.role || "").toLowerCase();
+          const roleMap = {
+            amo: "amo",
+            dsmo: "dsmo",
+            factory: "factory",
+            nodal: "nodal",
+            admin: "admin",
+            commissioner: "commissioner"
+          };
+
+          let folder = "";
+          for (const key in roleMap) {
+            if (role.includes(key)) {
+              folder = roleMap[key];
+              break;
+            }
+          }
+
+          if (!folder) throw new Error("Unknown role: " + role);
+
+          // 🚀 Redirect
+          window.location.href = `${folder}/home.html`;
+
+        } catch (error) {
+          console.error("Login Error:", error);
+          showErrorToast("Login failed. Please try again.");
+        }
+      });
+    });
+  </script> -->
+  <!-- <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const otpInput = document.getElementById('P9999_OTP_NUMBER');
+      const sendOtpButton = document.getElementById('sendOtp');
+      const loginButton = document.querySelector('.login-but');
+      let otpData = null; // Will store {otp: '123456', timestamp: Date.now()}
+      const OTP_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+      otpInput.hide();
+      // OTP Validation Function
+      function validateOTP(enteredOtp, mobile) {
+        // Check if OTP data exists
+        if (!otpData) {
+          return { valid: false, message: "Please request an OTP first." };
+        }
+
+        // Check if OTP is for the same mobile number
+        if (otpData.mobile !== mobile) {
+          return { valid: false, message: "Mobile number mismatch. Please request OTP again." };
+        }
+
+        // Check if OTP is expired
+        const currentTime = Date.now();
+        const timeDifference = currentTime - otpData.timestamp;
+
+        if (timeDifference > OTP_EXPIRY_TIME) {
+          otpData = null; // Clear expired OTP
+          return { valid: false, message: "OTP has expired. Please request a new one." };
+        }
+
+        // Validate OTP value
+        if (enteredOtp !== otpData.otp) {
+          return { valid: false, message: "Invalid OTP. Please try again." };
+        }
+
+        return { valid: true, message: "OTP verified successfully!" };
+      }
+
+      // OTP Expiry Timer Functions
+      let otpTimer = null;
+
+      function startOtpExpiryTimer() {
+        clearOtpExpiryTimer();
+
+        // Update timer every second
+        otpTimer = setInterval(() => {
+          if (!otpData) return;
+
+          const currentTime = Date.now();
+          const timeDifference = currentTime - otpData.timestamp;
+          const timeLeft = OTP_EXPIRY_TIME - timeDifference;
+
+          if (timeLeft <= 0) {
+            clearOtpExpiryTimer();
+            showWarningToast("OTP has expired. Please request a new one.");
+            otpData = null;
+          }
+        }, 1000);
+      }
+
+      function clearOtpExpiryTimer() {
+        if (otpTimer) {
+          clearInterval(otpTimer);
+          otpTimer = null;
+        }
+      }
+
+      // Step 1: Generate and Send OTP
+      sendOtpButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        otpInput.show();
+        const mobnumber = document.getElementById('P9999_USERNAME')?.value?.trim();
+        if (!mobnumber || mobnumber.length !== 10 || isNaN(mobnumber)) {
+          showErrorToast("Please enter a valid 10-digit mobile number.");
+          return;
+        }
+
+        // Generate a 6-digit OTP
+        const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Store OTP with timestamp
+        otpData = {
+          otp: generatedOtp,
+          timestamp: Date.now(),
+          mobile: mobnumber
+        };
+
+        // Show loading state
+        const originalText = sendOtpButton.textContent;
+        sendOtpButton.disabled = true;
+        sendOtpButton.textContent = "Sending OTP...";
+
+        // Call API to send OTP via AJAX
+        sendOTPToAPI(mobnumber, generatedOtp).then(success => {
+          // Restore button state
+          sendOtpButton.disabled = false;
+          sendOtpButton.textContent = originalText;
+
+          if (success) {
+            showSuccessToast(`OTP has been sent to ${mobnumber}`);
+            $("#P9999_OTP_NUMBER_CONTAINER").show();
+            $(".login-but").show();
+            $("#sendOtp").hide();
+
+            // Start OTP expiry timer
+            startOtpExpiryTimer();
+          } else {
+            showErrorToast(response.message || "Failed to send OTP. Please try again.");
+          }
+        }).catch(error => {
+          // Restore button state on error
+          sendOtpButton.disabled = false;
+          sendOtpButton.textContent = originalText;
+          showErrorToast("Network error. Please try again.");
+        });
+      });
+
+      // AJAX-based OTP API function
+      async function sendOTPToAPI(mobileNumber, otp) {
+        return new Promise((resolve, reject) => {
+          // Prepare payload for OTP sending
+          const payload = {
+            action: "otp_operation",
+            operation: "send_otp",
+            mobile_no: mobileNumber,
+            // Add any additional parameters your API requires
+          };
+
+          $.ajax({
+            url: `${BASE_API_URL}/fn_otp_operation`, // Adjust URL as needed
+            method: "POST",
+            headers: {
+              "X-APP-Key": "edm",
+              "X-APP-Name": "edm",
+            },
+            data: {
+              data: encryptData(payload) // Assuming encryptData function exists
+            },
+            dataType: "json",
+            success: function (response) {
+              try {
+                // If response is encrypted, decrypt it
+                let result;
+                if (response.data && typeof response.data === 'string') {
+                  const decrypted = decryptData(response.data);
+                  result = decrypted;
+                } else {
+                  result = response;
+                }
+
+                console.log("OTP API Response:", result);
+
+                // Check if OTP was sent successfully
+                if (response.success === 1 || (result && result.success === 1)) {
+                  // Store the actual OTP that was sent by server (if different)
+                  if (result.debug_otp || result.otp_sent) {
+                    otpData.otp = result.debug_otp || result.otp_sent; // Use server-generated OTP
+                  }
+                  resolve(true);
+                } else {
+                  const errorMsg = response.message || result.message || "Failed to send OTP";
+                  showErrorToast(errorMsg);
+                  resolve(false);
+                }
+              } catch (error) {
+                console.error("Error processing OTP response:", error);
+                resolve(false);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("OTP API Error:", error);
+
+              // Check for specific error types
+              if (xhr.status === 0) {
+                showErrorToast("Network error. Please check your connection.");
+              } else if (xhr.status === 401) {
+                showErrorToast("Authentication failed. Please refresh the page.");
+              } else if (xhr.status === 429) {
+                showErrorToast("Too many requests. Please wait before trying again.");
+              } else {
+                showErrorToast("Failed to send OTP. Please try again.");
+              }
+
+              reject(error);
+            },
+            timeout: 30000 // 30 second timeout
+          });
+        });
+      }
+
+      // Enhanced OTP validation with AJAX verification
+      loginButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const enteredOtp = document.getElementById('P9999_OTP_NUMBER')?.value?.trim();
+        if (!enteredOtp) {
+          showErrorToast("Please enter the OTP.");
+          return;
+        }
+
+        const mobnumber = document.getElementById('P9999_USERNAME')?.value?.trim();
+
+        // Show loading state
+        const originalText = loginButton.textContent;
+        loginButton.disabled = true;
+        loginButton.textContent = "Verifying...";
+
+        try {
+          // Option 1: Client-side validation (for testing/fallback)
+          const clientValidation = validateOTP(enteredOtp, mobnumber);
+          if (!clientValidation.valid) {
+            loginButton.disabled = false;
+            loginButton.textContent = originalText;
+            showErrorToast(clientValidation.message);
+            return;
+          }
+
+          // Option 2: Server-side OTP verification via AJAX
+          const serverValid = await verifyOTPWithServer(mobnumber, enteredOtp);
+          if (!serverValid) {
+            loginButton.disabled = false;
+            loginButton.textContent = originalText;
+            return;
+          }
+
+          // 🔐 Create encrypted session
+          await initializeUserSession(mobnumber);
+
+          // 🔓 Get decrypted session for navigation logic
+          const session = getDecryptedUserSession();
+          if (!session) {
+            throw new Error("User session decryption failed.");
+          }
+
+          console.log("✅ Decrypted session:", session);
+
+          // 🧠 Determine user role and redirect
+          const role = (session.role || "").toLowerCase();
+          const roleMap = {
+            amo: "amo",
+            dsmo: "dsmo",
+            factory: "factory",
+            nodal: "nodal",
+            admin: "admin",
+            commissioner: "commissioner"
+          };
+
+          let folder = "";
+          for (const key in roleMap) {
+            if (role.includes(key)) {
+              folder = roleMap[key];
+              break;
+            }
+          }
+
+          if (!folder) throw new Error("Unknown role: " + role);
+
+          // Clear OTP data after successful login
+          otpData = null;
+          clearOtpExpiryTimer();
+
+          // 🚀 Redirect
+          window.location.href = `${folder}/home.html`;
+
+        } catch (error) {
+          console.error("Login Error:", error);
+          loginButton.disabled = false;
+          loginButton.textContent = originalText;
+          showErrorToast("Login failed. Please try again.");
+        }
+      });
+
+      // Server-side OTP verification function
+      async function verifyOTPWithServer(mobileNumber, otp) {
+        return new Promise((resolve, reject) => {
+          const payload = {
+            action: "otp_operation",
+            operation: "verify_otp",
+            mobile_no: mobileNumber,
+            otp: otp
+          };
+
+          $.ajax({
+            url: `${BASE_API_URL}/fn_otp_operation`, // Adjust URL as needed
+            method: "POST",
+            headers: {
+              "X-APP-Key": "edm",
+              "X-APP-Name": "edm",
+            },
+            data: {
+              data: encryptData(payload)
+            },
+            dataType: "json",
+            success: function (response) {
+              try {
+                let result;
+                if (response.data && typeof response.data === 'string') {
+                  const decrypted = decryptData(response.data);
+                  result = decrypted;
+                } else {
+                  result = response;
+                }
+
+                console.log("OTP Verification Response:", result);
+
+                if (response.success === 1 && response.verified) {
+                  showSuccessToast(response.message || "OTP verified successfully!");
+                  resolve(true);
+                } else {
+                  const errorMsg = response.message || result.message || "OTP verification failed";
+                  showErrorToast(errorMsg);
+                  resolve(false);
+                }
+              } catch (error) {
+                console.error("Error processing verification response:", error);
+                resolve(false);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("Verification API Error:", error);
+
+              // Fallback to client-side validation if server fails
+              if (otpData && otpData.otp === otp && otpData.mobile === mobileNumber) {
+                const timeDifference = Date.now() - otpData.timestamp;
+                if (timeDifference <= OTP_EXPIRY_TIME) {
+                  console.warn("Server verification failed, using client-side fallback");
+                  resolve(true);
+                  return;
+                }
+              }
+
+              showErrorToast("OTP verification failed. Please try again.");
+              reject(error);
+            },
+            timeout: 10000 // 10 second timeout for verification
+          });
+        });
+      }
+
+      // Resend OTP function with AJAX
+      function resendOTP() {
+        const mobnumber = document.getElementById('P9999_USERNAME')?.value?.trim();
+        if (!mobnumber || mobnumber.length !== 10 || isNaN(mobnumber)) {
+          showErrorToast("Please enter a valid mobile number.");
+          return;
+        }
+
+        // Generate new OTP
+        const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Update OTP data
+        otpData = {
+          otp: newOtp,
+          timestamp: Date.now(),
+          mobile: mobnumber
+        };
+
+        // Show loading on resend button
+        const resendBtn = document.getElementById('resendOtp');
+        if (resendBtn) {
+          const originalText = resendBtn.textContent;
+          resendBtn.disabled = true;
+          resendBtn.textContent = "Resending...";
+
+          sendOTPToAPI(mobnumber, newOtp).then(success => {
+            resendBtn.disabled = false;
+            resendBtn.textContent = originalText;
+
+            if (success) {
+              showSuccessToast("New OTP sent successfully!");
+              startOtpExpiryTimer();
+            }
+          });
+        }
+      }
+
+      // Add resend OTP button dynamically
+      function addResendOtpButton() {
+        if (!document.getElementById('resendOtp')) {
+          const resendButton = document.createElement('button');
+          resendButton.id = 'resendOtp';
+          resendButton.textContent = 'Resend OTP';
+          resendButton.style.display = 'none';
+          resendButton.style.marginTop = '10px';
+          resendButton.classList.add('btn', 'btn-secondary', 'btn-sm');
+
+          resendButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            resendOTP();
+          });
+
+          // Add to DOM
+          const container = document.querySelector('#P9999_OTP_NUMBER_CONTAINER');
+          if (container) {
+            container.appendChild(resendButton);
+          }
+
+          // Show resend button after 30 seconds
+          setTimeout(() => {
+            if (otpData && resendButton) {
+              resendButton.style.display = 'block';
+            }
+          }, 30000);
+        }
+      }
+
+      function showWarningToast(message) {
+        // Implement your toast notification here
+        alert("⚠️ " + message); // Replace with actual toast
+      }
+
+      // Call this when showing OTP input
+      $("#P9999_OTP_NUMBER_CONTAINER").show().then(() => {
+        addResendOtpButton();
+      });
+    });
+  </script> -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const otpInput = document.getElementById('P9999_OTP_NUMBER');
+      const sendOtpButton = document.getElementById('sendOtp');
+      const loginButton = document.querySelector('.login-but');
+      const otpContainer = document.getElementById('P9999_OTP_NUMBER_CONTAINER');
+      let otpData = null;
+      const OTP_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes for OTP expiry
+      const RESEND_COOLDOWN = 60; // 60 seconds cooldown for resending OTP
+
+      // Timer elements
+      let cooldownTimer = null;
+      let cooldownSeconds = 0;
+      let cooldownDisplay = null;
+
+      // Initially hide OTP input and login button
+      if (otpContainer) otpContainer.style.display = 'none';
+      if (loginButton) loginButton.style.display = 'none';
+
+      // Create cooldown timer display
+      function createCooldownDisplay() {
+        if (!document.getElementById('cooldownTimer')) {
+          const timerDiv = document.createElement('div');
+          timerDiv.id = 'cooldownTimer';
+          timerDiv.style.fontSize = '12px';
+          timerDiv.style.color = '#ff6b6b';
+          timerDiv.style.marginTop = '5px';
+          timerDiv.style.textAlign = 'center';
+          timerDiv.style.display = 'none';
+
+          const sendOtpParent = sendOtpButton.parentElement;
+          if (sendOtpParent) {
+            sendOtpParent.appendChild(timerDiv);
+          }
+          cooldownDisplay = timerDiv;
+        } else {
+          cooldownDisplay = document.getElementById('cooldownTimer');
+        }
+      }
+
+      // Start cooldown timer
+      function startCooldownTimer() {
+        clearCooldownTimer();
+        cooldownSeconds = RESEND_COOLDOWN;
+
+        if (cooldownDisplay) {
+          cooldownDisplay.style.display = 'block';
+          updateCooldownDisplay();
+        }
+
+        cooldownTimer = setInterval(() => {
+          cooldownSeconds--;
+          updateCooldownDisplay();
+
+          if (cooldownSeconds <= 0) {
+            clearCooldownTimer();
+            if (cooldownDisplay) {
+              cooldownDisplay.style.display = 'none';
+            }
+            sendOtpButton.disabled = false;
+            sendOtpButton.textContent = "Send OTP";
+          }
+        }, 1000);
+      }
+
+      // Clear cooldown timer
+      function clearCooldownTimer() {
+        if (cooldownTimer) {
+          clearInterval(cooldownTimer);
+          cooldownTimer = null;
+        }
+      }
+
+      // Update cooldown display
+      function updateCooldownDisplay() {
+        if (cooldownDisplay) {
+          cooldownDisplay.textContent = `Please wait ${cooldownSeconds} seconds before requesting another OTP`;
+        }
+      }
+
+
+
+      function showWarningToast(message) {
+        alert("⚠️ " + message);
+      }
+
+      // Initialize cooldown display
+      createCooldownDisplay();
+
+      // OTP Validation Function
+      function validateOTP(enteredOtp, mobile) {
+        if (!otpData) {
+          return { valid: false, message: "Please request an OTP first." };
+        }
+
+        if (otpData.mobile !== mobile) {
+          return { valid: false, message: "Mobile number mismatch. Please request OTP again." };
+        }
+
+        const currentTime = Date.now();
+        const timeDifference = currentTime - otpData.timestamp;
+
+        if (timeDifference > OTP_EXPIRY_TIME) {
+          otpData = null;
+          return { valid: false, message: "OTP has expired. Please request a new one." };
+        }
+
+        if (enteredOtp !== otpData.otp) {
+          return { valid: false, message: "Invalid OTP. Please try again." };
+        }
+
+        return { valid: true, message: "OTP verified successfully!" };
+      }
+
+      // OTP Expiry Timer Functions
+      let otpTimer = null;
+      let expiryTimerElement = null; // Add this global variable
+
+      // Create and initialize OTP timer display
+      function initializeOtpTimerDisplay() {
+        if (!document.getElementById('otpTimer')) {
+          const timerElement = document.createElement('div');
+          timerElement.id = 'otpTimer';
+          timerElement.style.fontSize = '12px';
+          timerElement.style.color = '#666';
+          timerElement.style.marginTop = '5px';
+          timerElement.style.textAlign = 'center';
+
+          const container = document.querySelector('#P9999_OTP_NUMBER_CONTAINER');
+          if (container) {
+            container.appendChild(timerElement);
+          }
+        }
+        expiryTimerElement = document.getElementById('otpTimer');
+        if (expiryTimerElement) {
+          expiryTimerElement.style.display = 'block';
+        }
+      }
+
+      // Update OTP timer display
+      function updateOtpTimerDisplay(timeLeft) {
+        if (!expiryTimerElement) return;
+
+        const minutes = Math.floor(timeLeft / 60000);
+        const seconds = Math.floor((timeLeft % 60000) / 1000);
+
+        if (timeLeft <= 30000) { // Last 30 seconds
+          expiryTimerElement.classList.add('expiring');
+        } else {
+          expiryTimerElement.classList.remove('expiring');
+        }
+
+        if (timeLeft <= 0) {
+          expiryTimerElement.textContent = "OTP expired!";
+        } else {
+          expiryTimerElement.textContent = `OTP expires in: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+      }
+
+      function startOtpExpiryTimer() {
+        clearOtpExpiryTimer();
+
+        // Initialize timer display
+        initializeOtpTimerDisplay();
+
+        otpTimer = setInterval(() => {
+          if (!otpData) {
+            if (expiryTimerElement) {
+              expiryTimerElement.style.display = 'none';
+            }
+            return;
+          }
+
+          const currentTime = Date.now();
+          const timeDifference = currentTime - otpData.timestamp;
+          const timeLeft = OTP_EXPIRY_TIME - timeDifference;
+
+          // Update the timer display
+          updateOtpTimerDisplay(timeLeft);
+
+          if (timeLeft <= 0) {
+            clearOtpExpiryTimer();
+            if (expiryTimerElement) {
+              expiryTimerElement.textContent = "OTP expired!";
+              expiryTimerElement.style.color = '#ff6b6b';
+            }
+            showWarningToast("OTP has expired. Please request a new one.");
+            otpData = null;
+
+            // Show resend button immediately when OTP expires
+            const resendBtn = document.getElementById('resendOtp');
+            if (resendBtn) {
+              resendBtn.style.display = 'block';
+            }
+          }
+        }, 1000);
+      }
+
+      // Clear OTP expiry timer
+      function clearOtpExpiryTimer() {
+        if (otpTimer) {
+          clearInterval(otpTimer);
+          otpTimer = null;
+        }
+        if (expiryTimerElement) {
+          expiryTimerElement.style.display = 'none';
+        }
+      }
+      // Step 1: Generate and Send OTP
+      sendOtpButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Check if still in cooldown period
+        if (cooldownSeconds > 0) {
+          showErrorToast(`Please wait ${cooldownSeconds} seconds before requesting another OTP`);
+          return;
+        }
+
+        const mobnumber = document.getElementById('P9999_USERNAME')?.value?.trim();
+        if (!mobnumber || mobnumber.length !== 10 || isNaN(mobnumber)) {
+          showErrorToast("Please enter a valid 10-digit mobile number.");
+          return;
+        }
+
+        // Generate a 6-digit OTP
+        const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Store OTP with timestamp
+        otpData = {
+          otp: generatedOtp,
+          timestamp: Date.now(),
+          mobile: mobnumber
+        };
+
+        // Show loading state and disable button
+        const originalText = sendOtpButton.textContent;
+        sendOtpButton.disabled = true;
+        sendOtpButton.textContent = "Sending OTP...";
+
+        // Call API to send OTP via AJAX
+        sendOTPToAPI(mobnumber, generatedOtp).then(success => {
+          if (success) {
+            showSuccessToast(`OTP has been sent to ${mobnumber}`);
+
+            // Show OTP input and login button, hide send button
+            if (otpContainer) otpContainer.style.display = 'block';
+            if (loginButton) loginButton.style.display = 'block';
+            sendOtpButton.style.display = 'none';
+
+            // Clear OTP input field
+            if (otpInput) otpInput.value = '';
+
+            // Focus on OTP input field
+            setTimeout(() => {
+              if (otpInput) otpInput.focus();
+            }, 100);
+
+            // Start OTP expiry timer
+            startOtpExpiryTimer();
+
+            // Start cooldown timer
+            startCooldownTimer();
+
+            // Add resend button
+            addResendOtpButton();
+          } else {
+            // Restore button state on failure
+            sendOtpButton.disabled = false;
+            sendOtpButton.textContent = originalText;
+          }
+        }).catch(error => {
+          // Restore button state on error
+          sendOtpButton.disabled = false;
+          sendOtpButton.textContent = originalText;
+          showErrorToast("Network error. Please try again.");
+        });
+      });
+
+      // AJAX-based OTP API function
+      async function sendOTPToAPI(mobileNumber, otp) {
+        return new Promise((resolve, reject) => {
+          const payload = {
+            action: "otp_operation",
+            operation: "send_otp",
+            mobile_no: mobileNumber,
+          };
+
+          $.ajax({
+            url: `${BASE_API_URL}/fn_otp_operation`,
+            method: "POST",
+            headers: {
+              "X-APP-Key": "edm",
+              "X-APP-Name": "edm",
+            },
+            data: {
+              data: encryptData(payload)
+            },
+            dataType: "json",
+            success: function (response) {
+              try {
+                let result;
+                if (response.data && typeof response.data === 'string') {
+                  const decrypted = decryptData(response.data);
+                  result = decrypted;
+                } else {
+                  result = response;
+                }
+
+                console.log("OTP API Response:", result);
+
+                if (response.success === 1 || (result && result.success === 1)) {
+                  // if (result.debug_otp || result.otp_sent) {
+                  //   otpData.otp = result.debug_otp || result.otp_sent;
+                  // }
+                  resolve(true);
+                } else {
+                  const errorMsg = response.message || result.message || "Failed to send OTP";
+                  showErrorToast(errorMsg);
+                  resolve(false);
+                }
+              } catch (error) {
+                console.error("Error processing OTP response:", error);
+                resolve(false);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("OTP API Error:", error);
+
+              if (xhr.status === 0) {
+                showErrorToast("Network error. Please check your connection.");
+              } else if (xhr.status === 401) {
+                showErrorToast("Authentication failed. Please refresh the page.");
+              } else if (xhr.status === 429) {
+                showErrorToast("Too many requests. Please wait before trying again.");
+              } else {
+                showErrorToast("Failed to send OTP. Please try again.");
+              }
+
+              reject(error);
+            },
+            timeout: 30000
+          });
+        });
+      }
+
+      // Enhanced OTP validation with AJAX verification
+      loginButton.addEventListener('click', async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const enteredOtp = document.getElementById('P9999_OTP_NUMBER')?.value?.trim();
+        if (!enteredOtp) {
+          showErrorToast("Please enter the OTP.");
+          return;
+        }
+
+        const mobnumber = document.getElementById('P9999_USERNAME')?.value?.trim();
+
+        // Show loading state
+        const originalText = loginButton.textContent;
+        loginButton.disabled = true;
+        loginButton.textContent = "Verifying...";
+
+        try {
+          // const clientValidation = validateOTP(enteredOtp, mobnumber);
+          // if (!clientValidation.valid) {
+          //   loginButton.disabled = false;
+          //   loginButton.textContent = originalText;
+          //   showErrorToast(clientValidation.message);
+          //   return;
+          // }
+
+          const serverValid = await verifyOTPWithServer(mobnumber, enteredOtp);
+          if (!serverValid) {
+            loginButton.disabled = false;
+            loginButton.textContent = originalText;
+            return;
+          }
+
+          // 🔐 Create encrypted session
+          await initializeUserSession(mobnumber);
+
+          // 🔓 Get decrypted session for navigation logic
+          const session = getDecryptedUserSession();
+          if (!session) {
+            throw new Error("User session decryption failed.");
+          }
+
+          console.log("✅ Decrypted session:", session);
+
+          // 🧠 Determine user role and redirect
+          const role = (session.role || "").toLowerCase();
+          const roleMap = {
+            amo: "amo",
+            dsmo: "dsmo",
+            factory: "factory",
+            nodal: "nodal",
+            admin: "admin",
+            commissioner: "commissioner"
+          };
+
+          let folder = "";
+          for (const key in roleMap) {
+            if (role.includes(key)) {
+              folder = roleMap[key];
+              break;
+            }
+          }
+
+          if (!folder) throw new Error("Unknown role: " + role);
+
+          // Clear OTP data after successful login
+          otpData = null;
+          clearOtpExpiryTimer();
+          clearCooldownTimer();
+
+          // 🚀 Redirect
+          window.location.href = `${folder}/home.html`;
+
+        } catch (error) {
+          console.error("Login Error:", error);
+          loginButton.disabled = false;
+          loginButton.textContent = originalText;
+          showErrorToast("Login failed. Please try again.");
+        }
+      });
+
+      // Server-side OTP verification function
+      async function verifyOTPWithServer(mobileNumber, otp) {
+        return new Promise((resolve, reject) => {
+          const payload = {
+            action: "otp_operation",
+            operation: "verify_otp",
+            mobile_no: mobileNumber,
+            otp: otp
+          };
+
+          $.ajax({
+            url: `${BASE_API_URL}/fn_otp_operation`,
+            method: "POST",
+            headers: {
+              "X-APP-Key": "edm",
+              "X-APP-Name": "edm",
+            },
+            data: {
+              data: encryptData(payload)
+            },
+            dataType: "json",
+            success: function (response) {
+              try {
+                let result;
+                if (response.data && typeof response.data === 'string') {
+                  const decrypted = decryptData(response.data);
+                  result = decrypted;
+                } else {
+                  result = response;
+                }
+
+                console.log("OTP Verification Response:", result);
+
+                if (response.success === 1 && response.verified) {
+                  showSuccessToast(response.message || "OTP verified successfully!");
+                  resolve(true);
+                } else {
+                  const errorMsg = response.message || result.message || "OTP verification failed";
+                  showErrorToast(errorMsg);
+                  resolve(false);
+                }
+              } catch (error) {
+                console.error("Error processing verification response:", error);
+                resolve(false);
+              }
+            },
+            error: function (xhr, status, error) {
+              console.error("Verification API Error:", error);
+
+              if (otpData && otpData.otp === otp && otpData.mobile === mobileNumber) {
+                const timeDifference = Date.now() - otpData.timestamp;
+                if (timeDifference <= OTP_EXPIRY_TIME) {
+                  console.warn("Server verification failed, using client-side fallback");
+                  resolve(true);
+                  return;
+                }
+              }
+
+              showErrorToast("OTP verification failed. Please try again.");
+              reject(error);
+            },
+            timeout: 10000
+          });
+        });
+      }
+
+      // Resend OTP function with AJAX
+      function resendOTP() {
+        const mobnumber = document.getElementById('P9999_USERNAME')?.value?.trim();
+        if (!mobnumber || mobnumber.length !== 10 || isNaN(mobnumber)) {
+          showErrorToast("Please enter a valid mobile number.");
+          return;
+        }
+
+        // Generate new OTP
+        const newOtp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Update OTP data
+        otpData = {
+          otp: newOtp,
+          timestamp: Date.now(),
+          mobile: mobnumber
+        };
+
+        // Show loading on resend button
+        const resendBtn = document.getElementById('resendOtp');
+        if (resendBtn) {
+          const originalText = resendBtn.textContent;
+          resendBtn.disabled = true;
+          resendBtn.textContent = "Resending...";
+
+          sendOTPToAPI(mobnumber, newOtp).then(success => {
+            resendBtn.disabled = false;
+            resendBtn.textContent = originalText;
+
+            if (success) {
+              showSuccessToast("New OTP sent successfully!");
+              startOtpExpiryTimer();
+            }
+          });
+        }
+      }
+
+      // Add resend OTP button dynamically
+      function addResendOtpButton() {
+        if (!document.getElementById('resendOtp')) {
+          const resendButton = document.createElement('button');
+          resendButton.id = 'resendOtp';
+          resendButton.textContent = 'Resend OTP';
+          resendButton.style.display = 'none';
+          resendButton.style.marginTop = '10px';
+          resendButton.classList.add('btn', 'btn-secondary', 'btn-sm');
+
+          resendButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            resendOTP();
+          });
+
+          const container = document.querySelector('#P9999_OTP_NUMBER_CONTAINER');
+          if (container) {
+            container.appendChild(resendButton);
+          }
+
+          setTimeout(() => {
+            if (otpData && resendButton) {
+              resendButton.style.display = 'block';
+            }
+          }, 30000);
+        }
+      }
+    });
+  </script>
+
+
+  <script>
+    // Prevent navigating back into logged-in pages
+    window.history.pushState(null, null, window.location.href);
+    window.onpopstate = function () {
+      window.history.go(1);
+    };
+
+  </script>
+
+
+
+</body>
+
+</html>

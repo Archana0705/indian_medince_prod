@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html class="page-22 app-IMIM" lang="en" style="--js-sticky-top: 204.375px;">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="IE=edge">
+  <meta charset="utf-8">
+  <title>District, Financial year, System, Quarter</title>
+
+  <!-- Prevent browser from caching protected pages -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <link rel="apple-touch-icon" href="../assets/img/app-icon-192.png">
+  <link rel="icon" href="../assets/img/app-icon-32.png">
+
+  <link rel="stylesheet" href="../assets/css/Core.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/Theme-Standard.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/font-apex.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/Core_theme.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/custom.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/aos.min.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/theme.css" type="text/css">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="../assets/vendor/datatable/css/dataTables.css" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/vendor/datatable/dataTables.bootstrap5.min.css">
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- session toast  -->
+  <link rel="stylesheet" href="../assets/css/sessionToast.css" type="text/css">
+
+  <style type="text/css">
+    ul.headermenu {
+      padding: 10px 30px;
+      width: auto !important;
+      margin: 0;
+      white-space: nowrap;
+      left: -32px;
+      position: relative;
+    }
+
+    .a-Menu--top.submenu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 200px;
+      background: white;
+      border: 1px solid #ccc;
+      z-index: 1000;
+      display: none;
+    }
+
+    .cusdrop {
+      top: 13.5rem;
+      left: initial !important;
+    }
+
+    .navpage {
+      height: 100%;
+      text-decoration: none;
+      color: #fff;
+      padding: 12px;
+      line-height: 3.2;
+    }
+
+    .a-MenuBar-item a {
+      display: block;
+      width: 100%;
+      height: 100%;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Table styling */
+    #searchResultsTable {
+      width: 100% !important;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    #searchResultsTable thead th {
+      background-color: #343a40;
+      color: white;
+      font-weight: 600;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    #searchResultsTable tbody td {
+      vertical-align: middle;
+      padding: 8px;
+    }
+
+    #searchResultsTable tbody tr:hover {
+      background-color: #f5f5f5;
+    }
+
+    /* Loading spinner */
+    .spinner-border {
+      width: 3rem;
+      height: 3rem;
+    }
+
+    /* Responsive table */
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* DataTable customization */
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_paginate {
+      margin: 10px 0;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 5px 10px;
+      margin-left: 5px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      padding: 5px 10px;
+      margin: 0 2px;
+      border-radius: 4px;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+      background: #007bff;
+      color: white !important;
+      border: 1px solid #007bff;
+    }
+
+    /* Hide pivot and actions */
+    .a-IRR-controlGroup--views,
+    .a-IRR-actions,
+    .a-IRR-controls-item--pivot,
+    .a-IRR-reportSummary-item--pivot {
+      display: none !important;
+    }
+
+    /* Download button styling */
+    .download-btn-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 15px;
+    }
+
+    .btn-download {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin: 10px 0;
+    }
+
+    .btn-download:hover {
+      background-color: #218838;
+    }
+
+    .btn-download i {
+      font-size: 16px;
+    }
+  </style>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="-1">
+  <meta http-equiv="Cache-Control" content="no-cache">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../assets/css/responsive.css" type="text/css">
+</head>
+
+<body
+  class="t-PageBody t-PageBody--hideLeft t-PageBody--hideActions t-PageTemplate--standard apex-top-nav apex-icons-fontapex apex-theme-vita-standard js-HeaderExpanded t-PageBody--topNav"
+  id="t_PageBody" data-aos-easing="ease" data-aos-duration="400" data-aos-delay="0">
+  <a href="#main" id="t_Body_skipToContent">Skip to Main Content</a>
+  <form>
+    <header class="t-Header" id="t_Header" role="banner">
+      <div class="t-Header-branding">
+        <div class="t-Header-controls">
+          <button class="t-Button t-Button--icon t-Button--header t-Button--headerTree" aria-label="Main Navigation"
+            title="Main Navigation" id="t_Button_navControl" type="button"><span class="t-Header-controlsIcon"
+              aria-hidden="true"></span></button>
+        </div>
+        <div class="t-Header-logo">
+          <div class="gigw">
+            <li><a data-aos="fade-up" data-aos-delay="200" class="linkedin btn-decrease aos-init aos-animate"><span
+                  class="d-inline-block" tabindex="0" data-toggle="tooltip" title="font size Decrease"><i></i> A
+                  -</span></a></li>
+            <li><a data-aos="fade-up" data-aos-delay="300" class="linkedin btn-orig aos-init aos-animate"><span
+                  class="d-inline-block" tabindex="0" data-toggle="tooltip" title="Reset font"><i></i> A
+                  <sup></sup></span></a></li>
+            <li><a data-aos="fade-up" data-aos-delay="400" class="instagram btn-increase aos-init aos-animate"><span
+                  class="d-inline-block" tabindex="0" data-toggle="tooltip" title="font size Increase"><i></i> A
+                  +</span></a></li>
+            <li><a data-aos="fade-up" data-aos-delay="500" class="aos-init aos-animate"><span class="d-inline-block"
+                  tabindex="0" data-toggle="tooltip" title="Dark Mode"><i class="t-Icon fa fa-moon-o"
+                    id="darkmode"></i></span></a></li>
+          </div>
+        </div>
+        <div class="t-Header-navBar">
+          <div class="t-Header-navBar--start"></div>
+          <div id="globalHeader"></div>
+          <div class="t-Header-navBar--end"></div>
+        </div>
+      </div>
+      <div class="top">
+        <img id="leftlogo" data-aos="fade-right" data-aos-duration="800" src="../assets/img/head-tnlogo.png"
+          class="aos-init aos-animate">
+        <h1 data-aos="zoom-in" data-aos-duration="800" class="dept-name text-middle aos-init aos-animate">Medicine
+          Indent</h1>
+        <h3 data-aos="zoom-in" data-aos-duration="800" class="dept-name2 text-middle aos-init aos-animate">Department of
+          Indian Medicine and Homoeopathy</h3>
+        <img id="rightlogo" data-aos="fade-left" data-aos-duration="800" src="../assets/img/head-dept-logo.png"
+          class="aos-init aos-animate">
+      </div>
+      <div class="t-Header-nav">
+        <div class="t-Header-nav-list js-tabLike js-tabLike a-MenuBar a-MenuBar--overflow a-MenuBar--tabs"
+          id="t_MenuNav" role="menubar">
+          <ul id="nav-links">
+            <div id="navbar-container"></div>
+          </ul>
+        </div>
+      </div>
+    </header>
+    <div class="t-Body">
+      <div class="t-Body-main">
+        <div class="t-Body-title" id="t_Body_title"></div>
+        <div class="t-Body-content" id="t_Body_content">
+          <div id="t_Body_content_offset"></div>
+          <main id="main" class="t-Body-mainContent">
+            <div class="t-Body-fullContent"></div>
+            <div class="t-Body-contentInner">
+              <div class="container">
+                <div class="row">
+                  <div class="col col-12 apex-col-auto col-start col-end">
+                    <div class="t-Region t-Region--scrollBody" id="R35956637762423278" role="region"
+                      aria-label="District, Financial year, System, Quarter">
+                      <div class="t-Region-header">
+                        <div class="t-Region-headerItems t-Region-headerItems--title">
+                          <span class="t-Region-headerIcon"><span class="t-Icon " aria-hidden="true"></span></span>
+                          <h2 class="t-Region-title" id="R35956637762423278_heading" data-apex-heading="">District,
+                            Financial year, System, Quarter</h2>
+                        </div>
+                        <div class="t-Region-headerItems t-Region-headerItems--buttons"><span
+                            class="js-maximizeButtonContainer"></span></div>
+                      </div>
+                      <div class="t-Region-bodyWrap">
+                        <div class="t-Region-buttons t-Region-buttons--top">
+                          <div class="t-Region-buttons-left"></div>
+                          <div class="t-Region-buttons-right"></div>
+                        </div>
+                        <div class="t-Region-body">
+                          <div class="t-Region-orderBy"></div>
+                          <div class="container">
+                            <div class="row">
+                              <div class="col col-6 apex-col-auto col-start">
+                                <div
+                                  class="t-Form-fieldContainer is-required rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--select-list"
+                                  id="P22_DISTRICT_CONTAINER">
+                                  <div class="t-Form-labelContainer col col-2">
+                                    <label for="P22_DISTRICT" id="P22_DISTRICT_LABEL" class="t-Form-label">District
+                                    </label>
+                                  </div>
+                                  <div class="t-Form-inputContainer col col-4">
+                                    <div class="t-Form-itemWrapper">
+                                      <select id="P22_DISTRICT" name="P22_DISTRICT" required=""
+                                        class="selectlist apex-item-select" data-native-menu="false" size="1">
+                                      </select>
+                                    </div>
+                                    <div class="t-Form-itemAssistance">
+                                      <span id="P22_DISTRICT_error_placeholder" class="a-Form-error"
+                                        data-template-id="428237131064519931341_ET"></span>
+                                      <div class="t-Form-itemRequired" aria-hidden="true">Required</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col col-6 apex-col-auto col-end">
+                                <div
+                                  class="t-Form-fieldContainer is-required rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--select-list"
+                                  id="P22_FINANCIAL_YEAR_CONTAINER">
+                                  <div class="t-Form-labelContainer col col-2">
+                                    <label for="P22_FINANCIAL_YEAR" id="P22_FINANCIAL_YEAR_LABEL"
+                                      class="t-Form-label">Financial Year </label>
+                                  </div>
+                                  <div class="t-Form-inputContainer col col-4">
+                                    <div class="t-Form-itemWrapper">
+                                      <select id="P22_FINANCIAL_YEAR" name="P22_FINANCIAL_YEAR" required=""
+                                        class="selectlist apex-item-select" data-native-menu="false" size="1">
+                                      </select>
+                                    </div>
+                                    <div class="t-Form-itemAssistance">
+                                      <span id="P22_FINANCIAL_YEAR_error_placeholder" class="a-Form-error"
+                                        data-template-id="428237131064519931341_ET"></span>
+                                      <div class="t-Form-itemRequired" aria-hidden="true">Required</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col col-6 apex-col-auto col-start">
+                                <div
+                                  class="t-Form-fieldContainer rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--select-list"
+                                  id="P22_SYSTEM_CONTAINER">
+                                  <div class="t-Form-labelContainer col col-2">
+                                    <label for="P22_SYSTEM" id="P22_SYSTEM_LABEL" class="t-Form-label">System</label>
+                                  </div>
+                                  <div class="t-Form-inputContainer col col-4">
+                                    <div class="t-Form-itemWrapper">
+                                      <select id="P22_SYSTEM" name="P22_SYSTEM" class="selectlist apex-item-select"
+                                        data-native-menu="false" size="1">
+                                        <option value="" selected="selected"></option>
+                                      </select>
+                                    </div>
+                                    <span id="P22_SYSTEM_error_placeholder" class="a-Form-error"
+                                      data-template-id="428237130780249931341_ET"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col col-6 apex-col-auto col-end">
+                                <div
+                                  class="t-Form-fieldContainer rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--select-list"
+                                  id="P22_QUARTERS_CONTAINER">
+                                  <div class="t-Form-labelContainer col col-2">
+                                    <label for="P22_QUARTERS" id="P22_QUARTERS_LABEL"
+                                      class="t-Form-label">Quarters</label>
+                                  </div>
+                                  <div class="t-Form-inputContainer col col-4">
+                                    <div class="t-Form-itemWrapper">
+                                      <select id="P22_QUARTERS" name="P22_QUARTERS" class="selectlist apex-item-select"
+                                        data-native-menu="false" size="1">
+                                        <option value="" selected="selected"></option>
+                                      </select>
+                                    </div>
+                                    <span id="P22_QUARTERS_error_placeholder" class="a-Form-error"
+                                      data-template-id="428237130780249931341_ET"></span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col col-6 apex-col-auto col-start">
+                                <button class="t-Button t-Button--hot t-Button--large t-Button--success" type="button"
+                                  id="B18615018702591765"><span class="t-Button-label">Search</span></button>
+                              </div>
+                              <div class="col col-6 apex-col-auto col-end">
+                                <button class="t-Button t-Button--hot t-Button--large t-Button--warning" type="button"
+                                  id="B18614627927591766"><span class="t-Button-label">Clear</span></button>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col col-12 apex-col-auto col-start col-end">
+                                <div class="t-TabsRegion t-TabsRegion-mod--simple apex-tabs-region js-apex-region"
+                                  id="R311536870478607761214">
+                                  <div id="R311536870478607761214_ir" class="a-IRR-container">
+                                    <div id="R311536870478607761214_worksheet_region" class="a-IRR" aria-live="polite">
+                                      <div id="R311536870478607761214_single_row_view" class="a-IRR-singleRowView">
+                                      </div>
+                                      <div id="R311536870478607761214_full_view" class="a-IRR-fullView">
+                                        <div id="R311536870478607761214_toolbar" class="a-IRR-toolbar">
+                                          <div role="search"
+                                            aria-label="Search bar of District, Financial year, System, Quarter Report"
+                                            id="R311536870478607761214_toolbar_controls" class="a-IRR-controls">
+                                            <div
+                                              class="a-IRR-controlGroup a-IRR-controlGroup--search a-IRR-controlGroup--hidden">
+                                              <div class="a-IRR-search">
+                                                <input type="hidden"
+                                                  id="R311536870478607761214_column_search_current_column">
+                                                <input type="hidden" id="R311536870478607761214_search_field" value="">
+                                              </div>
+                                            </div>
+                                            <div class="a-IRR-controlGroup a-IRR-controlGroup--options">
+                                              <input type="hidden" id="R311536870478607761214_row_select" value="50">
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div id="R311536870478607761214_content" class="a-IRR-content">
+                                          <div id="R311536870478607761214_dialog_js" class="a-IRR-dialogBody"
+                                            style="display:none"></div>
+                                          <input type="hidden" id="R311536870478607761214_worksheet_id"
+                                            value="311536870576816761214">
+                                          <input type="hidden" id="R311536870478607761214_app_user" value="9994793279">
+                                          <input type="hidden" id="R311536870478607761214_report_id"
+                                            value="311537314560853005022">
+                                          <input type="hidden" id="R311536870478607761214_view_mode" value="PIVOT">
+                                          <div id="R311536870478607761214_data_panel" class="a-IRR-reportView">
+                                            <!-- Search results will be displayed here -->
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="t-Region-buttons t-Region-buttons--bottom">
+                          <div class="t-Region-buttons-left"></div>
+                          <div class="t-Region-buttons-right"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </main>
+          <footer class="t-Footer" id="t_Footer" role="contentinfo">
+            <div class="t-Footer-body">
+              <div class="t-Footer-content"></div>
+              <div class="t-Footer-apex">
+                <div class="row">
+                  <div class="col-6">
+                    <p class="text-middle"><img class="footer-logo" src="../assets/img/head-dept-logo.png"><br>Content
+                      owned by Department of Indian Medicine and Homoeopathy ©</p>
+                  </div>
+                  <div class="col-6">
+                    <p class="text-middle"><img class="footer-logo" src="../assets/img/tnegalogo.png"><br>Designed and
+                      Developed by Tamil Nadu e-Governance Agency</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="t-Footer-top">
+              <a href="#top" class="t-Footer-topButton" id="t_Footer_topButton" title="Start of page"
+                aria-label="Start of page"><span class="a-Icon icon-up-chevron" aria-hidden="true"></span></a>
+            </div>
+          </footer>
+        </div>
+      </div>
+    </div>
+    <div class="t-Body-inlineDialogs" id="t_Body_inlineDialogs"></div>
+  </form>
+
+  <!-- Load jQuery first -->
+  <script src="../assets/js/jquery.latest.min.js"></script>
+
+  <!-- Then load other dependencies -->
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="../assets/common.js"></script>
+
+  <!-- Then load your custom scripts -->
+  <script src="../assets/js/crypto-js.min.js"></script>
+  <script src="../assets/js/encrypt_decrypt.js"></script>
+  <script src="../assets/js/apiConfig.js"></script>
+  <script src="../assets/js/global.js"></script>
+  <script src="../assets/js/session.js"></script>
+  <script src="../assets/js/session-guard.js"></script>
+  <script src="../assets/js/toastUtil.js"></script>
+  <script src="../assets/js/singleFileUpload.js"></script>
+  <script src="../assets/js/globalHeader.js"></script>
+  <script src="../assets/js/dataTableUtil.js"></script>
+
+  <script>
+    let dataTableRef;
+    let isSearching = false; // Flag to prevent multiple simultaneous searches
+
+    $(document).ready(function () {
+      console.log('Document ready - initializing...');
+
+      let uploadFile = null;
+      let uploadPayload = null;
+      const apiUrl = `${BASE_API_URL}/commonfunction`;
+
+      // Safely get session storage items
+      let district = '';
+      let username = '';
+      let mobnumber = '9941256207';
+
+      try {
+        district = sessionStorage.getItem('userDistrict') || '';
+        username = sessionStorage.getItem('userName') || '';
+        mobnumber = sessionStorage.getItem('userMobileNumber') || '9941256207';
+      } catch (e) {
+        console.warn('SessionStorage not available:', e);
+      }
+
+      // Safely set values if elements exist
+      if ($('#P1_NAME_OF_THE_INDENTING_OFFICER_DISPLAY').length) {
+        $('#P1_NAME_OF_THE_INDENTING_OFFICER_DISPLAY').text(username);
+      }
+      if ($('#P1_NAME_OF_THE_INDENTING_OFFICER').length) {
+        $('#P1_NAME_OF_THE_INDENTING_OFFICER').val(username);
+      }
+      if ($('#P1_DISTRICT_DISPLAY').length) {
+        $('#P1_DISTRICT_DISPLAY').text(district);
+      }
+      if ($('#P1_DISTRICT').length) {
+        $('#P1_DISTRICT').val(district);
+      }
+
+      function fetchAndPopulateDropdown({ payload, dropdownId, placeholder }) {
+        $.ajax({
+          url: apiUrl,
+          method: 'POST',
+          headers: {
+            'X-APP-Key': 'edm',
+            'X-APP-Name': 'edm'
+          },
+          data: {
+            data: encryptData(payload)
+          },
+          dataType: 'json',
+          success(response) {
+            try {
+              const decrypted = decryptData(response.data);
+              console.log(`Dropdown data for ${dropdownId}:`, decrypted);
+
+              const $dropdown = $(`#${dropdownId}`);
+              $dropdown.empty().append(`<option value="">${placeholder}</option>`);
+
+              decrypted.forEach(item => {
+                // Handle different response structures
+                let value = '';
+                let displayText = '';
+
+                if (typeof item === 'string') {
+                  value = item;
+                  displayText = item;
+                } else {
+                  value = item.district || item.d || item.quarter || item.year || item.system || item.name || item.value || '';
+                  displayText = item.district || item.d || item.quarter || item.year || item.system || item.name || item.label || value;
+                }
+
+                if (value) {
+                  $dropdown.append(`<option value="${value}">${displayText}</option>`);
+                }
+              });
+            } catch (e) {
+              console.error('Error processing dropdown data:', e);
+            }
+          },
+          error(xhr, status, error) {
+            console.error(`${payload.function_name} API Error:`, error);
+          }
+        });
+      }
+
+      // Populate District dropdown
+      fetchAndPopulateDropdown({
+        payload: {
+          action: "function_call",
+          function_name: "get_factory_districts_fn",
+          params: {}
+        },
+        dropdownId: "P22_DISTRICT",
+        placeholder: "--Select District Name--"
+      });
+
+      // Populate Financial Year dropdown
+      fetchAndPopulateDropdown({
+        payload: {
+          action: "function_call",
+          function_name: "im_year_fn",
+          params: {}
+        },
+        dropdownId: "P22_FINANCIAL_YEAR",
+        placeholder: "--Select Financial Year--"
+      });
+
+      // Populate System dropdown
+      fetchAndPopulateDropdown({
+        payload: {
+          action: "function_call",
+          function_name: "im_system_fn",
+          params: {}
+        },
+        dropdownId: "P22_SYSTEM",
+        placeholder: "--Select System Name--"
+      });
+
+      // Populate Quarter dropdown
+      fetchAndPopulateDropdown({
+        payload: {
+          action: "function_call",
+          function_name: "im_quarter_fn",
+          params: {}
+        },
+        dropdownId: "P22_QUARTERS",
+        placeholder: "--Select Quarters Name--"
+      });
+
+      // Function to export data to CSV
+      function exportToCSV(data) {
+        if (!data || data.length === 0) {
+          alert('No data to export');
+          return;
+        }
+
+        // Get column headers from the first data item
+        const headers = Object.keys(data[0]).map(key =>
+          key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+        );
+
+        const csvRows = [];
+        csvRows.push(headers.join(','));
+
+        data.forEach((item) => {
+          const row = Object.values(item).map(value => {
+            if (typeof value === 'string') {
+              return `"${value.replace(/"/g, '""')}"`;
+            }
+            return value || '';
+          });
+          csvRows.push(row.join(','));
+        });
+
+        const csvString = csvRows.join('\n');
+        const blob = new Blob([csvString], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('hidden', '');
+        a.setAttribute('href', url);
+        a.setAttribute('download', `${new Date().getTime()}.csv`);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }
+
+      // Function to fetch and display search results
+      function performSearch() {
+        // Prevent multiple simultaneous searches
+        if (isSearching) {
+          console.log('Search already in progress...');
+          return;
+        }
+
+        // Get selected values from the form
+        const selectedDistrict = $('#P22_DISTRICT').val() || null;
+        const selectedFinancialYear = $('#P22_FINANCIAL_YEAR').val() || null;
+        const selectedSystem = $('#P22_SYSTEM').val() || null;
+        const selectedQuarter = $('#P22_QUARTERS').val() || null;
+
+        // Validate required fields
+        // if (!selectedDistrict) {
+        //   alert('Please select a District');
+        //   $('#P22_DISTRICT').focus();
+        //   return;
+        // }
+
+        // if (!selectedFinancialYear) {
+        //   alert('Please select a Financial Year');
+        //   $('#P22_FINANCIAL_YEAR').focus();
+        //   return;
+        // }
+
+        isSearching = true;
+
+        // Prepare payload for search - UPDATE THIS FUNCTION NAME BASED ON YOUR ACTUAL API
+        const payload = {
+          action: "function_call",
+          function_name: "im_get_factory_despatch_report_fn", // Update this with correct function name
+          params: { selectedDistrict, selectedFinancialYear, selectedSystem, selectedQuarter }
+        };
+
+        console.log('Search payload:', payload);
+
+        // Show loading state
+        $('#R311536870478607761214_data_panel').html(`
+          <div class="text-center p-4">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading data...</p>
+          </div>
+        `);
+
+        $.ajax({
+          url: apiUrl,
+          method: 'POST',
+          headers: {
+            'X-APP-Key': 'edm',
+            'X-APP-Name': 'edm'
+          },
+          data: {
+            data: encryptData(payload)
+          },
+          dataType: 'json',
+          success: function (response) {
+            try {
+              const decrypted = decryptData(response.data);
+              console.log('Search results:', decrypted);
+              displaySearchResults(decrypted);
+            } catch (e) {
+              console.error('Error decrypting response:', e);
+              $('#R311536870478607761214_data_panel').html('<div class="alert alert-danger" role="alert">Error processing data.</div>');
+            } finally {
+              isSearching = false;
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('Search API Error:', error);
+            $('#R311536870478607761214_data_panel').html('<div class="alert alert-danger" role="alert">Error loading data. Please try again.</div>');
+            isSearching = false;
+          }
+        });
+      }
+
+      // Function to display search results in the report view
+      function displaySearchResults(data) {
+        const $dataPanel = $('#R311536870478607761214_data_panel');
+
+        if (!data || data.length === 0) {
+          $dataPanel.html('<div class="alert alert-info" role="alert">No records found for the selected criteria.</div>');
+          return;
+        }
+
+        // Get all unique keys from data to create dynamic headers
+        const allKeys = new Set();
+        data.forEach(item => {
+          Object.keys(item).forEach(key => allKeys.add(key));
+        });
+
+        const headers = Array.from(allKeys).map(key =>
+          key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+        );
+
+        // Create download button
+        let html = `
+          <div class="download-btn-container">
+            <button class="btn-download" id="downloadReportBtn">
+              <i class="bi bi-download"></i> Download Report
+            </button>
+          </div>
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover" id="searchResultsTable">
+              <thead class="table-dark">
+                <tr>
+                  <th>S.No</th>
+                  ${headers.map(header => `<th>${header}</th>`).join('')}
+                </tr>
+              </thead>
+              <tbody>
+        `;
+
+        // Add data rows
+        data.forEach((item, index) => {
+          html += `<tr><td>${index + 1}</td>`;
+          Array.from(allKeys).forEach(key => {
+            const value = item[key] || '';
+            html += `<td>${value}</td>`;
+          });
+          html += `</tr>`;
+        });
+
+        html += `
+              </tbody>
+            </table>
+          </div>
+        `;
+
+        $dataPanel.html(html);
+
+        // Add download button click handler
+        $('#downloadReportBtn').on('click', function () {
+          exportToCSV(data);
+        });
+
+        // Initialize DataTable
+        if (typeof $.fn.DataTable !== 'undefined') {
+          if (dataTableRef) {
+            dataTableRef.destroy();
+          }
+
+          dataTableRef = $('#searchResultsTable').DataTable({
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            order: [[0, 'asc']],
+            language: {
+              search: "Search:",
+              lengthMenu: "Show _MENU_ entries",
+              info: "Showing _START_ to _END_ of _TOTAL_ entries",
+              infoEmpty: "Showing 0 to 0 of 0 entries",
+              infoFiltered: "(filtered from _MAX_ total entries)"
+            },
+            responsive: true
+          });
+        } else {
+          console.warn('DataTable not available');
+        }
+      }
+
+      // Clear form function
+      function clearForm() {
+        $('#P22_DISTRICT').val('');
+        $('#P22_FINANCIAL_YEAR').val('');
+        $('#P22_SYSTEM').val('');
+        $('#P22_QUARTERS').val('');
+        $('#R311536870478607761214_data_panel').empty(); // Clear results
+
+        // Destroy DataTable if it exists
+        if (dataTableRef) {
+          dataTableRef.destroy();
+          dataTableRef = null;
+        }
+      }
+
+      // Bind search button click
+      $('#B18615018702591765').on('click', function (e) {
+        e.preventDefault();
+        performSearch();
+      });
+
+      // Bind clear button click
+      $('#B18614627927591766').on('click', function (e) {
+        e.preventDefault();
+        clearForm();
+      });
+
+      // Add enter key support for search
+      $('#P22_DISTRICT, #P22_FINANCIAL_YEAR, #P22_SYSTEM, #P22_QUARTERS').on('keypress', function (e) {
+        if (e.which === 13) {
+          $('#B18615018702591765').click();
+        }
+      });
+
+      // Override apex.submit if it exists to prevent conflicts
+      if (window.apex && typeof window.apex.submit === 'function') {
+        const originalApexSubmit = window.apex.submit;
+        window.apex.submit = function (options) {
+          if (options && options.request === 'Search') {
+            performSearch();
+            return false;
+          } else if (options && options.request === 'Clear') {
+            clearForm();
+            return false;
+          }
+          return originalApexSubmit ? originalApexSubmit(options) : false;
+        };
+      }
+
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<!-- ================== TOAST STYLES ================== -->
+<style>
+.custom-toast {
+  position: fixed;
+  top: 20px;
+  right: -400px; /* hidden initially */
+  background-color: #333;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transition: right 0.5s ease, opacity 0.5s ease;
+  z-index: 9999;
+  opacity: 0;
+}
+.custom-toast.show {
+  right: 20px; /* slide in */
+  opacity: 1;
+}
+.custom-toast.info {
+  background-color: #007bff;
+}
+.custom-toast.success {
+  background-color: #28a745;
+}
+.custom-toast.error {
+  background-color: #dc3545;
+}
+</style>
