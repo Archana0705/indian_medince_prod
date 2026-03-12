@@ -376,6 +376,11 @@ if (!loginTime || (now - loginTime) > 1800000) {
   <!-- ================== USER INFO DISPLAY ================== -->
   <script>
     $(document).ready(function () {
+      // View Indent button - navigate to view-indent.html
+      $('#B330520910244721140320').on('click', function () {
+        window.location.href = 'view-indent.html';
+      });
+
       // Get values from sessionStorage
       // var userName = sessionStorage.getItem("userName");
       // var userDistrict = sessionStorage.getItem("userDistrict");

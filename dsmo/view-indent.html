@@ -267,7 +267,8 @@
                               <div class="col col-6 apex-col-auto col-end">
                                 <div
                                   class="t-Form-fieldContainer t-Form-fieldContainer--stacked t-Form-fieldContainer--stretchInputs apex-item-wrapper apex-item-wrapper--select-list"
-                                  id="P4_SCHEME_NAME_CONTAINER">
+                                  id="P4_SCHEME_NAME_CONTAINER"
+                                  style="display: none;">
                                   <div class="t-Form-labelContainer">
                                     <label for="P4_SCHEME_NAME" id="P4_SCHEME_NAME_LABEL" class="t-Form-label">Scheme
                                       Name</label>
@@ -508,7 +509,7 @@
 
       // District
 
-      function fetchAndPopulateDropdown({ payload, dropdownId, placeholder }) {
+      function fetchAndPopulateDropdown({ payload, dropdownId, placeholder, valueKey }) {
         // debugger
         $.ajax({
           url: apiUrl,
@@ -529,7 +530,7 @@
             $dropdown.empty().append(`<option value="">${placeholder}</option>`);
 
             decrypted.forEach(item => {
-              const value = item.district || item.institude || item.system || item.year || item.quarter || item.type || item.scheme;
+              const value = valueKey ? (item[valueKey] != null ? item[valueKey] : null) : (item.district || item.institude || item.name_of_the_institution || item.system || item.year || item.quarter || item.type || item.scheme);
               if (value) {
                 $dropdown.append(`<option value="${value}">${value}</option>`);
               }
@@ -541,29 +542,18 @@
         });
       }
 
-      // District
+      // District - im_all_district_fn
       fetchAndPopulateDropdown({
         payload: {
           action: "function_call",
-          function_name: "im_get_district_list_fn",
-          params: { mobnumber: mobnumber }
+          function_name: "im_all_district_fn",
+          params: {}
         },
         dropdownId: "P4_NAME_OF_THE_DISTRICT",
         placeholder: "--Select District--"
       });
 
-      // Instituion
-      // fetchAndPopulateDropdown({
-      //   payload: {
-      //     action: "function_call",
-      //     function_name: "im_get_institution_list_fn",   
-      //     params: { mobnumber: mobnumber }
-      //   },
-      //   dropdownId: "P4_NAME_OF_THE_INSTITUTION",
-      //   placeholder: "--Select Instituion--"
-      // });
-
-
+      // Institution - im_all_institution_name_fn with p_district (populated on district change)
       $('#P4_NAME_OF_THE_DISTRICT').on('change', function () {
         const selectedDistrict = $(this).val();
 
@@ -572,35 +562,32 @@
           return;
         }
 
-        // Fetch institutions based on selected district
         fetchAndPopulateDropdown({
           payload: {
             action: "function_call",
-            function_name: "im_get_institution_list_fn",
-            params: {
-              mobnumber: mobnumber
-
-            }
+            function_name: "im_all_institution_name_fn",
+            params: { p_district: String(selectedDistrict) }
           },
           dropdownId: "P4_NAME_OF_THE_INSTITUTION",
-          placeholder: "--Select Institution--"
+          placeholder: "--Select Institution--",
+          valueKey: "name_of_the_institution"
         });
       });
 
 
 
-      // system
+      // System - im_name_of_system_fn
       fetchAndPopulateDropdown({
         payload: {
           action: "function_call",
-          function_name: "im_system_fn",
-          params: { mobnumber: mobnumber }
+          function_name: "im_name_of_system_fn",
+          params: {}
         },
         dropdownId: "P4_SYSTEM",
         placeholder: "--Select System--"
       });
 
-      // financial year
+      // Financial year - im_year_fn
       fetchAndPopulateDropdown({
         payload: {
           action: "function_call",
@@ -633,15 +620,25 @@
         placeholder: "--Select indent type--"
       });
 
-      // scheme names 
-      fetchAndPopulateDropdown({
-        payload: {
-          action: "function_call",
-          function_name: "im_scheme_names_fn",
-          params: {}
-        },
-        dropdownId: "P4_SCHEME_NAME",
-        placeholder: "--Select indent type--"
+      // Scheme name: only show when indent type is "scheme"
+      $('#P4_INDENT_TYPE').on('change', function () {
+        const indentType = ($(this).val() || '').toString().toLowerCase();
+        const $schemeContainer = $('#P4_SCHEME_NAME_CONTAINER');
+        if (indentType === 'scheme') {
+          $schemeContainer.show();
+          fetchAndPopulateDropdown({
+            payload: {
+              action: "function_call",
+              function_name: "im_scheme_names_fn",
+              params: {}
+            },
+            dropdownId: "P4_SCHEME_NAME",
+            placeholder: "--Select scheme--"
+          });
+        } else {
+          $schemeContainer.hide();
+          $('#P4_SCHEME_NAME').empty().append('<option value="">--Select scheme--</option>');
+        }
       });
 
 
@@ -931,10 +928,10 @@
           const mobnumber = sessionStorage.getItem("usermobnumberNumber");
           const district = $('#P4_NAME_OF_THE_DISTRICT').val();
           const institute = $('#P4_NAME_OF_THE_INSTITUTION').val();
-          const year = $('#P4_YEAR').val();
-          const quarter = $('#P4_QUARTER').val();
-          const indent = $('#P4_NAME_OF_THE_INDENT').val();
-          const scheme = $('#P4_NAME_OF_THE_SCHEME').val();
+          const year = $('#P4_FINANCIAL_YEAR').val();
+          const quarter = $('#P4_QUARTERS').val();
+          const indent = $('#P4_INDENT_TYPE').val();
+          const scheme = $('#P4_SCHEME_NAME').val();
           const system = $('#P4_SYSTEM').val(); // ✅ now correct selector
 
           // call your fetchTableData with consistent filter IDs
@@ -1005,10 +1002,10 @@
           const mobnumber = sessionStorage.getItem("usermobnumberNumber");
           const district = $('#P4_NAME_OF_THE_DISTRICT').val();
           const institute = $('#P4_NAME_OF_THE_INSTITUTION').val();
-          const year = $('#P4_YEAR').val();
-          const quarter = $('#P4_QUARTER').val();
-          const indent = $('#P4_NAME_OF_THE_INDENT').val();
-          const scheme = $('#P4_NAME_OF_THE_SCHEME').val();
+          const year = $('#P4_FINANCIAL_YEAR').val();
+          const quarter = $('#P4_QUARTERS').val();
+          const indent = $('#P4_INDENT_TYPE').val();
+          const scheme = $('#P4_SCHEME_NAME').val();
           const system = $('#P4_SYSTEM').val();
 
           fetchTableData(mobnumber, district, institute, year, quarter, indent, scheme, system);
@@ -1075,10 +1072,10 @@
         const mobnumber = sessionStorage.getItem("usermobnumberNumber");
         const district = $('#P4_NAME_OF_THE_DISTRICT').val();
         const institute = $('#P4_NAME_OF_THE_INSTITUTION').val();
-        const year = $('#P4_YEAR').val();
-        const quarter = $('#P4_QUARTER').val();
-        const indent = $('#P4_NAME_OF_THE_INDENT').val();
-        const scheme = $('#P4_NAME_OF_THE_SCHEME').val();
+        const year = $('#P4_FINANCIAL_YEAR').val();
+        const quarter = $('#P4_QUARTERS').val();
+        const indent = $('#P4_INDENT_TYPE').val();
+        const scheme = $('#P4_SCHEME_NAME').val();
         const system = $('#P4_SYSTEM').val();
 
         fetchTableData(mobnumber, district, institute, year, quarter, indent, scheme, system);
