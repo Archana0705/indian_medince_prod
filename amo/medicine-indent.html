@@ -54,6 +54,36 @@
     .t-fht-tbody {
       overflow: auto;
     }
+    /* Budget loader when scheme is selected */
+    .budget-loader-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      z-index: 10;
+      border-radius: 4px;
+    }
+    .budget-loader-spinner {
+      width: 28px;
+      height: 28px;
+      border: 3px solid #e0e0e0;
+      border-top-color: #0d6efd;
+      border-radius: 50%;
+      animation: budgetLoaderSpin 0.8s linear infinite;
+    }
+    .budget-loader-text {
+      font-size: 14px;
+      color: #333;
+    }
+    @keyframes budgetLoaderSpin {
+      to { transform: rotate(360deg); }
+    }
   </style>
   <style type="text/css">
     ul.headermenu {
@@ -366,7 +396,11 @@
                             </div>
 
 
-                            <div class="row" id="allotedDetails" style="display:none;">
+                            <div class="row position-relative" id="allotedDetails" style="display:none;">
+                                <div id="budgetLoaderOverlay" class="budget-loader-overlay" style="display:none;">
+                                  <span class="budget-loader-spinner"></span>
+                                  <span class="budget-loader-text">Loading budget...</span>
+                                </div>
                               <div class="col col-6 apex-col-auto col-start">
                                 <div
                                   class="t-Form-fieldContainer is-required rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--number-field"
@@ -723,8 +757,17 @@
   <script>
     let dataTableRef;
 
+    // Helper: detect API "data not found" response { success: 0, message: "Data not found", pagination: { total: 0 } }
+    function isDataNotFound(obj) {
+      if (!obj || typeof obj !== 'object') return false;
+      return obj.success === 0 || obj.success === false ||
+        (obj.message && String(obj.message).toLowerCase().includes('not found'));
+    }
+    function getDataNotFoundMessage(obj) {
+      return (obj && obj.message && String(obj.message).trim()) ? obj.message : 'Data not found';
+    }
+
     $(document).ready(function () {
-      debugger
       let uploadFile = null;
       let uploadPayload = null;
       const apiUrl = `${BASE_API_URL}/commonfunction`;
@@ -767,7 +810,6 @@
 
       // Utility: Fetch and populate dropdown
       function fetchAndPopulateDropdown({ payload, dropdownId, placeholder }) {
-        debugger
         $.ajax({
           url: apiUrl,
           method: 'POST',
@@ -780,10 +822,18 @@
           },
           dataType: 'json',
           success(response) {
+            // Handle API "data not found" (success: 0, message, pagination)
+            if (response && isDataNotFound(response)) {
+              const $dropdown = $(`#${dropdownId}`);
+              $dropdown.empty().append(`<option value="">${placeholder}</option>`);
+              return;
+            }
             const decrypted = decryptData(response.data);
-
             const $dropdown = $(`#${dropdownId}`);
             $dropdown.empty().append(`<option value="">${placeholder}</option>`);
+
+            if (!decrypted) return;
+            if (typeof decrypted === 'object' && !Array.isArray(decrypted) && isDataNotFound(decrypted)) return;
 
             if (Array.isArray(decrypted)) {
               decrypted.forEach(item => {
@@ -971,7 +1021,6 @@
 
       // Indent type change handler
       $('#P8_INDENT_TYPE').on('change', function () {
-        debugger
         const indentTypeText = $('#P8_INDENT_TYPE option:selected').text().trim();
         const $allotedDetails = $('#allotedDetails');
         const $schemeDetails = $('#schemeDetails');
@@ -1029,7 +1078,17 @@
             },
             dataType: 'json',
             success(response) {
+              // Handle API "data not found"
+              if (response && isDataNotFound(response)) {
+                $schemeDropdown.empty().append('<option value="">Select Scheme</option>');
+                return;
+              }
               const decrypted = decryptData(response.data);
+              if (!decrypted) return;
+              if (typeof decrypted === 'object' && !Array.isArray(decrypted) && isDataNotFound(decrypted)) {
+                $schemeDropdown.empty().append('<option value="">Select Scheme</option>');
+                return;
+              }
               if (Array.isArray(decrypted)) {
                 decrypted.forEach(item => {
                   const schemeName = item.scheme || item.scheme_name || item.name;
@@ -1051,6 +1110,10 @@
         const selectedScheme = $(this).val();
         const indentTypeText = $('#P8_INDENT_TYPE option:selected').text().trim();
 
+        // Clear budget immediately so old values don't show while new data loads
+        $('#P8_ALLOTTED_SCHEME').val('');
+        $('#P8_AVAILABLE_SCHEME').val('');
+
         // Use the session variables
         if (!selectedScheme || !userDistrict || !userInstitutionName || !userSystem) return;
 
@@ -1071,6 +1134,11 @@
 
       // Function to call indent details API
       function callIndentDetailsAPI(payload) {
+        // Show loader and clear budget so old values don't show in prod
+        $('#budgetLoaderOverlay').show();
+        $('#P8_ALLOTTED_SCHEME').val('');
+        $('#P8_AVAILABLE_SCHEME').val('');
+
         $.ajax({
           url: apiUrl,
           method: 'POST',
@@ -1083,7 +1151,27 @@
           },
           dataType: 'json',
           success(response) {
+            // Handle API "data not found" (success: 0, message, pagination)
+            if (response && isDataNotFound(response)) {
+              $('#budgetLoaderOverlay').hide();
+              $('#P8_ALLOTTED_SCHEME').val('');
+              $('#P8_AVAILABLE_SCHEME').val('');
+              alert(getDataNotFoundMessage(response));
+              return;
+            }
             const decrypted = decryptData(response.data);
+            if (!decrypted) {
+              $('#budgetLoaderOverlay').hide();
+              return;
+            }
+            // Decrypted might be object { success: 0, message: "Data not found", pagination }
+            if (typeof decrypted === 'object' && !Array.isArray(decrypted) && isDataNotFound(decrypted)) {
+              $('#budgetLoaderOverlay').hide();
+              $('#P8_ALLOTTED_SCHEME').val('');
+              $('#P8_AVAILABLE_SCHEME').val('');
+              alert(getDataNotFoundMessage(decrypted));
+              return;
+            }
             console.log("Indent details response:", decrypted);
 
             if (Array.isArray(decrypted)) {
@@ -1109,9 +1197,11 @@
                 $('#P8_AVAILABLE_SCHEME').val(decrypted[1] || '');
               }
             }
+            $('#budgetLoaderOverlay').hide();
           },
           error(xhr, status, error) {
             console.error(`${payload.function_name} API Error:`, error);
+            $('#budgetLoaderOverlay').hide();
           }
         });
       }
