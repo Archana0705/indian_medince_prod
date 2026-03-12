@@ -37,6 +37,166 @@
     .modal-backdrop {
       background-color: #00000040 !important;
     }
+
+    /* Medicine Details DataTable - visually appealing styling */
+    #medicineDetailsWrap_wrapper {
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      background: #fff;
+    }
+
+    #medicineDetailsWrap {
+      margin: 0 !important;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    #medicineDetailsWrap thead th {
+      background: linear-gradient(180deg, #113946 0%, #113946 100%);
+      color: #fff !important;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.875rem 1rem !important;
+      text-align: center !important;
+      border: none;
+      white-space: nowrap;
+    }
+
+    #medicineDetailsWrap thead th:first-child {
+      border-radius: 0.5rem 0 0 0;
+    }
+
+    #medicineDetailsWrap thead th:last-child {
+      border-radius: 0 0.5rem 0 0;
+    }
+
+    #medicineDetailsWrap tbody tr {
+      transition: background-color 0.15s ease;
+    }
+
+    #medicineDetailsWrap tbody tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    #medicineDetailsWrap tbody tr:hover {
+      background-color: #e8f4fd !important;
+    }
+
+    #medicineDetailsWrap tbody td {
+      padding: 0.75rem 1rem !important;
+      font-size: 0.875rem;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: middle !important;
+    }
+
+    #medicineDetailsWrap tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    #medicineDetailsWrap tbody tr:last-child td:first-child {
+      border-radius: 0 0 0 0.5rem;
+    }
+
+    #medicineDetailsWrap tbody tr:last-child td:last-child {
+      border-radius: 0 0 0.5rem 0;
+    }
+
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter {
+      padding: 0.75rem 1rem;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .dataTables_wrapper .dataTables_length label,
+    .dataTables_wrapper .dataTables_filter label {
+      font-size: 0.875rem;
+      color: #475569;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+      border: 1px solid #cbd5e1;
+      border-radius: 0.375rem;
+      padding: 0.375rem 0.75rem;
+      font-size: 0.875rem;
+    }
+
+    .dataTables_wrapper .dataTables_filter input:focus {
+      outline: none;
+      border-color: #2b6cb0;
+      box-shadow: 0 0 0 2px rgba(43, 108, 176, 0.2);
+    }
+
+    .dataTables_wrapper .dataTables_info {
+      padding: 0.625rem 1rem;
+      font-size: 0.8125rem;
+      color: #64748b;
+    }
+
+    .dataTables_wrapper .dataTables_paginate {
+      padding: 0.625rem 1rem;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button {
+      padding: 0.375rem 0.75rem !important;
+      margin: 0 2px !important;
+      border-radius: 0.375rem !important;
+      border: 1px solid #e2e8f0 !important;
+      background: #fff !important;
+      color: #475569 !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+      background: #f1f5f9 !important;
+      border-color: #cbd5e1 !important;
+      color: #1e293b !important;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+      background: #2b6cb0 !important;
+      border-color: #2b6cb0 !important;
+      color: #fff !important;
+    }
+
+    /* Space between Search/Clear buttons and datatable */
+    #R310684784301682619619 {
+      margin-top: 1.5rem;
+    }
+
+    /* Selected District & Year info above datatable */
+    .medicine-details-filter-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.625rem 1rem;
+      margin-bottom: 0.75rem;
+      background: #f0f7ff;
+      border: 1px solid #b6d4fe;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      color: #1e3a5f;
+    }
+
+    .medicine-details-filter-info strong {
+      color: #1e40af;
+    }
+
+    .medicine-details-filter-info .filter-sep {
+      color: #94a3b8;
+      font-weight: normal;
+    }
+
+    /* Placeholder row when no search done yet */
+    #medicineDetailsWrap tbody tr.medicine-details-placeholder-row td {
+      padding: 1.5rem 1rem !important;
+      text-align: center !important;
+      color: #64748b;
+      font-size: 0.9375rem;
+      background: #f8fafc !important;
+      border-bottom: 1px solid #e2e8f0;
+    }
   </style>
 
   <link rel="stylesheet" href="../assets/css/responsive.css" type="text/css">
@@ -121,16 +281,13 @@
                       class="t-Form-fieldContainer is-required rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--select-list"
                       id="P43_DISTRICT_CONTAINER">
                       <div class="t-Form-labelContainer col col-2">
-                        <!-- <label for="P43_DISTRICT" id="P43_DISTRICT_LABEL" class="t-Form-label">District  </label> -->
-                        <label for="P43_DISTRICT" class="form-label">District <span class="text-danger">*</span></label>
+                        <label for="P43_DISTRICT" id="P43_DISTRICT_LABEL" class="t-Form-label">District</label>
                       </div>
                       <div class="t-Form-inputContainer col col-4">
                         <div class="t-Form-itemWrapper">
-
-                          <select id="P43_DISTRICT" name="P43_DISTRICT" class="form-select" required>
-                            <!-- <option value="Chennai HO">Chennai HO</option> -->
+                          <select id="P43_DISTRICT" name="P43_DISTRICT" required="" class="selectlist apex-item-select"
+                            data-native-menu="false" size="1">
                           </select>
-
                         </div>
                         <div class="t-Form-itemAssistance">
                           <span id="P43_DISTRICT_error_placeholder" class="a-Form-error"
@@ -182,36 +339,6 @@
                         <div id="R310684784301682619619_worksheet_region" class="a-IRR" aria-live="polite">
                           <div id="R310684784301682619619_single_row_view" class="a-IRR-singleRowView"></div>
                           <div id="R310684784301682619619_full_view" class="a-IRR-fullView">
-                            <div id="R310684784301682619619_toolbar" class="a-IRR-toolbar">
-                              <div role="search" aria-label="Search bar of Medicine Details"
-                                id="R310684784301682619619_toolbar_controls" class="a-IRR-controls">
-                                <div class="a-IRR-controlGroup a-IRR-controlGroup--search a-IRR-controlGroup--hidden">
-                                  <div class="a-IRR-search"><input type="hidden"
-                                      id="R310684784301682619619_column_search_current_column"><input type="hidden"
-                                      id="R310684784301682619619_search_field" value=""></div>
-                                </div>
-                                <div class="a-IRR-controlGroup a-IRR-controlGroup--views">
-                                  <div class="a-IRR-viewsContainer">
-                                    <div class="a-IRR-views"><button id="R310684784301682619619_report_view"
-                                        type="button" class="a-Button a-IRR-button a-IRR-button--views"
-                                        data-view="report" title="View Report" aria-label="View Report"
-                                        aria-pressed="false"><span class="a-Icon icon-irr-report"
-                                          aria-hidden="true"></span></button><button
-                                        id="R310684784301682619619_pivot_view" type="button"
-                                        class="a-Button a-IRR-button a-IRR-button--views is-active" data-view="pivot"
-                                        title="View Pivot" aria-label="View Pivot" aria-pressed="true"><span
-                                          class="a-Icon icon-irr-pivot" aria-hidden="true"></span></button></div>
-                                  </div>
-                                </div>
-                                <div class="a-IRR-controlGroup a-IRR-controlGroup--options">
-                                  <input type="hidden" id="R310684784301682619619_row_select" value="50">
-                                  <div class="a-IRR-actions"><button id="R310684784301682619619_actions_button"
-                                      class="a-Button a-IRR-button a-IRR-button--actions" type="button"
-                                      data-menu="R310684784301682619619_actions_menu" aria-haspopup="menu">Actions<span
-                                        aria-hidden="true" class="a-Icon icon-menu-drop-down"></span></button></div>
-                                </div>
-                              </div>
-                            </div>
                             <div id="R310684784301682619619_content" class="a-IRR-content ">
                               <div id="R310684784301682619619_dialog_js" class="a-IRR-dialogBody" style="display:none">
                               </div>
@@ -220,53 +347,6 @@
                               <input type="hidden" id="R310684784301682619619_app_user" value="9994793279">
                               <input type="hidden" id="R310684784301682619619_report_id" value="310685228383927863427">
                               <input type="hidden" id="R310684784301682619619_view_mode" value="PIVOT">
-                              <div role="region" aria-label="Report settings of Medicine Details"
-                                class="a-MediaBlock a-IRR-controlsContainer a-Collapsible is-expanded"
-                                id="R310684784301682619619_control_panel">
-                                <div class="a-MediaBlock-graphic">
-                                  <h3 aria-hidden="true" class="u-vh a-Collapsible-heading"
-                                    id="a_Collapsible1_R310684784301682619619_control_panel_heading">Report Settings
-                                  </h3>
-                                  <span role="heading" aria-level="3"><button type="button"
-                                      class="a-Button a-IRR-button a-IRR-button--controls"
-                                      aria-labelledby="a_Collapsible1_R310684784301682619619_control_panel_heading"
-                                      aria-controls="a_Collapsible1_R310684784301682619619_control_panel_content"
-                                      aria-expanded="true"><span class="a-Icon a-Collapsible-icon icon-down-arrow"
-                                        aria-hidden="true"></span></button></span>
-                                </div>
-                                <div class="a-MediaBlock-content a-Collapsible-content"
-                                  id="a_Collapsible1_R310684784301682619619_control_panel_content" aria-hidden="false">
-                                  <ul role="none" class="a-IRR-controls">
-                                    <li class="a-IRR-controls-item a-IRR-controls-item--pivot"
-                                      aria-labelledby="R310684784301682619619_control_text_pivot" role="region"><span
-                                        class="a-IRR-controls-cell"></span><span class="a-IRR-controls-cell"><span
-                                          class="a-Icon a-IRR-controlsIcon icon-irr-pivot"
-                                          aria-hidden="true"></span></span><span
-                                        class="a-IRR-controls-cell a-IRR-controls-cell--label"><button type="button"
-                                          aria-describedby="R310684784301682619619_control_text_pivot"
-                                          class="a-IRR-button--edit a-IRR-controlsLabel" data-setting="pivot"><span
-                                            aria-hidden="true"
-                                            id="R310684784301682619619_control_text_pivot">Pivot</span><span
-                                            class="u-vh">Edit Pivot</span></button></span><span
-                                        class="a-IRR-controls-cell a-IRR-controls-cell--remove"><button
-                                          class="a-Button a-IRR-button a-Button--noUI a-IRR-button--remove"
-                                          aria-label="Remove Pivot"
-                                          aria-describedby="R310684784301682619619_control_text_pivot" type="button"
-                                          data-setting="pivot"><span aria-hidden="true"
-                                            class="a-Icon icon-remove"></span><span class="u-vh" "="">Remove Pivot</span></button></span></li>
-                                    </ul>
-                                  </div>
-                                  <div class=" a-IRR-reportSummaryContainer"
-                                            id="R310684784301682619619_control_panel_summary" style="display: none;">
-                                            <ul class="a-IRR-reportSummary">
-                                              <li class="a-IRR-reportSummary-item a-IRR-reportSummary-item--pivot"><a
-                                                  href="#" class="a-IRR-reportSummary-label" data-setting="pivot"><span
-                                                    class="a-IRR-reportSummary-icon" aria-label="Pivot" role="img"><span
-                                                      class="a-Icon icon-irr-pivot"></span></span><span
-                                                    class="a-IRR-reportSummary-value">Edit Pivot</span></a></li>
-                                            </ul>
-                                </div>
-                              </div>
                               <div role="region" aria-label="Chart view of Medicine Details"
                                 id="R310684784301682619619_chart" class="a-IRR-chartView"></div>
                               <div role="region" aria-label="Group by view of Medicine Details"
@@ -274,15 +354,23 @@
                               <div role="region" aria-label="Pivot view of Medicine Details"
                                 id="R310684784301682619619_pivot" class="a-IRR-pivotView">
 
-                                <div class="a-IRR-tableContainer">
+                                <div id="medicineDetailsFilterInfo" class="medicine-details-filter-info"
+                                  style="display: none;">
+                                  <span><strong>District:</strong> <span
+                                      id="medicineDetailsDistrictText">—</span></span>
+                                  <span class="filter-sep">|</span>
+                                  <span><strong>Financial Year:</strong> <span
+                                      id="medicineDetailsYearText">—</span></span>
+                                </div>
+                                <div class="a-IRR-tableContainer medicine-details-table-wrap">
                                   <table id="medicineDetailsWrap" class="display" style="width:100%">
                                     <thead>
                                       <tr>
-                                        <th>SI No</th>
-                                        <th>Edm Id</th>
-                                        <th>Date</th>
-                                        <th>Activity</th>
-                                        <th>Notes</th>
+                                        <th>Medicine Name</th>
+                                        <th>Packing Size</th>
+                                        <th>Name of Institution</th>
+                                        <th>Quantity</th>
+                                        <th>Total Quantity</th>
                                       </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -423,8 +511,8 @@
         fetchAndPopulateDropdown({
           payload: {
             action: "function_call",
-            function_name: "im_get_district_list_fn",
-            params: { mobnumber: mobnumber }
+            function_name: "im_all_district_fn",
+            params: {}
           },
           dropdownId: "P43_DISTRICT",
           placeholder: "--Select District--"
@@ -476,7 +564,8 @@
 
         // Financial Year
 
-
+        // On load: show message in datatable to select dropdowns
+        setTablePlaceholder('medicineDetailsWrap', 'Please select District and Financial Year above, then click Search to view medicine details.');
       });
 
 
@@ -495,6 +584,11 @@
             return;
           }
 
+          // Show selected district and year above datatable
+          $('#medicineDetailsDistrictText').text(selectedDistrict);
+          $('#medicineDetailsYearText').text(selectedYear);
+          $('#medicineDetailsFilterInfo').show();
+
           // 👇 Pass values to the function
           fetchTableData(selectedDistrict, selectedYear);
         });
@@ -509,8 +603,13 @@
         // Optionally trigger change if other scripts depend on it
         $('#P43_DISTRICT, #P43_FINANCIAL_YEAR').trigger('change');
 
-        // Clear the table
-        clearTable('medicineDetailsWrap');
+        // Hide district/year info above datatable
+        $('#medicineDetailsFilterInfo').hide();
+        $('#medicineDetailsDistrictText').text('—');
+        $('#medicineDetailsYearText').text('—');
+
+        // Clear the table and show placeholder again
+        setTablePlaceholder('medicineDetailsWrap', 'Please select District and Financial Year above, then click Search to view medicine details.');
       });
 
 
@@ -559,6 +658,15 @@
         const $tableBody = $(`#${tableId} tbody`);
         if ($tableBody.length) {
           $tableBody.empty().append(`<tr><td colspan="5" class="u-tC">No data available</td></tr>`);
+        }
+      }
+
+      function setTablePlaceholder(tableId, message) {
+        const $tableBody = $(`#${tableId} tbody`);
+        if ($tableBody.length) {
+          $tableBody.empty().append(
+            `<tr class="medicine-details-placeholder-row"><td colspan="5">${message}</td></tr>`
+          );
         }
       }
     </script>
