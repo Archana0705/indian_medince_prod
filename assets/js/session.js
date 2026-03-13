@@ -68,6 +68,7 @@ async function initializeUserSession(mobnumber) {
           const encryptedSession = encryptData(userSession);
           sessionStorage.setItem("encryptedUserSession", encryptedSession);
           sessionStorage.setItem("loginTime", Date.now().toString());
+          sessionStorage.setItem("usermobnumberNumber", String(mobnumber));
 
           console.log("✅ Session initialized successfully:", userSession);
           resolve(userSession);

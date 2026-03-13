@@ -1318,6 +1318,7 @@
           success: function (response) {
             alert("Inserted Successfully");
             // Reset indent quantity and total amount to avoid errors on next add
+            $('#P8_MEDICINE_NAME').val('');
             $('#P8_QUANTITY').val('');
             $('#P8_TOTAL_AMOUNT').val('');
             $('#P8_AMOUNT').val('');

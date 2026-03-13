@@ -8,7 +8,8 @@ window.loadDataToTable = function ({
 }) {
     const tableSelector = `#${tableId}`;
     const tableBody = $(`${tableSelector} tbody`);
-    tableBody.html('<tr><td colspan="10" class="text-center">Loading...</td></tr>');
+    const colCount = $(`${tableSelector} thead th`).length || 10;
+    tableBody.html('<tr><td colspan="' + colCount + '" class="text-center dt-loading">Loading...</td></tr>');
 
     $.ajax({
         url: apiUrl,
@@ -21,11 +22,41 @@ window.loadDataToTable = function ({
         dataType: 'json',
         cache: false,
         success(response) {
-            const data = decryptData(response.data);
             tableBody.empty();
 
-            if (data.length === 0) {
-                tableBody.html('<tr><td colspan="10" class="text-center">No Data Found</td></tr>');
+            // Handle { success: 0, message: "Data not found", pagination: { total: 0 } } when API omits data
+            if (response && (response.success === 0 || response.success === false)) {
+                const msg = (response.message || 'No Data Found').toString();
+                tableBody.html('<tr><td colspan="' + colCount + '" class="text-center dt-empty-state">' + msg + '</td></tr>');
+                return;
+            }
+            if (!response || response.data == null || response.data === '') {
+                tableBody.html('<tr><td colspan="' + colCount + '" class="text-center dt-empty-state">No Data Found</td></tr>');
+                return;
+            }
+
+            let raw;
+            try {
+                raw = decryptData(response.data);
+            } catch (e) {
+                console.error('Decrypt error:', e);
+                tableBody.html('<tr><td colspan="' + colCount + '" class="text-center dt-empty-state">No Data Found</td></tr>');
+                return;
+            }
+
+            // Handle decrypted payload that is { success: 0, message: "Data not found", pagination: { total: 0 } }
+            let data = raw;
+            if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+                if (raw.success === 0 || raw.success === false || (raw.pagination && Number(raw.pagination.total) === 0)) {
+                    const msg = (raw.message || 'No Data Found').toString();
+                    tableBody.html('<tr><td colspan="' + colCount + '" class="text-center dt-empty-state">' + msg + '</td></tr>');
+                    return;
+                }
+                data = raw.data || raw.result || [];
+            }
+
+            if (!data || !Array.isArray(data) || data.length === 0) {
+                tableBody.html('<tr><td colspan="' + colCount + '" class="text-center dt-empty-state">No Data Found</td></tr>');
                 return;
             }
 
@@ -48,7 +79,7 @@ window.loadDataToTable = function ({
         },
         error(xhr, status, error) {
             console.error("API Error:", error);
-            tableBody.html('<tr><td colspan="10" class="text-center">No Data Found</td></tr>');
+            tableBody.html('<tr><td colspan="' + colCount + '" class="text-center dt-empty-state">No Data Found</td></tr>');
         }
     });
 };

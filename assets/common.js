@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 ],
                 dsmo: [
                     { name: 'Home', href: '../dsmo/home.html' },
-                    { name: 'Received Medicine', href: '../dsmo/received-medicine.html' },
+                    // { name: 'Received Medicine', href: '../dsmo/received-medicine.html' },
                     { name: 'Medicine Details', href: '../dsmo/medicine-details.html' },
                     { name: 'Download despatched medicine', href: '../dsmo/download.html' },
                     { name: 'View Indent Details - DSMO', href: '../dsmo/view-indent.html' },
