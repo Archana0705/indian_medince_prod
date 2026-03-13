@@ -414,7 +414,7 @@
         institutionName: userInstitutionName = "",
         mobnumber: mobnumber = ""
       } = session;
-      function fetchAndPopulateDropdown({ payload, dropdownId, placeholder }) {
+      function fetchAndPopulateDropdown({ payload, dropdownId, placeholder, valueKey }) {
         // debugger
         $.ajax({
           url: apiUrl,
@@ -435,7 +435,7 @@
             $dropdown.empty().append(`<option value="">${placeholder}</option>`);
 
             decrypted.forEach(item => {
-              const value = item.district || item.institude || item.year || item.quarter;
+              const value = valueKey ? (item[valueKey] != null ? item[valueKey] : null) : (item.district || item.institude || item.system || item.year || item.quarter);
               if (value) {
                 $dropdown.append(`<option value="${value}">${value}</option>`);
               }
@@ -447,30 +447,39 @@
         });
       }
 
-      // District
+      // District - im_all_district_fn
       fetchAndPopulateDropdown({
         payload: {
           action: "function_call",
-          function_name: "im_get_district_list_fn",
-          params: { mobnumber: mobnumber }
+          function_name: "im_all_district_fn",
+          params: {}
         },
         dropdownId: "P35_DISTRICT",
         placeholder: "--Select District--"
       });
 
-      // Institution
-      fetchAndPopulateDropdown({
-        payload: {
-          action: "function_call",
-          function_name: "im_get_institution_list_fn",
-          params: { mobnumber: mobnumber }
-        },
-        dropdownId: "P35_INSTITUTION",
-        placeholder: "--Select Institution--"
+      // Institution - im_all_institution_name_fn (populated on district change)
+      $('#P35_DISTRICT').on('change', function () {
+        const selectedDistrict = $(this).val();
+
+        if (!selectedDistrict) {
+          $('#P35_INSTITUTION').empty().append('<option value="">--Select Institution--</option>');
+          return;
+        }
+
+        fetchAndPopulateDropdown({
+          payload: {
+            action: "function_call",
+            function_name: "im_all_institution_name_fn",
+            params: { p_district: String(selectedDistrict) }
+          },
+          dropdownId: "P35_INSTITUTION",
+          placeholder: "--Select Institution--",
+          valueKey: "name_of_the_institution"
+        });
       });
 
-
-      // Financial Year
+      // Financial Year - im_year_fn
       fetchAndPopulateDropdown({
         payload: {
           action: "function_call",
@@ -481,15 +490,15 @@
         placeholder: "--Select Financial Year--"
       });
 
-      // System
+      // System - im_name_of_system_fn
       fetchAndPopulateDropdown({
         payload: {
           action: "function_call",
-          function_name: "im_system_fn",
+          function_name: "im_name_of_system_fn",
           params: {}
         },
         dropdownId: "P35_SYSTEM",
-        placeholder: "--Select Financial Year--"
+        placeholder: "--Select System--"
       });
 
       // Quarter
