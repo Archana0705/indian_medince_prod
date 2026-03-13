@@ -54,6 +54,7 @@
     .t-fht-tbody {
       overflow: auto;
     }
+
     /* Budget loader when scheme is selected */
     .budget-loader-overlay {
       position: absolute;
@@ -69,6 +70,7 @@
       z-index: 10;
       border-radius: 4px;
     }
+
     .budget-loader-spinner {
       width: 28px;
       height: 28px;
@@ -77,12 +79,16 @@
       border-radius: 50%;
       animation: budgetLoaderSpin 0.8s linear infinite;
     }
+
     .budget-loader-text {
       font-size: 14px;
       color: #333;
     }
+
     @keyframes budgetLoaderSpin {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
   </style>
   <style type="text/css">
@@ -397,10 +403,10 @@
 
 
                             <div class="row position-relative" id="allotedDetails" style="display:none;">
-                                <div id="budgetLoaderOverlay" class="budget-loader-overlay" style="display:none;">
-                                  <span class="budget-loader-spinner"></span>
-                                  <span class="budget-loader-text">Loading budget...</span>
-                                </div>
+                              <div id="budgetLoaderOverlay" class="budget-loader-overlay" style="display:none;">
+                                <span class="budget-loader-spinner"></span>
+                                <span class="budget-loader-text">Loading budget...</span>
+                              </div>
                               <div class="col col-6 apex-col-auto col-start">
                                 <div
                                   class="t-Form-fieldContainer is-required rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--number-field"
@@ -498,8 +504,7 @@
                                   </div>
                                   <div class="t-Form-inputContainer">
                                     <div class="t-Form-itemWrapper"><input type="text" id="P8_STOCK_AVAILBLE"
-                                        name="P8_STOCK_AVAILBLE" class="text_field apex-item-text" value="" size="30"
-                                        readonly>
+                                        name="P8_STOCK_AVAILBLE" class="text_field apex-item-text" value="" size="30">
                                     </div>
                                     <div class="t-Form-itemAssistance">
                                       <span id="P8_STOCK_AVAILBLE_error_placeholder" class="a-Form-error"
