@@ -355,7 +355,7 @@
             <div class="row">
               <div class="col col-12 apex-col-auto col-start col-end">
                 <div
-                  class="t-Form-fieldContainer is-required rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--text-field"
+                  class="t-Form-fieldContainer is-required rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--select-list"
                   id="P50_SYSTEM_CONTAINER">
                   <div class="t-Form-labelContainer col col-2">
                     <label for="P50_SYSTEM" id="P50_SYSTEM_LABEL" class="t-Form-label">System
@@ -363,8 +363,10 @@
                   </div>
                   <div class="t-Form-inputContainer col col-10">
                     <div class="t-Form-itemWrapper">
-                      <input type="text" id="P50_SYSTEM" name="P50_SYSTEM" class="text_field apex-item-text" value=""
-                        size="32" maxlength="50" data-trim-spaces="NONE" />
+                      <select id="P50_SYSTEM" name="P50_SYSTEM" class="selectlist apex-item-select"
+                        data-native-menu="false" size="1">
+                        <option value="" selected="selected">Select System</option>
+                      </select>
                     </div>
                     <div class="t-Form-itemAssistance">
                       <span id="P50_SYSTEM_error_placeholder" class="a-Form-error"
@@ -435,7 +437,7 @@
             <div class="row">
               <div class="col col-12 apex-col-auto col-start col-end">
                 <div
-                  class="t-Form-fieldContainer is-required rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--has-initial-value apex-item-wrapper--text-field"
+                  class="t-Form-fieldContainer is-required rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--has-initial-value apex-item-wrapper--select-list"
                   id="P50_SYSTEM_CONTAINER">
                   <div class="t-Form-labelContainer col col-2">
                     <label for="P50_SYSTEM" id="P50_SYSTEM_LABEL" class="t-Form-label">System
@@ -444,8 +446,10 @@
                   <div class="t-Form-inputContainer col col-10">
                     <div class="t-Form-itemWrapper">
                       <input type="hidden" id="P50_ID_Edit" />
-                      <input type="text" id="P50_SYSTEM_Edit" name="P50_SYSTEM" class="text_field apex-item-text"
-                        value="" size="32" maxlength="50" data-trim-spaces="NONE" />
+                      <select id="P50_SYSTEM_Edit" name="P50_SYSTEM" class="selectlist apex-item-select"
+                        data-native-menu="false" size="1">
+                        <option value="" selected="selected">Select System</option>
+                      </select>
                     </div>
                     <div class="t-Form-itemAssistance">
                       <span id="P50_SYSTEM_error_placeholder" class="a-Form-error"
@@ -837,6 +841,66 @@
 
   const apiUrl = `${BASE_API_URL}/commonfunction`;
 
+  function loadDropdownOptions({ payload, dropdownId, placeholder, valueKey = "system", preselectedValue = "" }) {
+    $.ajax({
+      url: apiUrl,
+      method: "POST",
+      headers: { "X-APP-Key": "edm", "X-APP-Name": "edm" },
+      data: { data: encryptData(payload) },
+      dataType: "json",
+      success(response) {
+        let decrypted = decryptData(response.data);
+
+        // Handle wrapped response: { data: [...] }
+        if (
+          decrypted &&
+          typeof decrypted === "object" &&
+          !Array.isArray(decrypted) &&
+          Array.isArray(decrypted.data)
+        ) {
+          decrypted = decrypted.data;
+        }
+
+        const $dropdown = $(`#${dropdownId}`);
+        $dropdown.empty().append(`<option value="">${placeholder}</option>`);
+
+        if (!Array.isArray(decrypted)) return;
+
+        decrypted.forEach((item) => {
+          let val = "";
+          if (typeof item === "string") {
+            val = item;
+          } else if (item && typeof item === "object") {
+            val = item[valueKey] ?? item.system ?? "";
+          }
+
+          if (val != null && val !== "") {
+            const safeVal = String(val)
+              .replace(/"/g, "&quot;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+            $dropdown.append(`<option value="${safeVal}">${safeVal}</option>`);
+          }
+        });
+
+        if (preselectedValue) $dropdown.val(preselectedValue);
+      },
+      error(xhr, status, error) {
+        console.error(`${payload.function_name} API Error:`, error);
+      },
+    });
+  }
+
+  // Load System dropdown options when Create modal opens
+  $(".create_Modal").on("show.bs.modal", function () {
+    loadDropdownOptions({
+      payload: { action: "function_call", function_name: "im_name_of_system_fn", params: {} },
+      dropdownId: "P50_SYSTEM",
+      placeholder: "Select System",
+      valueKey: "system",
+    });
+  });
+
   function getPayload() {
     return {
       action: "function_call",
@@ -988,6 +1052,16 @@
 
   function openUpdateDiseaseModal(data) {
     document.getElementById("P50_ID_Edit").value = data.id;
+
+    // Load dropdown options and preselect current value
+    loadDropdownOptions({
+      payload: { action: "function_call", function_name: "im_name_of_system_fn", params: {} },
+      dropdownId: "P50_SYSTEM_Edit",
+      placeholder: "Select System",
+      valueKey: "system",
+      preselectedValue: data.system,
+    });
+
     document.getElementById("P50_SYSTEM_Edit").value = data.system;
     document.getElementById("P50_NAME_OF_THE_DISEASE_Edit").value =
       data.name_of_the_disease;

@@ -345,8 +345,10 @@
                   </div>
                   <div class="t-Form-inputContainer col col-4">
                     <div class="t-Form-itemWrapper">
-                      <input type="text" id="P54_NAME_OF_THE_INSTITUTION" name="P54_NAME_OF_THE_INSTITUTION"
-                        class="text_field apex-item-text" value="" size="32" maxlength="255" data-trim-spaces="NONE" />
+                      <select id="P54_NAME_OF_THE_INSTITUTION" name="P54_NAME_OF_THE_INSTITUTION"
+                        class="selectlist apex-item-select" data-native-menu="false" size="1">
+                        <option value="" selected="selected">Select Name Of The Institution</option>
+                      </select>
                     </div>
                     <div class="t-Form-itemAssistance">
                       <span id="P54_NAME_OF_THE_INSTITUTION_error_placeholder" class="a-Form-error"
@@ -371,8 +373,10 @@
                   </div>
                   <div class="t-Form-inputContainer col col-2">
                     <div class="t-Form-itemWrapper">
-                      <input type="text" id="P54_INSTITUTION_TYPE" name="P54_INSTITUTION_TYPE"
-                        class="text_field apex-item-text" value="" size="32" maxlength="50" data-trim-spaces="NONE" />
+                      <select id="P54_INSTITUTION_TYPE" name="P54_INSTITUTION_TYPE"
+                        class="selectlist apex-item-select" data-native-menu="false" size="1">
+                        <option value="" selected="selected">Select Institution Type</option>
+                      </select>
                     </div>
                     <div class="t-Form-itemAssistance">
                       <span id="P54_INSTITUTION_TYPE_error_placeholder" class="a-Form-error"
@@ -394,8 +398,10 @@
                   </div>
                   <div class="t-Form-inputContainer col col-2">
                     <div class="t-Form-itemWrapper">
-                      <input type="text" id="P54_SYSTEM" name="P54_SYSTEM" class="text_field apex-item-text" value=""
-                        size="32" maxlength="50" data-trim-spaces="NONE" />
+                      <select id="P54_SYSTEM" name="P54_SYSTEM" class="selectlist apex-item-select"
+                        data-native-menu="false" size="1">
+                        <option value="" selected="selected">Select System</option>
+                      </select>
                     </div>
                     <div class="t-Form-itemAssistance">
                       <span id="P54_SYSTEM_error_placeholder" class="a-Form-error"
@@ -495,8 +501,10 @@
                   </div>
                   <div class="t-Form-inputContainer col col-4">
                     <div class="t-Form-itemWrapper">
-                      <input type="text" id="P54_NAME_OF_THE_INSTITUTION_Edit" name="P54_NAME_OF_THE_INSTITUTION"
-                        class="text_field apex-item-text" value="" size="32" maxlength="255" data-trim-spaces="NONE" />
+                      <select id="P54_NAME_OF_THE_INSTITUTION_Edit" name="P54_NAME_OF_THE_INSTITUTION_Edit"
+                        class="selectlist apex-item-select" data-native-menu="false" size="1">
+                        <option value="" selected="selected">--Select Name Of The Institution--</option>
+                      </select>
                     </div>
                     <div class="t-Form-itemAssistance">
                       <span id="P54_NAME_OF_THE_INSTITUTION_error_placeholder" class="a-Form-error"
@@ -521,8 +529,10 @@
                   </div>
                   <div class="t-Form-inputContainer col col-2">
                     <div class="t-Form-itemWrapper">
-                      <input type="text" id="P54_INSTITUTION_TYPE_Edit" name="P54_INSTITUTION_TYPE"
-                        class="text_field apex-item-text" value="" size="32" maxlength="50" data-trim-spaces="NONE" />
+                      <select id="P54_INSTITUTION_TYPE_Edit" name="P54_INSTITUTION_TYPE"
+                        class="selectlist apex-item-select" data-native-menu="false" size="1">
+                        <option value="" selected="selected">--Select Institution Type--</option>
+                      </select>
                     </div>
                     <div class="t-Form-itemAssistance">
                       <span id="P54_INSTITUTION_TYPE_error_placeholder" class="a-Form-error"
@@ -544,8 +554,10 @@
                   </div>
                   <div class="t-Form-inputContainer col col-2">
                     <div class="t-Form-itemWrapper">
-                      <input type="text" id="P54_SYSTEM_Edit" name="P54_SYSTEM" class="text_field apex-item-text"
-                        value="" size="32" maxlength="50" data-trim-spaces="NONE" />
+                      <select id="P54_SYSTEM_Edit" name="P54_SYSTEM" class="selectlist apex-item-select"
+                        data-native-menu="false" size="1">
+                        <option value="" selected="selected">--Select System--</option>
+                      </select>
                     </div>
                     <div class="t-Form-itemAssistance">
                       <span id="P54_SYSTEM_error_placeholder" class="a-Form-error"
@@ -811,32 +823,77 @@
 
 
     function openUpdateRegularModal(data) {
-      document.getElementById("P54_ID_Edit").value = data.id;
-      document.getElementById("P54_DISTRICT_Edit").value = data.district || "";
-      document.getElementById("P54_NAME_OF_THE_INSTITUTION_Edit").value = data.name_of_the_institution || "";
-      document.getElementById("P54_INSTITUTION_TYPE_Edit").value = data.institution_type || "";
-      document.getElementById("P54_SYSTEM_Edit").value = data.system || "";
+      document.getElementById("P54_ID_Edit").value = data.id || "";
+      const district = (data.district || "").trim();
+      document.getElementById("P54_DISTRICT_Edit").value = district;
       document.getElementById("P54_REGULAR_Edit").value = data.regular || "";
 
       // Set original data snapshot for change detection
       originalInstitutionData = {
-        district: (data.district || "").trim(),
+        district,
         institution: (data.name_of_the_institution || "").trim(),
         type: (data.institution_type || "").trim(),
         system: (data.system || "").trim(),
         regular: (data.regular || "").toString().trim(),
       };
 
+      // District dropdown
       loadDistrictOptions({
         payload: {
           action: "function_call",
-          function_name: "im_own_district_fn",
-          params: { null: null },
+          function_name: "im_all_district_fn",
+          params: {},
         },
         dropdownId: "P54_DISTRICT_Edit",
         placeholder: "--Select District--",
-        preselectedValue: data.district,
+        preselectedValue: district,
+        valueKey: "district",
       });
+
+      // Institution type dropdown
+      loadDistrictOptions({
+        payload: {
+          action: "function_call",
+          function_name: "im_all_institution_type_fn",
+          params: {},
+        },
+        dropdownId: "P54_INSTITUTION_TYPE_Edit",
+        placeholder: "--Select Institution Type--",
+        preselectedValue: (data.institution_type || "").trim(),
+        valueKey: "institution_type",
+      });
+
+      // System dropdown
+      loadDistrictOptions({
+        payload: {
+          action: "function_call",
+          function_name: "im_name_of_system_fn",
+          params: {},
+        },
+        dropdownId: "P54_SYSTEM_Edit",
+        placeholder: "--Select System--",
+        preselectedValue: (data.system || "").trim(),
+        valueKey: "system",
+      });
+
+      // Institution name depends on district
+      $("#P54_NAME_OF_THE_INSTITUTION_Edit")
+        .empty()
+        .append('<option value="">--Select Name Of The Institution--</option>');
+      if (district) {
+        loadDistrictOptions({
+          payload: {
+            action: "function_call",
+            function_name: "im_all_institution_name_fn",
+            params: { p_district: String(district) },
+          },
+          dropdownId: "P54_NAME_OF_THE_INSTITUTION_Edit",
+          placeholder: "--Select Name Of The Institution--",
+          preselectedValue: (data.name_of_the_institution || "").trim(),
+          valueKey: "name_of_the_institution",
+        });
+      }
+
       $(".update_Modal").modal("show");
     }
     function updateRegularData() {
@@ -853,23 +910,23 @@
       // === Validation ===
       let isValid = true;
       if (!district) {
-        document.getElementById("P54_DISTRICT_Edit_error_placeholder").textContent = "District is required";
+        document.getElementById("P54_DISTRICT_error_placeholder").textContent = "District is required";
         isValid = false;
       }
       if (!institution) {
-        document.getElementById("P54_NAME_OF_THE_INSTITUTION_Edit_error_placeholder").textContent = "Institution name is required";
+        document.getElementById("P54_NAME_OF_THE_INSTITUTION_error_placeholder").textContent = "Institution name is required";
         isValid = false;
       }
       if (!type) {
-        document.getElementById("P54_INSTITUTION_TYPE_Edit_error_placeholder").textContent = "Institution type is required";
+        document.getElementById("P54_INSTITUTION_TYPE_error_placeholder").textContent = "Institution type is required";
         isValid = false;
       }
       if (!system) {
-        document.getElementById("P54_SYSTEM_Edit_error_placeholder").textContent = "System is required";
+        document.getElementById("P54_SYSTEM_error_placeholder").textContent = "System is required";
         isValid = false;
       }
       if (!regular || isNaN(regular)) {
-        document.getElementById("P54_REGULAR_Edit_error_placeholder").textContent = "Valid number is required";
+        document.getElementById("P54_REGULAR_error_placeholder").textContent = "Valid number is required";
         isValid = false;
       }
       if (!isValid) return;
@@ -938,17 +995,47 @@
     loadDistrictOptions({
       payload: {
         action: "function_call",
-        function_name: "im_own_district_fn",
-        params: { null: null },
+        function_name: "im_all_district_fn",
+        params: {},
       },
       dropdownId: "P54_DISTRICT",
       placeholder: "--Select District--",
+      valueKey: "district",
     });
+
+    loadDistrictOptions({
+      payload: {
+        action: "function_call",
+        function_name: "im_all_institution_type_fn",
+        params: {},
+      },
+      dropdownId: "P54_INSTITUTION_TYPE",
+      placeholder: "--Select Institution Type--",
+      valueKey: "institution_type",
+    });
+
+    loadDistrictOptions({
+      payload: {
+        action: "function_call",
+        function_name: "im_name_of_system_fn",
+        params: {},
+      },
+      dropdownId: "P54_SYSTEM",
+      placeholder: "--Select System--",
+      valueKey: "system",
+    });
+
+    // Institution name depends on district selection
+    $("#P54_NAME_OF_THE_INSTITUTION")
+      .empty()
+      .append("<option value=''>Select Name Of The Institution</option>");
+
     function loadDistrictOptions({
       payload,
       dropdownId,
       placeholder,
       preselectedValue = "",
+      valueKey = null,
     }) {
       $.ajax({
         url: apiUrl,
@@ -968,16 +1055,29 @@
             .empty()
             .append(`<option value="">${placeholder}</option>`);
 
-          decrypted.forEach((item) => {
-            const value =
+          const list = Array.isArray(decrypted)
+            ? decrypted
+            : decrypted && Array.isArray(decrypted.data)
+              ? decrypted.data
+              : [];
+
+          list.forEach((item) => {
+            const value = valueKey ? item?.[valueKey] : null;
+            const fallback =
               item.district ||
-              item.year ||
               item.system ||
-              item.scheme ||
+              item.institution_type ||
+              item.name_of_the_institution ||
+              item.institution_name ||
               item.type ||
+              item.year ||
+              item.scheme ||
               item.quarter;
 
-            $dropdown.append(`<option value="${value}">${value}</option>`);
+            const finalValue = value ?? fallback;
+            if (finalValue === null || finalValue === undefined) return;
+            const safeVal = String(finalValue);
+            $dropdown.append(`<option value="${safeVal}">${safeVal}</option>`);
           });
 
           // ✅ Set selected value after loading options
@@ -990,16 +1090,85 @@
         },
       });
     }
+
+    // When district changes in create modal, load institution names
+    $(document).on("change", "#P54_DISTRICT", function () {
+      const district = ($(this).val() || "").trim();
+      $("#P54_NAME_OF_THE_INSTITUTION")
+        .empty()
+        .append("<option value=''>Select Name Of The Institution</option>");
+      if (!district) return;
+
+      loadDistrictOptions({
+        payload: {
+          action: "function_call",
+          function_name: "im_all_institution_name_fn",
+          params: { p_district: String(district) },
+        },
+        dropdownId: "P54_NAME_OF_THE_INSTITUTION",
+        placeholder: "Select Name Of The Institution",
+        valueKey: "name_of_the_institution",
+      });
+    });
+
+    // When district changes in update modal, load institution names
+    $(document).on("change", "#P54_DISTRICT_Edit", function () {
+      const district = ($(this).val() || "").trim();
+      $("#P54_NAME_OF_THE_INSTITUTION_Edit")
+        .empty()
+        .append('<option value="">--Select Name Of The Institution--</option>');
+      if (!district) return;
+
+      loadDistrictOptions({
+        payload: {
+          action: "function_call",
+          function_name: "im_all_institution_name_fn",
+          params: { p_district: String(district) },
+        },
+        dropdownId: "P54_NAME_OF_THE_INSTITUTION_Edit",
+        placeholder: "--Select Name Of The Institution--",
+        valueKey: "name_of_the_institution",
+      });
+    });
+
     function loaddistricoption() {
       loadDistrictOptions({
         payload: {
           action: "function_call",
-          function_name: "im_own_district_fn",
-          params: { null: null },
+          function_name: "im_all_district_fn",
+          params: {},
         },
         dropdownId: "P54_DISTRICT",
         placeholder: "--Select District--",
+        valueKey: "district",
       });
+
+      loadDistrictOptions({
+        payload: {
+          action: "function_call",
+          function_name: "im_all_institution_type_fn",
+          params: {},
+        },
+        dropdownId: "P54_INSTITUTION_TYPE",
+        placeholder: "--Select Institution Type--",
+        valueKey: "institution_type",
+      });
+
+      loadDistrictOptions({
+        payload: {
+          action: "function_call",
+          function_name: "im_name_of_system_fn",
+          params: {},
+        },
+        dropdownId: "P54_SYSTEM",
+        placeholder: "--Select System--",
+        valueKey: "system",
+      });
+
+      // Clear institution name until district is selected
+      $("#P54_NAME_OF_THE_INSTITUTION")
+        .empty()
+        .append("<option value=''>Select Name Of The Institution</option>");
     }
 
 
