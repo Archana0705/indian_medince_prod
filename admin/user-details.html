@@ -676,7 +676,7 @@
                     <div class="t-Form-itemWrapper">
                       <input type="number" id="P42_AADHAAR_LINKED_MOBILE_NO" name="P42_AADHAAR_LINKED_MOBILE_NO"
                         class="number_field apex-item-text apex-item-number" value="" size="32" maxlength="255"
-                        inputmode="decimal" style="text-align: start" />
+                        inputmode="numeric" step="1" min="0" style="text-align: start" />
                     </div>
                     <div class="t-Form-itemAssistance">
                       <span id="P42_AADHAAR_LINKED_MOBILE_NO_error_placeholder" class="a-Form-error"
@@ -979,7 +979,7 @@
                     <div class="t-Form-itemWrapper">
                       <input type="number" id="P42_AADHAAR_LINKED_MOBILE_NO_Edit" name="P42_AADHAAR_LINKED_MOBILE_NO"
                         class="number_field apex-item-text apex-item-number" value="9994793279" size="32"
-                        maxlength="255" inputmode="decimal" style="text-align: start" />
+                        maxlength="255" inputmode="numeric" step="1" min="0" style="text-align: start" />
                     </div>
                     <div class="t-Form-itemAssistance">
                       <span id="P42_AADHAAR_LINKED_MOBILE_NO_error_placeholder" class="a-Form-error"
@@ -1089,6 +1089,18 @@
     const apiUrl =
       `${BASE_API_URL}/commonfunction`;
 
+    // Convert mobile input to an integer for API calls.
+    // - Accepts only exactly 10 digits
+    // - Returns null for empty/invalid values
+    function toNullableInt10(value) {
+      const str =
+        value === null || value === undefined ? "" : String(value).trim();
+      if (!str) return null;
+      if (!/^\d{10}$/.test(str)) return null;
+      const intVal = parseInt(str, 10);
+      return Number.isNaN(intVal) ? null : intVal;
+    }
+
     function getPayload() {
       return {
         action: "function_call",
@@ -1185,7 +1197,7 @@
           p_designation_of_officer:
             $("#P42_DESIGNATION_OF_OFFICER").val() || null,
           p_aadhaar_linked_mobile_no:
-            $("#P42_AADHAAR_LINKED_MOBILE_NO").val() || null,
+            toNullableInt10($("#P42_AADHAAR_LINKED_MOBILE_NO").val()),
           p_created_by: userSession?.mobnumber || null, // Replace with dynamic value if available
           p_created_date: new Date().toISOString(),
         },
@@ -1238,9 +1250,9 @@
       // }
 
       const mobile = $("#P42_AADHAAR_LINKED_MOBILE_NO").val();
-      if (mobile && mobile.length !== 10) {
+      if (!/^\d{10}$/.test(mobile || "")) {
         $("#P42_AADHAAR_LINKED_MOBILE_NO_error_placeholder").text(
-          "Mobile number must be 10 digits"
+          "Mobile number must be exactly 10 digits"
         );
         isValid = false;
       }
@@ -1263,9 +1275,9 @@
           ).val(),
           p_designation_of_officer: $("#P42_DESIGNATION_OF_OFFICER").val(),
           // p_aadhaar_number: $("#P42_AADHAAR_NUMBER").val(),
-          p_aadhaar_linked_mobile_no: $(
-            "#P42_AADHAAR_LINKED_MOBILE_NO"
-          ).val(),
+          p_aadhaar_linked_mobile_no: toNullableInt10(
+            $("#P42_AADHAAR_LINKED_MOBILE_NO").val()
+          ),
           p_created_by: userSession?.mobnumber || null,
           p_created_date: new Date().toISOString(),
         },
@@ -1538,6 +1550,14 @@
         }
       }
 
+      // Mobile validation (same rule as create)
+      if (
+        !/^\d{10}$/.test(currentFormData.p_aadhaar_linked_mobile_no || "")
+      ) {
+        alert("Mobile number must be exactly 10 digits");
+        return;
+      }
+
       // Check if any changes were made
       const noChanges = Object.keys(currentFormData).every(
         (key) => currentFormData[key] == initialFormData[key]
@@ -1564,7 +1584,7 @@
             currentFormData.p_name_of_the_indenting_officer,
           p_designation_of_officer: currentFormData.p_designation_of_officer,
           p_aadhaar_linked_mobile_no:
-            currentFormData.p_aadhaar_linked_mobile_no,
+            toNullableInt10(currentFormData.p_aadhaar_linked_mobile_no),
           p_updated_by: userSession?.mobnumber || null,
           p_updated_date: new Date()
             .toISOString()
