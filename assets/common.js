@@ -275,7 +275,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const currentPage = window.location.pathname.split('/').pop();
 
             // List of pages that should be considered as "Home" pages
-            const homePages = ['medicine-indent.html', 'stock-details.html', 'view-indent-status.html'];
+            const homePages = ['medicine-indent.html', 'stock-details.html', 'view-indent-status.html', 'view-indent.html'];
             // For admin role, Home menu is active on home.html or any admin sub-page (e.g. user-details.html)
             const adminPages = ['home.html', 'user-details.html', 'medicine-details.html', 'scheme-details.html', 'disease-details.html', 'budget-scheme.html', 'budget-regular.html'];
 

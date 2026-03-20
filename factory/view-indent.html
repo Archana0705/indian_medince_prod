@@ -464,6 +464,20 @@
                                 id="R617921792892394551850_pivot" class="a-IRR-pivotView"></div>
                               <div role="region" aria-label="Data view of Search Results"
                                 id="R617921792892394551850_data_panel" class="a-IRR-reportView">
+                                <div class="download-report-toolbar d-flex flex-wrap gap-2 align-items-center mb-2"
+                                  style="margin-top: 8px;">
+                                  <button type="button" id="downloadExcelBtn" class="t-Button t-Button--hot t-Button--small"
+                                    style="display: none;" title="Download as Excel">
+                                    <i class="bi bi-file-earmark-excel" aria-hidden="true"></i>
+                                    <span class="t-Button-label">Download Excel</span>
+                                  </button>
+                                  <button type="button" id="downloadPdfBtn" class="t-Button t-Button--hot t-Button--small"
+                                    style="display: none;" title="Download as PDF">
+                                    <i class="bi bi-file-earmark-pdf" aria-hidden="true"></i>
+                                    <span class="t-Button-label">Download PDF</span>
+                                  </button>
+                                  <div id="downloadReportStatus" class="text-muted" style="font-size: 0.875rem;"></div>
+                                </div>
                                 <div class="a-IRR-tableContainer">
                                   <div class="t-fht-wrapper">
                                     <div class="t-fht-thead js-stickyTableHeader js-stickyWidget-toggle"
@@ -579,6 +593,11 @@
 
   <!-- DataTables -->
   <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <!-- pdfmake for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
   <script src="../assets/js/widget.treeView.min.js"></script>
   <script src="../assets/common.js"></script>
   <script src="../assets/js/widget.interactiveReport.min.js"></script>
@@ -774,8 +793,38 @@
         }
       });
 
+      function updateFactoryDownloadButtons() {
+        const hasAnyFilters =
+          ($('#P15_NAME_OF_THE_INSTITUTION').val() || '').trim() !== '' ||
+          ($('#P15_NAME_OF_THE_DISTRICT').val() || '').trim() !== '' ||
+          ($('#P15_FINANCIAL_YEAR').val() || '').trim() !== '' ||
+          ($('#P15_QUARTERS').val() || '').trim() !== '' ||
+          ($('#P15_INDENT_TYPE').val() || '').trim() !== '' ||
+          ($('#P15_SYSTEM').val() || '').trim() !== '' ||
+          ($('#P15_SCHEME_NAME').val() || '').trim() !== '';
+
+        if (hasAnyFilters) {
+          $('#downloadExcelBtn, #downloadPdfBtn').show();
+          $('#downloadExcelBtn, #downloadPdfBtn').prop('disabled', currentIndentReportTotal <= 0);
+        } else {
+          $('#downloadExcelBtn, #downloadPdfBtn').hide();
+        }
+      }
+
+      // If user selects any filter, show buttons (disable until Search returns data)
+      $('#P15_NAME_OF_THE_DISTRICT, #P15_NAME_OF_THE_INSTITUTION, #P15_FINANCIAL_YEAR, #P15_QUARTERS, #P15_INDENT_TYPE, #P15_SYSTEM, #P15_SCHEME_NAME')
+        .on('change', function () {
+          currentIndentReportTotal = 0; // reset until next Search refreshes results
+          updateFactoryDownloadButtons();
+        });
+
       const PAGE_SIZE = 50;
       let currentTablePage = 1;
+      let currentIndentReportTotal = 0;
+      let exportInProgress = false;
+
+      // Initial state
+      updateFactoryDownloadButtons();
 
       // Main function to fetch table data (server-side pagination)
       function fetchTableData(page) {
@@ -864,15 +913,22 @@
                 if (pagination) {
                   updatePaginationUI(pagination);
                 }
+                currentIndentReportTotal =
+                  pagination && pagination.total != null ? parseInt(pagination.total, 10) : (rows ? rows.length : 0);
+                updateFactoryDownloadButtons();
               } else {
                 console.error('Unexpected data format after decryption:', dataPayload);
                 $('#pressReleaseTable tbody').html('<tr><td colspan="14" class="text-center text-danger">Invalid data format received</td></tr>');
                 updatePaginationUI({ total: 0, limit: PAGE_SIZE, offset: 0, total_pages: 0, current_page: 1 });
+                currentIndentReportTotal = 0;
+                updateFactoryDownloadButtons();
               }
             } catch (e) {
               console.error('Error decrypting response:', e);
               $('#pressReleaseTable tbody').html('<tr><td colspan="14" class="text-center text-danger">Error processing data</td></tr>');
               $('#tablePaginationPrev, #tablePaginationNext').prop('disabled', false);
+              currentIndentReportTotal = 0;
+              updateFactoryDownloadButtons();
             }
           },
           error: function (xhr, status, error) {
@@ -884,6 +940,8 @@
             });
             $('#pressReleaseTable tbody').html('<tr><td colspan="14" class="text-center text-danger">Error loading data. Please try again.</td></tr>');
             $('#tablePaginationPrev, #tablePaginationNext').prop('disabled', false);
+            currentIndentReportTotal = 0;
+            updateFactoryDownloadButtons();
           }
         });
       }
@@ -984,6 +1042,337 @@
         return div.innerHTML;
       }
 
+      function formatHeader(key) {
+        return String(key)
+          .replace(/_/g, ' ')
+          .replace(/\b\w/g, c => c.toUpperCase());
+      }
+
+      // Columns to export (must match what is shown in the DataTable)
+      const factoryExportKeys = [
+        'medicine_name',
+        'packing_size',
+        'amount',
+        'quantity',
+        'total_amount',
+        'indent_type',
+        'system',
+        'scheme_name',
+        'institution_type',
+        'name_of_the_institution',
+        'quarters',
+        'financial_year',
+        'name_of_the_district'
+      ];
+
+      function downloadAsExcel(data, filename) {
+        if (!data || data.length === 0) return;
+        const keys = factoryExportKeys;
+
+        const normalized = data.map(r => {
+          const o = {};
+          keys.forEach(k => { o[k] = (r && r[k] != null) ? r[k] : ''; });
+          return o;
+        });
+
+        const ws = XLSX.utils.json_to_sheet(normalized, { header: keys });
+        ws['!cols'] = keys.map(() => ({ wch: 18 }));
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Indent Report');
+        wb.Props = {
+          Title: 'Indent Medicine List',
+          Author: 'Department of Indian Medicine and Homoeopathy',
+          CreatedDate: new Date()
+        };
+
+        XLSX.writeFile(wb, filename);
+      }
+
+      function downloadAsPdf(data, filename) {
+        if (!data || data.length === 0) return;
+        const keys = factoryExportKeys;
+
+        const headers = keys.map(k => ({
+          text: formatHeader(k),
+          style: 'tableHeader',
+          fillColor: '#4472C4',
+          color: '#fff'
+        }));
+
+        const bodyRows = data.map(r => keys.map(k => ({
+          text: (r[k] != null && r[k] !== '') ? String(r[k]) : '',
+          style: 'tableCell'
+        })));
+
+        const tableBody = [headers, ...bodyRows];
+
+        const docDef = {
+          pageOrientation: 'landscape',
+          pageSize: 'A4',
+          content: [
+            { text: 'Indent Medicine List - Report', style: 'title', margin: [0, 0, 0, 10] },
+            { text: 'Department of Indian Medicine and Homoeopathy', style: 'subtitle', margin: [0, 0, 0, 12] },
+            {
+              table: { headerRows: 1, widths: keys.map(() => '*'), body: tableBody },
+              layout: { hLineWidth: () => 0.5, vLineWidth: () => 0.5 }
+            }
+          ],
+          styles: {
+            title: { fontSize: 14, bold: true },
+            subtitle: { fontSize: 10, color: '#666' },
+            tableHeader: { fontSize: 8, bold: true },
+            tableCell: { fontSize: 7 }
+          },
+          defaultStyle: { fontSize: 8 }
+        };
+
+        pdfMake.createPdf(docDef).download(filename);
+      }
+
+      function getFactoryFiltersForExport() {
+        return {
+          p_institution: $('#P15_NAME_OF_THE_INSTITUTION').val() || null,
+          p_district: $('#P15_NAME_OF_THE_DISTRICT').val() || null,
+          p_fin_year: $('#P15_FINANCIAL_YEAR').val() || null,
+          p_quarter: $('#P15_QUARTERS').val() || null,
+          p_indent_type: $('#P15_INDENT_TYPE').val() || null,
+          p_system: $('#P15_SYSTEM').val() || null,
+          p_scheme_name: $('#P15_SCHEME_NAME').val() || null
+        };
+      }
+
+      function fetchFactoryReportRowsPage(limit, offset) {
+        const filters = getFactoryFiltersForExport();
+
+        const payload = {
+          action: 'function_call',
+          function_name: 'im_indent_medicine_factory_data_fn',
+          params: {
+            p_institution: filters.p_institution,
+            p_district: filters.p_district,
+            p_fin_year: filters.p_fin_year,
+            p_quarter: filters.p_quarter,
+            p_indent_type: filters.p_indent_type,
+            p_system: filters.p_system,
+            p_scheme_name: filters.p_scheme_name
+          },
+          limit,
+          offset
+        };
+
+        return new Promise((resolve, reject) => {
+          $.ajax({
+            url: apiUrlWithLimitOffset,
+            method: 'POST',
+            headers: {
+              'X-APP-Key': 'edm',
+              'X-APP-Name': 'edm'
+            },
+            data: { data: encryptData(payload) },
+            dataType: 'json',
+            success: function (response) {
+              try {
+                const level1 = decryptData(response.data);
+                let dataPayload = level1;
+
+                if (level1 && level1.data !== undefined) {
+                  if (typeof level1.data === 'string') {
+                    try {
+                      const level2 = decryptData(level1.data);
+                      dataPayload = level2;
+                    } catch (innerErr) {
+                      dataPayload = level1.data;
+                    }
+                  } else {
+                    dataPayload = level1.data;
+                  }
+                }
+
+                let rows = [];
+                if (Array.isArray(dataPayload)) rows = dataPayload;
+                else if (dataPayload && Array.isArray(dataPayload.data)) rows = dataPayload.data;
+
+                const pagination = response.pagination || (level1 && level1.pagination);
+                const total = pagination && pagination.total != null ? parseInt(pagination.total, 10) : null;
+                resolve({ rows, total });
+              } catch (err) {
+                reject(err);
+              }
+            },
+            error: function (xhr, status, error) {
+              reject(error || status);
+            }
+          });
+        });
+      }
+
+      async function fetchAllFactoryReportRowsForExport() {
+        const EXPORT_PAGE_SIZE = 500;
+        let offset = 0;
+        let total = null;
+        const allRows = [];
+
+        while (true) {
+          const { rows, total: pageTotal } = await fetchFactoryReportRowsPage(EXPORT_PAGE_SIZE, offset);
+          if (!rows || rows.length === 0) break;
+
+          allRows.push(...rows);
+          if (total == null && pageTotal != null) total = pageTotal;
+
+          offset += rows.length;
+          if (total != null && offset >= total) break;
+          if (rows.length < EXPORT_PAGE_SIZE) break;
+        }
+
+        return allRows;
+      }
+
+      async function fetchFactoryReportRowsForPdfExport(maxRows) {
+        const EXPORT_PAGE_SIZE = Math.min(5000, maxRows);
+        let offset = 0;
+        const rowsAcc = [];
+
+        while (rowsAcc.length < maxRows) {
+          const { rows } = await fetchFactoryReportRowsPage(EXPORT_PAGE_SIZE, offset);
+          if (!rows || rows.length === 0) break;
+
+          rowsAcc.push(...rows);
+          offset += rows.length;
+          if (rowsAcc.length >= maxRows) break;
+
+          // Give UI a chance to update between chunks
+          await new Promise(r => setTimeout(r, 0));
+        }
+
+        return rowsAcc;
+      }
+
+      async function downloadFactoryExcelLarge(filename) {
+        const EXPORT_PAGE_SIZE = 10000;
+        let offset = 0;
+        let processed = 0;
+        const total = currentIndentReportTotal || 0;
+
+        let keys = null;
+        let ws = null;
+        const wb = XLSX.utils.book_new();
+        wb.Props = {
+          Title: 'Indent Medicine List',
+          Author: 'Department of Indian Medicine and Homoeopathy',
+          CreatedDate: new Date()
+        };
+
+        while (true) {
+          $('#downloadReportStatus').text(`Fetching Excel rows... ${processed.toLocaleString()} / ${total ? total.toLocaleString() : '?'}`);
+
+          const { rows } = await fetchFactoryReportRowsPage(EXPORT_PAGE_SIZE, offset);
+          if (!rows || rows.length === 0) break;
+
+          if (!keys) {
+            keys = factoryExportKeys;
+            const headerRow = keys.map(k => formatHeader(k));
+            ws = XLSX.utils.aoa_to_sheet([headerRow]);
+            ws['!cols'] = keys.map(() => ({ wch: 18 }));
+          }
+
+          const aoa = rows.map(r => keys.map(k => (r[k] != null && r[k] !== '') ? String(r[k]) : ''));
+          // Append chunk rows to worksheet
+          XLSX.utils.sheet_add_aoa(ws, aoa, { origin: -1 });
+
+          processed += rows.length;
+          offset += rows.length;
+
+          if (total && processed >= total) break;
+
+          if (processed % (EXPORT_PAGE_SIZE * 2) === 0) {
+            $('#downloadReportStatus').text(`Preparing Excel... ${processed.toLocaleString()} / ${total ? total.toLocaleString() : '?'}`);
+          }
+
+          await new Promise(r => setTimeout(r, 0));
+        }
+
+        if (!ws) throw new Error('No data found for export.');
+
+        XLSX.utils.book_append_sheet(wb, ws, 'Indent Report');
+        XLSX.writeFile(wb, filename);
+      }
+
+      $('#downloadExcelBtn').on('click', async function (e) {
+        e.preventDefault();
+        if (exportInProgress) return;
+
+        if (!currentIndentReportTotal || currentIndentReportTotal <= 0) {
+          if (typeof showErrorToast === 'function') showErrorToast('No data available to download.');
+          else alert('No data available to download.');
+          return;
+        }
+
+        exportInProgress = true;
+        $('#downloadReportStatus').text('Preparing Excel report...');
+        $('#downloadExcelBtn, #downloadPdfBtn').prop('disabled', true);
+
+        try {
+          const dateStr = new Date().toISOString().split('T')[0];
+          const fn = ($('#P15_FINANCIAL_YEAR').val() || '').replace(/\s+/g, '_') || 'Report';
+          const q = ($('#P15_QUARTERS').val() || '').replace(/\s+/g, '_') || '';
+          const filename = `Indent_Medicine_Factory_Report_${fn}${q ? '_' + q : ''}_${dateStr}.xlsx`;
+
+          await downloadFactoryExcelLarge(filename);
+          if (typeof showSuccessToast === 'function') showSuccessToast('Excel report downloaded successfully.');
+        } catch (err) {
+          console.error('Excel download failed:', err);
+          if (typeof showErrorToast === 'function') showErrorToast('Failed to download Excel report.');
+          else alert('Failed to download Excel report.');
+        } finally {
+          exportInProgress = false;
+          $('#downloadExcelBtn, #downloadPdfBtn').prop('disabled', false);
+          $('#downloadReportStatus').text('');
+        }
+      });
+
+      $('#downloadPdfBtn').on('click', async function (e) {
+        e.preventDefault();
+        if (exportInProgress) return;
+
+        if (!currentIndentReportTotal || currentIndentReportTotal <= 0) {
+          if (typeof showErrorToast === 'function') showErrorToast('No data available to download.');
+          else alert('No data available to download.');
+          return;
+        }
+
+        exportInProgress = true;
+        $('#downloadReportStatus').text('Preparing PDF report...');
+        $('#downloadExcelBtn, #downloadPdfBtn').prop('disabled', true);
+
+        try {
+          const PDF_ROW_LIMIT = 50000;
+          if (currentIndentReportTotal > PDF_ROW_LIMIT) {
+            const msg = `PDF export is limited to ${PDF_ROW_LIMIT.toLocaleString()} rows for performance. Please narrow filters and try again.`;
+            if (typeof showErrorToast === 'function') showErrorToast(msg);
+            else alert(msg);
+            return;
+          }
+
+          const dateStr = new Date().toISOString().split('T')[0];
+          const fn = ($('#P15_FINANCIAL_YEAR').val() || '').replace(/\s+/g, '_') || 'Report';
+          const q = ($('#P15_QUARTERS').val() || '').replace(/\s+/g, '_') || '';
+          const filename = `Indent_Medicine_Factory_Report_${fn}${q ? '_' + q : ''}_${dateStr}.pdf`;
+
+          const pdfRows = await fetchFactoryReportRowsForPdfExport(PDF_ROW_LIMIT);
+          downloadAsPdf(pdfRows, filename);
+          if (typeof showSuccessToast === 'function') showSuccessToast('PDF report downloaded successfully.');
+        } catch (err) {
+          console.error('PDF download failed:', err);
+          if (typeof showErrorToast === 'function') showErrorToast('Failed to download PDF report.');
+          else alert('Failed to download PDF report.');
+        } finally {
+          exportInProgress = false;
+          $('#downloadExcelBtn, #downloadPdfBtn').prop('disabled', false);
+          $('#downloadReportStatus').text('');
+        }
+      });
+
       // Initial table load (page 1)
       setTimeout(function () { fetchTableData(1); }, 1000);
 
@@ -1006,6 +1395,9 @@
         $('#P15_INDENT_TYPE').val('').trigger('change');
         $('#P15_SYSTEM').val('').trigger('change');
         $('#P15_SCHEME_NAME').val('').trigger('change');
+        $('#downloadExcelBtn, #downloadPdfBtn').hide();
+        $('#downloadReportStatus').text('');
+        currentIndentReportTotal = 0;
         fetchTableData(1);
       });
 
