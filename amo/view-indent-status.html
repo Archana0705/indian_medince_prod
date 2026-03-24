@@ -679,6 +679,49 @@
         return key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
       }
 
+      function isCreatedDateColumn(key) {
+        const normalized = String(key || '').toLowerCase().replace(/[^a-z]/g, '');
+        return normalized.includes('createddate') || normalized.includes('createdon');
+      }
+
+      function formatDateDdMmYyyy(value) {
+        if (value == null || value === '') return '';
+        const raw = String(value).trim();
+
+        // Already in dd/mm/yyyy or dd-mm-yyyy
+        const directMatch = raw.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$/);
+        if (directMatch) {
+          const dd = directMatch[1].padStart(2, '0');
+          const mm = directMatch[2].padStart(2, '0');
+          const yyyy = directMatch[3];
+          return `${dd}/${mm}/${yyyy}`;
+        }
+
+        // ISO-like values (with or without time)
+        const isoMatch = raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+        if (isoMatch) {
+          const yyyy = isoMatch[1];
+          const mm = isoMatch[2].padStart(2, '0');
+          const dd = isoMatch[3].padStart(2, '0');
+          return `${dd}/${mm}/${yyyy}`;
+        }
+
+        const parsed = new Date(raw);
+        if (!Number.isNaN(parsed.getTime())) {
+          const dd = String(parsed.getDate()).padStart(2, '0');
+          const mm = String(parsed.getMonth() + 1).padStart(2, '0');
+          const yyyy = parsed.getFullYear();
+          return `${dd}/${mm}/${yyyy}`;
+        }
+
+        return raw;
+      }
+
+      function formatCellValue(key, value) {
+        if (isCreatedDateColumn(key)) return formatDateDdMmYyyy(value);
+        return value == null ? '' : value;
+      }
+
       function downloadAsExcel(data, filename) {
         if (!data || data.length === 0) return;
         const keys = Object.keys(data[0]).filter(k => !/^_/i.test(k));
@@ -697,29 +740,69 @@
 
       function downloadAsPdf(data, filename) {
         if (!data || data.length === 0) return;
+
         const keys = Object.keys(data[0]).filter(k => !/^_/i.test(k));
-        const headers = keys.map(k => ({ text: formatHeader(k), style: 'tableHeader', fillColor: '#4472C4', color: '#fff' }));
-        const bodyRows = data.map(r => keys.map(k => ({ text: (r[k] != null && r[k] !== '') ? String(r[k]) : '', style: 'tableCell' })));
+        const textHeavyColumns = [
+          'medicine_name',
+          'scheme_name',
+          'name_of_the_institution',
+          'institution_name',
+          'indent_type'
+        ];
+        const narrowColumns = ['sno', 'amount', 'quantity', 'total_amount', 'packing_size'];
+
+        const widths = keys.map((k) => {
+          const key = String(k || '').toLowerCase();
+          if (textHeavyColumns.some(c => key.includes(c))) return '*';
+          if (narrowColumns.some(c => key.includes(c))) return 52;
+          return 'auto';
+        });
+
+        const headers = keys.map(k => ({
+          text: formatHeader(k),
+          style: 'tableHeader',
+          fillColor: '#4472C4',
+          color: '#fff',
+          noWrap: false
+        }));
+
+        const bodyRows = data.map(r => keys.map(k => ({
+          text: String(formatCellValue(k, r[k]) ?? ''),
+          style: 'tableCell',
+          noWrap: false
+        })));
+
         const tableBody = [headers, ...bodyRows];
+        const useA3 = keys.length >= 9;
+
         const docDef = {
           pageOrientation: 'landscape',
-          pageSize: 'A4',
+          pageSize: useA3 ? 'A3' : 'A4',
+          pageMargins: [12, 22, 12, 18],
           content: [
-            { text: 'Indent Medicine List - Status Report', style: 'title', margin: [0, 0, 0, 10] },
-            { text: 'Department of Indian Medicine and Homoeopathy', style: 'subtitle', margin: [0, 0, 0, 12] },
+            { text: 'Indent Medicine List - Status Report', style: 'title', margin: [0, 0, 0, 8] },
+            { text: 'Department of Indian Medicine and Homoeopathy', style: 'subtitle', margin: [0, 0, 0, 10] },
             {
-              table: { headerRows: 1, widths: keys.map(() => '*'), body: tableBody },
-              layout: { hLineWidth: () => 0.5, vLineWidth: () => 0.5 }
+              table: { headerRows: 1, widths, body: tableBody },
+              layout: {
+                hLineWidth: () => 0.5,
+                vLineWidth: () => 0.5,
+                paddingLeft: () => 3,
+                paddingRight: () => 3,
+                paddingTop: () => 2,
+                paddingBottom: () => 2
+              }
             }
           ],
           styles: {
-            title: { fontSize: 14, bold: true },
-            subtitle: { fontSize: 10, color: '#666' },
-            tableHeader: { fontSize: 8, bold: true },
-            tableCell: { fontSize: 7 }
+            title: { fontSize: 13, bold: true },
+            subtitle: { fontSize: 9, color: '#666' },
+            tableHeader: { fontSize: 7, bold: true },
+            tableCell: { fontSize: 6.5 }
           },
-          defaultStyle: { fontSize: 8 }
+          defaultStyle: { fontSize: 7 }
         };
+
         if (!filename) {
           const dateStr = new Date().toISOString().split('T')[0];
           filename = `Indent_Status_Report_${dateStr}.pdf`;
@@ -747,7 +830,7 @@
         const keys = Object.keys(rows[0]).filter(k => !/^_/i.test(k));
         const thead = keys.map(k => `<th class="u-tC">${escapeHtml(formatHeader(k))}</th>`).join('');
         const tbody = rows.map(r => {
-          const tds = keys.map(k => `<td class="u-tC">${escapeHtml(r?.[k] ?? '')}</td>`).join('');
+          const tds = keys.map(k => `<td class="u-tC">${escapeHtml(formatCellValue(k, r?.[k]))}</td>`).join('');
           return `<tr>${tds}</tr>`;
         }).join('');
 
