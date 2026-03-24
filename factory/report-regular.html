@@ -767,7 +767,26 @@
           },
           dataType: 'json',
           success(response) {
-            const data = decryptData(response.data);
+            let parsedResponse;
+            try {
+              parsedResponse = response && response.data ? decryptData(response.data) : response;
+            } catch (e) {
+              console.error('Failed to decrypt response data:', e);
+              parsedResponse = response;
+            }
+
+            const data = Array.isArray(parsedResponse)
+              ? parsedResponse
+              : (Array.isArray(parsedResponse?.data) ? parsedResponse.data : []);
+
+            const responseMessage = parsedResponse?.message || response?.message || 'No data found for the selected criteria';
+            const successFlag = parsedResponse?.success ?? response?.success;
+            const totalCount = parsedResponse?.pagination?.total ?? response?.pagination?.total;
+            const isNoDataResponse = Number(successFlag) === 0 &&
+              (
+                Number(totalCount) === 0 ||
+                String(responseMessage).toLowerCase().includes('not found')
+              );
 
             // Store data for download
             currentData = data;
@@ -777,10 +796,12 @@
               dataTableRef.destroy();
             }
 
-            if (!data || data.length === 0) {
-              $('#pivotContainer').html('<div class="alert alert-info text-center p-4"><i class="bi bi-info-circle me-2"></i>No data found for the selected criteria</div>');
+            if (isNoDataResponse || !data || data.length === 0) {
+              const noDataText = responseMessage || 'No data found for the selected criteria';
+              $('#pivotContainer').html(`<div class="alert alert-info text-center p-4"><i class="bi bi-info-circle me-2"></i>${noDataText}</div>`);
               $('#downloadExcelBtn').hide();
               $('#summaryStats').removeClass('visible');
+              currentData = [];
               return;
             }
 

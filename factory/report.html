@@ -369,10 +369,7 @@
                           <div id="R311562979901797611632_single_row_view" class="a-IRR-singleRowView"></div>
                           <div id="R311562979901797611632_full_view" class="a-IRR-fullView">
                             <div id="R311562979901797611632_toolbar" class="a-IRR-toolbar">
-
                             </div>
-
-
                           </div>
                           <div role="region" aria-label="Chart view of Medicine Details"
                             id="R311562979901797611632_chart" class="a-IRR-chartView"></div>
@@ -590,6 +587,17 @@
           }
         };
 
+        // Show loading state while fetching report data
+        $('#pivotContainer').html(
+          '<div class="text-center p-4">' +
+          '<div class="spinner-border text-primary" role="status">' +
+          '<span class="visually-hidden">Loading...</span>' +
+          '</div>' +
+          '<p class="mt-2 mb-0">Loading data...</p>' +
+          '</div>'
+        );
+        $('#downloadExcelBtn').hide();
+
         $.ajax({
           url: apiUrl,
           method: 'POST',
@@ -602,21 +610,41 @@
           },
           dataType: 'json',
           success(response) {
-            const data = decryptData(response.data);
+            let parsedResponse;
+            try {
+              parsedResponse = response && response.data ? decryptData(response.data) : response;
+            } catch (e) {
+              console.error('Failed to decrypt response data:', e);
+              parsedResponse = response;
+            }
 
-            // Store data for download
-            currentData = data;
+            const data = Array.isArray(parsedResponse)
+              ? parsedResponse
+              : (Array.isArray(parsedResponse?.data) ? parsedResponse.data : []);
+            const responseMessage = parsedResponse?.message || response?.message || 'No Data Found';
+            const successFlag = parsedResponse?.success ?? response?.success;
+            const totalCount = parsedResponse?.pagination?.total ?? response?.pagination?.total;
+            const isNoDataResponse = Number(successFlag) === 0 &&
+              (
+                Number(totalCount) === 0 ||
+                String(responseMessage).toLowerCase().includes('not found')
+              );
 
             // Clear previous DataTable if exists
             if (dataTableRef) {
               dataTableRef.destroy();
+              dataTableRef = null;
             }
 
-            if (!data || data.length === 0) {
-              $('#pivotContainer').html('<div class="alert alert-info text-center">No Data Found</div>');
+            if (isNoDataResponse || !data || data.length === 0) {
+              $('#pivotContainer').html(`<div class="alert alert-info text-center">${responseMessage}</div>`);
               $('#downloadExcelBtn').hide(); // Hide download button if no data
+              currentData = [];
               return;
             }
+
+            // Store data for download
+            currentData = data;
 
             // Show download button
             $('#downloadExcelBtn').show();
@@ -698,6 +726,7 @@
         // Clear DataTable
         if (dataTableRef) {
           dataTableRef.destroy();
+          dataTableRef = null;
           $('#pivotContainer').empty();
         }
 
@@ -705,7 +734,7 @@
         $('#downloadExcelBtn').hide();
 
         // Clear stored data
-        currentData = null;
+        currentData = [];
       });
 
       // Download button click handler
