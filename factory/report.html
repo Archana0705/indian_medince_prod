@@ -300,6 +300,27 @@
                 <div class="row ">
                   <div class="col col-6 apex-col-auto col-start">
                     <div
+                      class="t-Form-fieldContainer rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--select-list"
+                      id="P37_DISTRICT_CONTAINER">
+                      <div class="t-Form-labelContainer col col-2">
+                        <label for="P37_DISTRICT" id="P37_DISTRICT_LABEL" class="t-Form-label">District </label>
+                      </div>
+                      <div class="t-Form-inputContainer col col-4">
+                        <div class="t-Form-itemWrapper">
+                          <select id="P37_DISTRICT" name="P37_DISTRICT" class="selectlist apex-item-select"
+                            data-native-menu="false" size="1">
+                            <option value="" selected="selected">Select</option>
+                          </select>
+                        </div>
+                        <div class="t-Form-itemAssistance">
+                          <span id="P37_DISTRICT_error_placeholder" class="a-Form-error"
+                            data-template-id="428237131064519931341_ET"></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col col-6 apex-col-auto col-end">
+                    <div
                       class="t-Form-fieldContainer is-required rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--select-list"
                       id="P37_FINANCIAL_YEAR_CONTAINER">
                       <div class="t-Form-labelContainer col col-2">
@@ -325,7 +346,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col col-6 apex-col-auto col-end">
+                </div>
+                <div class="row ">
+                  <div class="col col-6 apex-col-auto col-start">
                     <div
                       class="t-Form-fieldContainer is-required rel-col t-Form-fieldContainer--stretchInputs t-Form-fieldContainer--indicatorAsterisk t-Form-fieldContainer--large apex-item-wrapper apex-item-wrapper--select-list"
                       id="P37_QUARTERS_CONTAINER">
@@ -451,11 +474,14 @@
   <script>
     let dataTableRef;
     let currentData = null; // Store current data for download
+    let lastBasePayload = null; // Store last request payload for download
+    let lastTotalCount = 0; // Store total records count for download
 
     $(document).ready(function () {
       let uploadFile = null;
       let uploadPayload = null;
       const apiUrl = `${BASE_API_URL}/commonfunction`;
+      const apiUrlWithLimitOffset = `${BASE_API_URL}/commonfunction_with_limit_offset`;
       const district = sessionStorage.getItem('userDistrict');
       const designation = sessionStorage.getItem('userDesignation') || '';
 
@@ -498,11 +524,11 @@
       fetchAndPopulateDropdown({
         payload: {
           action: "function_call",
-          function_name: "im_quarter_fn",
+          function_name: "get_factory_districts_fn",
           params: {}
         },
-        dropdownId: "P37_QUARTERS",
-        placeholder: "--Select Quarters Name--"
+        dropdownId: "P37_DISTRICT",
+        placeholder: "--Select District--"
       });
 
       fetchAndPopulateDropdown({
@@ -513,6 +539,16 @@
         },
         dropdownId: "P37_FINANCIAL_YEAR",
         placeholder: "--Select Financial Year--"
+      });
+
+      fetchAndPopulateDropdown({
+        payload: {
+          action: "function_call",
+          function_name: "im_quarter_fn",
+          params: {}
+        },
+        dropdownId: "P37_QUARTERS",
+        placeholder: "--Select Quarters Name--"
       });
 
       // Function to download data as Excel
@@ -557,6 +593,39 @@
         XLSX.writeFile(wb, filename);
       }
 
+      function getParsedResponse(response) {
+        try {
+          return response && response.data ? decryptData(response.data) : response;
+        } catch (e) {
+          console.error('Failed to decrypt response data:', e);
+          return response;
+        }
+      }
+
+      function getPayloadWithLimitOffset(basePayload, limit, offset) {
+        return {
+          ...basePayload,
+          limit: Math.max(1, parseInt(limit, 10) || 1000),
+          offset: Math.max(0, parseInt(offset, 10) || 0)
+        };
+      }
+
+      function fetchPageData(basePayload, limit, offset) {
+        const requestPayload = getPayloadWithLimitOffset(basePayload, limit, offset);
+        return $.ajax({
+          url: apiUrlWithLimitOffset,
+          method: 'POST',
+          headers: {
+            'X-APP-Key': 'edm',
+            'X-APP-Name': 'edm'
+          },
+          data: {
+            data: encryptData(requestPayload)
+          },
+          dataType: 'json'
+        });
+      }
+
       // Add download button to the page
       function addDownloadButton() {
         // Check if button already exists
@@ -582,10 +651,15 @@
           action: "function_call",
           function_name: "im_get_medicine_details_fn",
           params: {
+            p_district: $('#P37_DISTRICT').val() || null,
             p_financial_year: $('#P37_FINANCIAL_YEAR').val() || '',
             p_quarters: $('#P37_QUARTERS').val() || '',
           }
         };
+
+        // Save payload/count so download can fetch all pages
+        lastBasePayload = payload;
+        lastTotalCount = 0;
 
         // Show loading state while fetching report data
         $('#pivotContainer').html(
@@ -624,6 +698,7 @@
             const responseMessage = parsedResponse?.message || response?.message || 'No Data Found';
             const successFlag = parsedResponse?.success ?? response?.success;
             const totalCount = parsedResponse?.pagination?.total ?? response?.pagination?.total;
+            lastTotalCount = Number(totalCount) || 0;
             const isNoDataResponse = Number(successFlag) === 0 &&
               (
                 Number(totalCount) === 0 ||
@@ -722,6 +797,7 @@
       $('#clearBtn').on('click', function () {
         $('#P37_FINANCIAL_YEAR').val('');
         $('#P37_QUARTERS').val('');
+        $('#P37_DISTRICT').val('');
 
         // Clear DataTable
         if (dataTableRef) {
@@ -738,7 +814,7 @@
       });
 
       // Download button click handler
-      $(document).on('click', '#downloadExcelBtn', function () {
+      $(document).on('click', '#downloadExcelBtn', async function () {
         if (!currentData || currentData.length === 0) {
           showErrorToast("No data available to download.");
           return;
@@ -751,8 +827,42 @@
         const dateStr = date.toISOString().split('T')[0];
         const filename = `Medicine_Indent_${financialYear}_${quarter}_${dateStr}.xlsx`;
 
+        // If API returned only first page, re-fetch all rows for full export
+        let dataToDownload = currentData;
+        try {
+          const totalCount = Number(lastTotalCount) || 0;
+          if (lastBasePayload && totalCount > 0 && totalCount > currentData.length) {
+            const allData = [];
+            const limit = 1000;
+
+            // prevent double-click while downloading
+            $('#downloadExcelBtn').prop('disabled', true).hide();
+
+            for (let offset = 0; offset < totalCount; offset += limit) {
+              const pageResp = await fetchPageData(lastBasePayload, limit, offset);
+              const parsedPage = getParsedResponse(pageResp);
+              const pageData = Array.isArray(parsedPage)
+                ? parsedPage
+                : (Array.isArray(parsedPage?.data) ? parsedPage.data : []);
+
+              if (!pageData || pageData.length === 0) break;
+              allData.push(...pageData);
+            }
+
+            if (allData.length > 0) {
+              dataToDownload = allData;
+            }
+          }
+        } catch (e) {
+          console.error('Failed to download all pages:', e);
+          // fallback to current page data
+          dataToDownload = currentData;
+        } finally {
+          $('#downloadExcelBtn').prop('disabled', false).show();
+        }
+
         // Download the data
-        downloadAsExcel(currentData, filename);
+        downloadAsExcel(dataToDownload, filename);
 
         // Show success message
         if (typeof showSuccessToast === 'function') {

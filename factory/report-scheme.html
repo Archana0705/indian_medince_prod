@@ -26,6 +26,9 @@
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -153,6 +156,35 @@
 
     .btn-clear:hover {
       background: #e0a800;
+    }
+
+    /* Download button */
+    .download-btn-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 15px;
+      gap: 10px;
+    }
+
+    .btn-download {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-download:hover {
+      background-color: #218838;
+    }
+
+    .btn-download i {
+      font-size: 16px;
     }
 
     /* Pivot Container Styling */
@@ -513,6 +545,12 @@
                 <div class="form-container">
                   <div class="row">
                     <div class="col-md-3">
+                      <label for="P60_DISTRICT">District</label>
+                      <select id="P60_DISTRICT" name="P60_DISTRICT" class="selectlist">
+                        <option value="" selected>Select District</option>
+                      </select>
+                    </div>
+                    <div class="col-md-3">
                       <label for="P60_FINANCIAL_YEAR">Financial Year</label>
                       <select id="P60_FINANCIAL_YEAR" name="P60_FINANCIAL_YEAR" class="selectlist">
                         <option value="" selected>Select Financial Year</option>
@@ -552,6 +590,8 @@
                         <option value="Tribal Units">Tribal Units</option>
                       </select>
                     </div>
+                  </div>
+                  <div class="row mt-3">
                     <div class="col-md-3 d-flex align-items-end">
                       <div class="d-flex gap-2 w-100">
                         <button class="btn-custom btn-search flex-grow-1" type="button" id="searchBtn">
@@ -651,11 +691,14 @@
   <script>
     let dataTableRef = null;
     let currentData = null;
+    let lastBasePayload = null; // Store last request payload for download
+    let lastTotalCount = 0; // Store total records count for download
 
     $(document).ready(function () {
       let uploadFile = null;
       let uploadPayload = null;
       const apiUrl = `${BASE_API_URL}/commonfunction`;
+      const apiUrlWithLimitOffset = `${BASE_API_URL}/commonfunction_with_limit_offset`;
       const district = sessionStorage.getItem('userDistrict');
       const designation = sessionStorage.getItem('userDesignation') || '';
 
@@ -706,6 +749,16 @@
           }
         });
       }
+
+      fetchAndPopulateDropdown({
+        payload: {
+          action: "function_call",
+          function_name: "get_factory_districts_fn",
+          params: {}
+        },
+        dropdownId: "P60_DISTRICT",
+        placeholder: "--Select District--"
+      });
 
       fetchAndPopulateDropdown({
         payload: {
@@ -769,13 +822,106 @@
         $('#pivotContainer').html(noDataHtml);
       }
 
+      // Function to download data as Excel (all pages)
+      function downloadAsExcel(data, filename) {
+        // Normalize/transform data to stable Excel headers
+        const excelData = (data || []).map(item => ({
+          'District': item.name_of_the_district || '',
+          'Medicine Name': item.medicine_name || '',
+          'Packing Size': item.packing_size || '',
+          'Quantity': item.quantity || '',
+          'Amount (₹)': item.amount || '',
+          'Total Quantity': item.total_quantity || ''
+        }));
+
+        const ws = XLSX.utils.json_to_sheet(excelData);
+        ws['!cols'] = [
+          { wch: 20 },
+          { wch: 30 },
+          { wch: 15 },
+          { wch: 15 },
+          { wch: 20 },
+          { wch: 15 }
+        ];
+
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Medicine Details");
+
+        wb.Props = {
+          Title: "Medicine Indent Report",
+          Subject: "Scheme Medicine Details",
+          Author: "Department of Indian Medicine and Homoeopathy",
+          CreatedDate: new Date()
+        };
+
+        if (!filename) {
+          const date = new Date();
+          const dateStr = date.toISOString().split('T')[0];
+          filename = `Medicine_Indent_Scheme_${dateStr}.xlsx`;
+        }
+
+        XLSX.writeFile(wb, filename);
+      }
+
+      function getParsedResponse(response) {
+        try {
+          return response && response.data ? decryptData(response.data) : response;
+        } catch (e) {
+          console.error('Failed to decrypt response data:', e);
+          return response;
+        }
+      }
+
+      function getPayloadWithLimitOffset(basePayload, limit, offset) {
+        return {
+          ...basePayload,
+          limit: Math.max(1, parseInt(limit, 10) || 1000),
+          offset: Math.max(0, parseInt(offset, 10) || 0)
+        };
+      }
+
+      function fetchPageData(basePayload, limit, offset) {
+        const requestPayload = getPayloadWithLimitOffset(basePayload, limit, offset);
+        return $.ajax({
+          url: apiUrlWithLimitOffset,
+          method: 'POST',
+          headers: {
+            'X-APP-Key': 'edm',
+            'X-APP-Name': 'edm'
+          },
+          data: {
+            data: encryptData(requestPayload)
+          },
+          dataType: 'json'
+        });
+      }
+
+      function addDownloadButton() {
+        if ($('#downloadExcelBtn').length === 0) {
+          const downloadButtonHtml = `
+            <div class="download-btn-container">
+              <button class="btn-download" id="downloadExcelBtn" type="button" style="display: none;">
+                <i class="bi bi-download"></i> Download Scheme Excel Report
+              </button>
+            </div>
+          `;
+
+          // Insert after the search/clear button row but before the table
+          $('.row:has(#searchBtn)').after(downloadButtonHtml);
+        }
+      }
+
+      // Create download button on page load
+      addDownloadButton();
+
       function fetchTableData() {
+        const districtFilter = $('#P60_DISTRICT').val();
         const financialYear = $('#P60_FINANCIAL_YEAR').val();
         const quarters = $('#P60_QUARTERS').val();
         const schemeName = $('#P60_SCHEME_NAME').val();
 
         // Check if at least one filter is selected
-        if (!financialYear && !quarters && !schemeName) {
+        if (!districtFilter && !financialYear && !quarters && !schemeName) {
           if (typeof showErrorToast === 'function') {
             showErrorToast("Please select at least one filter to search");
           } else {
@@ -788,11 +934,18 @@
           action: "function_call",
           function_name: "get_scheme_medicine_details",
           params: {
+            p_district: districtFilter || null,
             p_financial_year: financialYear || '',
             p_quarters: quarters || '',
             p_scheme_name: schemeName || '',
           }
         };
+
+        // Save payload/count so download can export all pages
+        lastBasePayload = payload;
+        lastTotalCount = 0;
+        currentData = null;
+        $('#downloadExcelBtn').hide();
 
         // Destroy existing DataTable before showing loader
         destroyDataTable();
@@ -822,22 +975,38 @@
             // Check response format
             if (response && response.success === 0) {
               // Handle no data found response
+              $('#downloadExcelBtn').hide();
               showNoDataMessage(response.message || "Data not found");
               return;
             }
 
             // Try to decrypt data
-            let data;
+            let parsedResponse;
             try {
-              data = decryptData(response.data);
+              parsedResponse = decryptData(response.data);
             } catch (e) {
               console.error("Error decrypting data:", e);
+              $('#downloadExcelBtn').hide();
               showNoDataMessage("Error processing response data");
               return;
             }
 
-            // Check if data exists and is an array
+            const data = Array.isArray(parsedResponse)
+              ? parsedResponse
+              : (Array.isArray(parsedResponse?.data) ? parsedResponse.data : []);
+
+            const totalCount = Number(
+              parsedResponse?.pagination?.total ??
+              parsedResponse?.total ??
+              data.length
+            );
+
+            lastTotalCount = totalCount;
+            currentData = data;
+
+            // Check if data exists
             if (!data || !Array.isArray(data) || data.length === 0) {
+              $('#downloadExcelBtn').hide();
               showNoDataMessage("No records found for the selected criteria");
               return;
             }
@@ -918,6 +1087,9 @@
                 zeroRecords: "No matching records found"
               }
             });
+
+            // Show download when we have at least one row
+            $('#downloadExcelBtn').show();
           },
           error(xhr, status, error) {
             console.error(`${payload.function_name} API Error:`, error);
@@ -954,12 +1126,75 @@
       });
 
       $('#clearBtn').on('click', function () {
+        $('#P60_DISTRICT').val('');
         $('#P60_FINANCIAL_YEAR').val('');
         $('#P60_QUARTERS').val('');
         $('#P60_SCHEME_NAME').val('');
 
         destroyDataTable();
         $('#pivotContainer').empty();
+
+        $('#downloadExcelBtn').hide();
+        currentData = null;
+        lastTotalCount = 0;
+        lastBasePayload = null;
+      });
+
+      // Download button click handler
+      $(document).on('click', '#downloadExcelBtn', async function () {
+        if (!currentData || currentData.length === 0) {
+          if (typeof showErrorToast === 'function') {
+            showErrorToast("No data available to download.");
+          } else {
+            alert("No data available to download.");
+          }
+          return;
+        }
+
+        const financialYear = ($('#P60_FINANCIAL_YEAR').val() || '').replace(/\s+/g, '_') || 'All';
+        const quarter = ($('#P60_QUARTERS').val() || '').replace(/\s+/g, '_') || 'All';
+        const schemeName = ($('#P60_SCHEME_NAME').val() || '').replace(/\s+/g, '_') || 'All';
+        const dateStr = new Date().toISOString().split('T')[0];
+        const filename = `Medicine_Indent_Scheme_${financialYear}_${quarter}_${schemeName}_${dateStr}.xlsx`;
+
+        let dataToDownload = currentData;
+        const totalCount = Number(lastTotalCount) || 0;
+
+        try {
+          if (lastBasePayload && totalCount > 0 && totalCount > currentData.length) {
+            const allData = [];
+            const limit = 1000;
+
+            // prevent double-click while downloading
+            $('#downloadExcelBtn').prop('disabled', true).hide();
+
+            for (let offset = 0; offset < totalCount; offset += limit) {
+              const pageResp = await fetchPageData(lastBasePayload, limit, offset);
+              const parsedPage = getParsedResponse(pageResp);
+              const pageData = Array.isArray(parsedPage)
+                ? parsedPage
+                : (Array.isArray(parsedPage?.data) ? parsedPage.data : []);
+
+              if (!pageData || pageData.length === 0) break;
+              allData.push(...pageData);
+            }
+
+            if (allData.length > 0) {
+              dataToDownload = allData;
+            }
+          }
+        } catch (e) {
+          console.error('Failed to download all pages:', e);
+          dataToDownload = currentData; // fallback
+        } finally {
+          $('#downloadExcelBtn').prop('disabled', false).show();
+        }
+
+        downloadAsExcel(dataToDownload, filename);
+
+        if (typeof showSuccessToast === 'function') {
+          showSuccessToast("Report downloaded successfully!");
+        }
       });
     });
   </script>

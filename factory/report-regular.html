@@ -442,6 +442,16 @@
                 <div class="form-container">
                   <div class="row align-items-end">
                     <div class="col-md-4">
+                      <div class="t-Form-fieldContainer" id="P40_DISTRICT_CONTAINER">
+                        <div class="form-group">
+                          <label for="P40_DISTRICT" id="P40_DISTRICT_LABEL" class="t-Form-label">District</label>
+                          <select id="P40_DISTRICT" name="P40_DISTRICT" class="form-control selectlist">
+                            <option value="" selected>Select District</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
                       <div class="t-Form-fieldContainer is-required" id="P40_FINANCIAL_YEAR_CONTAINER">
                         <div class="form-group">
                           <label for="P40_FINANCIAL_YEAR" id="P40_FINANCIAL_YEAR_LABEL" class="t-Form-label">Financial
@@ -473,7 +483,9 @@
                         </div>
                       </div>
                     </div>
-                    <div class="col-md-4">
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col-md-4 ms-auto">
                       <div class="d-flex gap-2">
                         <button class="btn btn-search btn-custom flex-grow-1" type="button" id="searchBtn">
                           <i class="bi bi-search"></i> Search
@@ -581,11 +593,14 @@
   <script>
     let dataTableRef;
     let currentData = null; // Store current data for download
+    let lastBasePayload = null; // Store last request payload for download
+    let lastTotalCount = 0; // Store total records count for download
 
     $(document).ready(function () {
       let uploadFile = null;
       let uploadPayload = null;
       const apiUrl = `${BASE_API_URL}/commonfunction`;
+      const apiUrlWithLimitOffset = `${BASE_API_URL}/commonfunction_with_limit_offset`;
       const district = sessionStorage.getItem('userDistrict');
       const designation = sessionStorage.getItem('userDesignation') || '';
 
@@ -634,6 +649,16 @@
       }
 
       // Populate dropdowns
+      fetchAndPopulateDropdown({
+        payload: {
+          action: "function_call",
+          function_name: "get_factory_districts_fn",
+          params: {}
+        },
+        dropdownId: "P40_DISTRICT",
+        placeholder: "--Select District--"
+      });
+
       fetchAndPopulateDropdown({
         payload: {
           action: "function_call",
@@ -742,105 +767,94 @@
         XLSX.writeFile(wb, filename);
       }
 
-      function fetchTableData() {
-        const payload = {
-          action: "function_call",
-          function_name: "im_get_medicine_detail_fn",
-          params: {
-            p_financial_year: $('#P40_FINANCIAL_YEAR').val() || '',
-            p_quarters: $('#P40_QUARTERS').val() || '',
-          }
+      function getParsedResponse(response) {
+        try {
+          return response && response.data ? decryptData(response.data) : response;
+        } catch (e) {
+          console.error('Failed to decrypt response data:', e);
+          return response;
+        }
+      }
+
+      function getPayloadWithLimitOffset(basePayload, limit, offset) {
+        return {
+          ...basePayload,
+          limit: Math.max(1, parseInt(limit, 10) || 1000),
+          offset: Math.max(0, parseInt(offset, 10) || 0)
         };
+      }
 
-        // Show loading state
-        $('#pivotContainer').html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading data...</p></div>');
-
-        $.ajax({
-          url: apiUrl,
+      function fetchPageData(basePayload, limit, offset) {
+        const requestPayload = getPayloadWithLimitOffset(basePayload, limit, offset);
+        return $.ajax({
+          url: apiUrlWithLimitOffset,
           method: 'POST',
           headers: {
             'X-APP-Key': 'edm',
             'X-APP-Name': 'edm'
           },
           data: {
-            data: encryptData(payload)
+            data: encryptData(requestPayload)
           },
-          dataType: 'json',
-          success(response) {
-            let parsedResponse;
-            try {
-              parsedResponse = response && response.data ? decryptData(response.data) : response;
-            } catch (e) {
-              console.error('Failed to decrypt response data:', e);
-              parsedResponse = response;
-            }
+          dataType: 'json'
+        });
+      }
 
-            const data = Array.isArray(parsedResponse)
-              ? parsedResponse
-              : (Array.isArray(parsedResponse?.data) ? parsedResponse.data : []);
+      async function fetchTableData() {
+        const basePayload = {
+          action: "function_call",
+          function_name: "im_get_medicine_detail_fn",
+          params: {
+            p_district: $('#P40_DISTRICT').val() || null,
+            p_financial_year: $('#P40_FINANCIAL_YEAR').val() || '',
+            p_quarters: $('#P40_QUARTERS').val() || ''
+          }
+        };
 
-            const responseMessage = parsedResponse?.message || response?.message || 'No data found for the selected criteria';
-            const successFlag = parsedResponse?.success ?? response?.success;
-            const totalCount = parsedResponse?.pagination?.total ?? response?.pagination?.total;
-            const isNoDataResponse = Number(successFlag) === 0 &&
-              (
-                Number(totalCount) === 0 ||
-                String(responseMessage).toLowerCase().includes('not found')
-              );
+        // Save payload/count so download can export all pages
+        lastBasePayload = basePayload;
+        lastTotalCount = 0;
 
-            // Store data for download
-            currentData = data;
+        // Show loading state
+        $('#pivotContainer').html('<div class="text-center p-5"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div><p class="mt-2">Loading data...</p></div>');
 
-            // Clear previous DataTable if exists
-            if (dataTableRef) {
-              dataTableRef.destroy();
-            }
+        try {
+          // Clear previous DataTable if exists
+          if (dataTableRef) {
+            dataTableRef.destroy();
+          }
+          currentData = [];
 
-            if (isNoDataResponse || !data || data.length === 0) {
-              const noDataText = responseMessage || 'No data found for the selected criteria';
-              $('#pivotContainer').html(`<div class="alert alert-info text-center p-4"><i class="bi bi-info-circle me-2"></i>${noDataText}</div>`);
-              $('#downloadExcelBtn').hide();
-              $('#summaryStats').removeClass('visible');
-              currentData = [];
-              return;
-            }
-
-            // Show download button
-            $('#downloadExcelBtn').show();
-
-            // Update summary statistics
-            updateSummaryStats(data);
-
-            // Define columns for DataTable
-            const columns = [
-              { title: "District", data: "name_of_the_district" },
-              { title: "Medicine Name", data: "medicine_name" },
-              { title: "Packing Size", data: "packing_size" },
-              {
-                title: "Quantity",
-                data: "quantity",
-                render: function (data) {
-                  return parseFloat(data).toLocaleString();
-                }
-              },
-              {
-                title: "Amount (₹)",
-                data: "amount",
-                render: function (data) {
-                  return '₹ ' + parseFloat(data).toLocaleString();
-                }
-              },
-              {
-                title: "Total Quantity",
-                data: "total_quantity",
-                render: function (data) {
-                  return parseFloat(data).toLocaleString();
-                }
+          // Define columns for DataTable
+          const columns = [
+            { title: "District", data: "name_of_the_district" },
+            { title: "Medicine Name", data: "medicine_name" },
+            { title: "Packing Size", data: "packing_size" },
+            {
+              title: "Quantity",
+              data: "quantity",
+              render: function (data) {
+                return parseFloat(data).toLocaleString();
               }
-            ];
+            },
+            {
+              title: "Amount (₹)",
+              data: "amount",
+              render: function (data) {
+                return '₹ ' + parseFloat(data).toLocaleString();
+              }
+            },
+            {
+              title: "Total Quantity",
+              data: "total_quantity",
+              render: function (data) {
+                return parseFloat(data).toLocaleString();
+              }
+            }
+          ];
 
-            // Create DataTable
-            const tableHtml = `
+          // Create DataTable
+          const tableHtml = `
               <table id="medicineDataTable" class="display table table-striped table-bordered" style="width:100%">
                 <thead>
                   <tr>
@@ -850,45 +864,106 @@
               </table>
             `;
 
-            dataTableRef = $('#pivotContainer').html(tableHtml).find('#medicineDataTable').DataTable({
-              data: data,
-              columns: columns,
-              pageLength: 10,
-              lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-              searching: true,
-              paging: true,
-              ordering: true,
-              info: true,
-              responsive: true,
-              scrollX: true,
-              language: {
-                paginate: {
-                  previous: '<i class="bi bi-chevron-left"></i> Previous',
-                  next: 'Next <i class="bi bi-chevron-right"></i>'
-                },
-                search: "Search:",
-                searchPlaceholder: "Type to search...",
-                emptyTable: "No data available",
-                info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                infoEmpty: "Showing 0 to 0 of 0 entries",
-                infoFiltered: "(filtered from _MAX_ total entries)"
-              },
-              dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
-                '<"row"<"col-sm-12"tr>>' +
-                '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-              initComplete: function () {
-                $('div.dataTables_filter input').addClass('form-control').attr('placeholder', 'Search...');
-                $('div.dataTables_length select').addClass('form-control');
+          dataTableRef = $('#pivotContainer').html(tableHtml).find('#medicineDataTable').DataTable({
+            columns: columns,
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+            searching: false,
+            paging: true,
+            ordering: true,
+            info: true,
+            responsive: true,
+            scrollX: true,
+            processing: true,
+            serverSide: true,
+            ajax: async function (data, callback) {
+              const limit = data.length || 10;
+              const offset = data.start || 0;
+
+              try {
+                const response = await fetchPageData(basePayload, limit, offset);
+                const parsedResponse = getParsedResponse(response);
+                const pageData = Array.isArray(parsedResponse)
+                  ? parsedResponse
+                  : (Array.isArray(parsedResponse?.data) ? parsedResponse.data : []);
+
+                const responseMessage = parsedResponse?.message || response?.message || 'No data found for the selected criteria';
+                const successFlag = parsedResponse?.success ?? response?.success;
+                const totalCount = Number(parsedResponse?.pagination?.total ?? response?.pagination?.total ?? 0);
+                lastTotalCount = totalCount;
+                const isNoDataResponse = Number(successFlag) === 0 &&
+                  (
+                    Number(totalCount) === 0 ||
+                    String(responseMessage).toLowerCase().includes('not found')
+                  );
+
+                if (isNoDataResponse) {
+                  $('#downloadExcelBtn').hide();
+                  $('#summaryStats').removeClass('visible');
+                  currentData = [];
+                  callback({
+                    draw: data.draw,
+                    recordsTotal: 0,
+                    recordsFiltered: 0,
+                    data: []
+                  });
+                  return;
+                }
+
+                // Keep only current page data to avoid loading huge dataset in browser
+                currentData = pageData;
+                if (pageData.length > 0) {
+                  $('#downloadExcelBtn').show();
+                  updateSummaryStats(pageData);
+                } else {
+                  $('#downloadExcelBtn').hide();
+                  $('#summaryStats').removeClass('visible');
+                }
+
+                callback({
+                  draw: data.draw,
+                  recordsTotal: totalCount || pageData.length,
+                  recordsFiltered: totalCount || pageData.length,
+                  data: pageData
+                });
+              } catch (xhr) {
+                console.error(`${basePayload.function_name} API Error:`, xhr);
+                $('#downloadExcelBtn').hide();
+                $('#summaryStats').removeClass('visible');
+                callback({
+                  draw: data.draw,
+                  recordsTotal: 0,
+                  recordsFiltered: 0,
+                  data: []
+                });
               }
-            });
-          },
-          error(xhr, status, error) {
-            console.error(`${payload.function_name} API Error:`, error);
-            $('#pivotContainer').html('<div class="alert alert-danger text-center p-4"><i class="bi bi-exclamation-triangle me-2"></i>Error loading data. Please try again.</div>');
-            $('#downloadExcelBtn').hide();
-            $('#summaryStats').removeClass('visible');
-          }
-        });
+            },
+            language: {
+              paginate: {
+                previous: '<i class="bi bi-chevron-left"></i> Previous',
+                next: 'Next <i class="bi bi-chevron-right"></i>'
+              },
+              search: "Search:",
+              searchPlaceholder: "Type to search...",
+              emptyTable: "No data available",
+              info: "Showing _START_ to _END_ of _TOTAL_ entries",
+              infoEmpty: "Showing 0 to 0 of 0 entries",
+              infoFiltered: "(filtered from _MAX_ total entries)"
+            },
+            dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
+              '<"row"<"col-sm-12"tr>>' +
+              '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+            initComplete: function () {
+              $('div.dataTables_filter input').addClass('form-control').attr('placeholder', 'Search...');
+              $('div.dataTables_length select').addClass('form-control');
+            }
+          });
+        } catch (xhr) {
+          console.error(`${basePayload.function_name} API Error:`, xhr);
+          $('#pivotContainer').html('<div class="alert alert-danger text-center p-4"><i class="bi bi-exclamation-triangle me-2"></i>Error loading data. Please try again.</div>');
+          $('#downloadExcelBtn').hide();
+          $('#summaryStats').removeClass('visible');
+        }
       }
 
       $('#searchBtn').on('click', function () {
@@ -907,6 +982,7 @@
       });
 
       $('#clearBtn').on('click', function () {
+        $('#P40_DISTRICT').val('');
         $('#P40_FINANCIAL_YEAR').val('');
         $('#P40_QUARTERS').val('');
 
@@ -925,7 +1001,7 @@
       });
 
       // Download button click handler
-      $(document).on('click', '#downloadExcelBtn', function () {
+      $(document).on('click', '#downloadExcelBtn', async function () {
         if (!currentData || currentData.length === 0) {
           if (typeof showErrorToast === 'function') {
             showErrorToast("No data available to download.");
@@ -935,8 +1011,41 @@
           return;
         }
 
+        // Download all pages if backend is returning only the first page
+        let dataToDownload = currentData;
+        try {
+          const totalCount = Number(lastTotalCount) || 0;
+          if (lastBasePayload && totalCount > 0 && totalCount > currentData.length) {
+            const allData = [];
+            const limit = 1000;
+
+            // prevent double-click while downloading
+            $('#downloadExcelBtn').prop('disabled', true).hide();
+
+            for (let offset = 0; offset < totalCount; offset += limit) {
+              const pageResp = await fetchPageData(lastBasePayload, limit, offset);
+              const parsedPage = getParsedResponse(pageResp);
+              const pageData = Array.isArray(parsedPage)
+                ? parsedPage
+                : (Array.isArray(parsedPage?.data) ? parsedPage.data : []);
+
+              if (!pageData || pageData.length === 0) break;
+              allData.push(...pageData);
+            }
+
+            if (allData.length > 0) {
+              dataToDownload = allData;
+            }
+          }
+        } catch (e) {
+          console.error('Failed to download all pages:', e);
+          dataToDownload = currentData;
+        } finally {
+          $('#downloadExcelBtn').prop('disabled', false).show();
+        }
+
         // Download the data
-        downloadAsExcel(currentData);
+        downloadAsExcel(dataToDownload);
 
         // Show success message
         if (typeof showSuccessToast === 'function') {
