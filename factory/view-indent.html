@@ -466,13 +466,15 @@
                                 id="R617921792892394551850_data_panel" class="a-IRR-reportView">
                                 <div class="download-report-toolbar d-flex flex-wrap gap-2 align-items-center mb-2"
                                   style="margin-top: 8px;">
-                                  <button type="button" id="downloadExcelBtn" class="t-Button t-Button--hot t-Button--small"
-                                    style="display: none;" title="Download as Excel">
+                                  <button type="button" id="downloadExcelBtn"
+                                    class="t-Button t-Button--hot t-Button--small" style="display: none;"
+                                    title="Download as Excel">
                                     <i class="bi bi-file-earmark-excel" aria-hidden="true"></i>
                                     <span class="t-Button-label">Download Excel</span>
                                   </button>
-                                  <button type="button" id="downloadPdfBtn" class="t-Button t-Button--hot t-Button--small"
-                                    style="display: none;" title="Download as PDF">
+                                  <button type="button" id="downloadPdfBtn"
+                                    class="t-Button t-Button--hot t-Button--small" style="display: none;"
+                                    title="Download as PDF">
                                     <i class="bi bi-file-earmark-pdf" aria-hidden="true"></i>
                                     <span class="t-Button-label">Download PDF</span>
                                   </button>
@@ -518,13 +520,16 @@
                                   <ul class="a-IRR-pagination">
                                     <li class="a-IRR-pagination-item">
                                       <button type="button" id="tablePaginationPrev"
-                                        class="a-Button a-IRR-button a-IRR-button--pagination" title="Previous" aria-label="Previous">
+                                        class="a-Button a-IRR-button a-IRR-button--pagination" title="Previous"
+                                        aria-label="Previous">
                                         <span class="a-Icon icon-left-chevron" aria-hidden="true"></span>
                                       </button>
                                     </li>
-                                    <li class="a-IRR-pagination-item"><span id="tablePaginationLabel" class="a-IRR-pagination-label">1 - 50 of 0</span></li>
+                                    <li class="a-IRR-pagination-item"><span id="tablePaginationLabel"
+                                        class="a-IRR-pagination-label">1 - 50 of 0</span></li>
                                     <li class="a-IRR-pagination-item"><button type="button" id="tablePaginationNext"
-                                        class="a-Button a-IRR-button a-IRR-button--pagination" title="Next" aria-label="Next">
+                                        class="a-Button a-IRR-button a-IRR-button--pagination" title="Next"
+                                        aria-label="Next">
                                         <span class="a-Icon icon-right-chevron" aria-hidden="true"></span>
                                       </button></li>
                                   </ul>
@@ -706,7 +711,7 @@
       fetchAndPopulateDropdown({
         payload: {
           action: "function_call",
-          function_name: "get_factory_districts_fn",
+          function_name: "im_all_district_fn",
           params: {}
         },
         dropdownId: "P15_NAME_OF_THE_DISTRICT",
